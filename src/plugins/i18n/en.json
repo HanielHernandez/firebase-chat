@@ -1,3 +1,28 @@
- {
-  "required": "is required"
+{
+  "signup":{
+    "title":"Register a new firechat account",
+    "name_placeholder":"Jhon McClaren",
+    "email_placeholder":"jmclaren@mycompany.com",
+    "password_placeholder":"XXXXXX",
+    "confirm_password_placeholder":"XXXXXX",
+    "button_text": "Sign Up",
+    "already_registered_text": "Already have an account?",
+    "click_here_text": "Log in"
+  },
+  "signin":{
+    "title": "Log in on Firechat",
+    "button_text": "Sign in",
+    "forgot_password_text": "¿No recuerdas tu contraseña?",
+    "no_account_text": "¿No tienes cuenta?",
+    "click_here_text":"Crea tu cuenta"
+  },
+  "auth":{
+    "name":"Name",
+    "email":"Email",
+    "password":"Password",
+    "confirm_password":"Confirm password"
+  },
+  "validations":{
+    "required":"is required"
+  }
 }

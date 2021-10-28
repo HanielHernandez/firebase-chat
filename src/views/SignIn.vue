@@ -1,70 +1,62 @@
 <template>
   <centered-layout>
-    <div class="flex flex-col md:mx-0 md:w-1/3 px-4">
-      <h3 class="text-2xl font-black text-center mb-4 t">
-        Register a new firechat account
+    <div class="flex flex-col md:mx-0 md:w-1/3 xl:w-1/4 px-4">
+      <h3 class="text-3xl font-bold text-gray-900 text-center mb-6 t">
+        {{ $t('signin.title') }}
       </h3>
-      <div class="w-full w-lg flex flex-col rounded-md border p-4">
-        <form @submit="register">
-          <TextField
-            v-model="name"
-            type="text"
-            :error="nameError != null"
-            :error-message="nameError"
-            :title="$t('signin.name')"
-            placeholder="An User name"
-            class="mb-3"
-          />
 
+      <div class="w-full w-lg flex flex-col rounded-md border p-4">
+        <vee-form
+          v-slot="{ meta }"
+          :initial-values="initialValues"
+          @submit="handleSubmit"
+        >
           <TextField
-            v-model="email"
             type="email"
-            :error="!!emailError"
-            :error-message="emailError"
-            :title="$t('signin.email')"
+            name="email"
+            :title="$t('auth.email')"
             placeholder="Your email"
             class="mb-3"
           />
-
           <TextField
-            v-model="password"
             type="password"
-            :title="$t('signin.password')"
-            class="mb-3"
-            :error="!!passwordError"
-            :error-message="passwordError"
+            name="password"
+            :title="$t('auth.password')"
             placeholder="Your Password"
           />
-
-          <TextField
-            v-model="passwordConfirmation"
-            type="password"
-            title="Password Confirmation"
-            :error="!!passwordConfirmationError"
-            :error-message="passwordConfirmationError"
-            placeholder="Confirm your password"
-            class="mb-4"
-          />
-
+          <div
+            class="
+              text-right text-sm
+              mt-2
+              text-gray-500
+              hover:text-blue-600
+              mb-4
+            "
+          >
+            <a href="">{{ $t('signin.forgot_password_text') }}?</a>
+          </div>
           <fr-button
-            :disabled="form.isSubmitting"
+            :disabled="loading || !meta.valid"
             type="submit"
             block
+            :loading="loading"
             color="blue-600 w-full"
-            class="text-white mb-2"
-            >Sign In</fr-button
+            class="text-white"
+            >{{ $t('signin.button_text') }}</fr-button
           >
 
-          <p class="text-sm text-center text-gray-600">
-            Already have an account?
+          <div class="border-t my-3"></div>
+
+          <p class="text-sm font-medium text-center text-gray-600">
+            {{ $t('signin.no_account_text') }}
             <router-link
-              to="log-in"
-              class="text-blue-600 opacity-50 hover:opacity-100"
+              to="sign-up"
+              class="text-blue-600 opacity-75 hover:opacity-100"
             >
-              click here</router-link
-            >
+              {{ $t('signin.click_here_text') }}
+            </router-link>
           </p>
-        </form>
+        </vee-form>
       </div>
     </div>
   </centered-layout>
@@ -72,52 +64,21 @@
 
 <script lang="ts">
 import CenteredLayout from '@/components/Layouts/CenteredLayout.vue'
-import { useForm, useField } from 'vee-validate'
-import * as yup from 'yup'
-import { useI18n } from 'vue-i18n'
-
-export default {
-  components: { CenteredLayout },
-  setup(): unknown {
-    const { t } = useI18n()
-    // form validation schema
-    const form = useForm({
-      validationSchema: yup.object({
-        name: yup.string().required().label(t('signin.name')),
-        password: yup.string().required().label('Password'),
-        confirm_password: yup
-          .string()
-          .required()
-          .label('Password confirmation'),
-        email: yup.string().required().email().label(t('signin.email'))
-      })
+import { defineComponent } from 'vue'
+import { Form as VeeForm } from 'vee-validate'
+import { ref } from 'vue'
+export default defineComponent({
+  components: { CenteredLayout, VeeForm },
+  setup() {
+    const intialValues = ref({
+      name: '',
+      email: ''
     })
-    // fields instance
-    const { value: email, errorMessage: emailError } = useField('email')
-    const { value: name, errorMessage: nameError } = useField('name')
-    const { value: password, errorMessage: passwordError } =
-      useField('password')
-    const { value: confirmPassword, errorMessage: confirmPasswordError } =
-      useField('confirm_password')
+    const loading = ref(false)
 
-    // register actions
-    const register = form.handleSubmit((): void => {
-      console.log('Registra usuario')
-    })
-    return {
-      register,
-      form,
-      email,
-      emailError,
-      name,
-      nameError,
-      password,
-      passwordError,
-      confirmPassword,
-      confirmPasswordError
-    }
+    return { loading, intialValues }
   }
-}
+})
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

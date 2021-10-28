@@ -1,0 +1,28 @@
+{
+  "signup":{
+    "title":"Registrart tu cuenta de firechat",
+    "name_placeholder":"Juan Martinez",
+    "email_placeholder":"jmartinez@micompañia.com",
+    "password_placeholder":"XXXXXX",
+    "confirm_password_placeholder":"XXXXXX",
+    "button_text": "Registrarse",
+    "already_registered_text": "¿Ya tienes cuenta?",
+    "click_here_text": "Inicia sesión"
+  },
+  "signin":{
+    "title": "Inicia sesión con Firechat",
+    "button_text": "Inicia sesión",
+    "forgot_password_text": "¿No recuerdas tu contraseña?",
+    "no_account_text": "¿No tienes cuenta?",
+    "click_here_text":"Crea tu cuenta"
+  },
+  "auth":{
+    "name":"Nombre",
+    "email":"Correo Electrónico",
+    "password":"Contraseña",
+    "confirm_password":"Confirmar Contraseña"
+  },
+  "validations":{
+    "required":"es requerido"
+  }
+}

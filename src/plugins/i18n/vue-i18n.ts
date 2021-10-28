@@ -1,47 +1,42 @@
+import { setLocale } from '@vee-validate/i18n'
 import { createI18n } from 'vue-i18n'
-import { setLocale } from 'yup'
-import * as yupLocales from 'yup-locales'
-import { LocaleObject } from 'yup/lib/locale'
+import en from './en.json'
+import es from './es.json'
 
-const es = {
-  signin: {
-    name: 'Nombre',
-    email: 'Correo Electrónico',
-    password: 'Contraseña',
-    comfirm_password: 'Confirmar Contraseña'
-  },
-  validations: {
-    required: 'es requerido'
+// const en = {
+//   signup: {
+//     title: 'Register a new firechat account'
+//   },
+//   auth: {
+//     name: 'Name',
+//     email: 'Email',
+//     password: 'Password',
+//     confirm_password: 'Confirm password'
+//   },
+//   validations: {
+//     required: 'is required'
+//   }
+// }
+
+export const getLocalei18n = (): string => {
+  if (navigator.language == 'es-ES') {
+    return 'es'
   }
-}
-const en = {
-  signin: {
-    name: 'Name',
-    email: 'Email',
-    isRequired: 'is required',
-    password: 'Password',
-    comfirm_password: 'Confirm password'
-  },
-  validations: {
-    required: 'is required'
+  if (navigator.language == 'en-EN') {
+    return 'en'
   }
+  return navigator.language
 }
 const i18n = createI18n({
-  locale: navigator.language,
+  locale: getLocalei18n(),
   fallbackLocale: 'en',
   messages: {
     en,
-    es,
-    ['es-Es']: { ...es },
-    ['en-En']: { ...en }
+    es
   }
 })
-const getLocale = (): LocaleObject => {
-  if (navigator.language == 'es-Es') {
-    return yupLocales.es
-  }
-  return yupLocales.es
-}
-setLocale(getLocale())
+
+setLocale(getLocalei18n())
+//setLocale(getLocalei18n())
 
 export default i18n
