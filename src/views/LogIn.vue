@@ -19,7 +19,19 @@
         >
           <a href="">Forgot password?</a>
         </div>
-        <fr-button color="blue-600" class="text-white">Log In</fr-button>
+        <fr-button type="submit" color="blue-600 mb-3" class="text-white"
+          >Log In</fr-button
+        >
+
+        <p class="text-sm text-center text-gray-600">
+          Dont have an account?
+          <router-link
+            to="sign-in"
+            class="text-blue-600 opacity-50 hover:opacity-100"
+          >
+            click here</router-link
+          >
+        </p>
       </div>
     </div>
   </centered-layout>

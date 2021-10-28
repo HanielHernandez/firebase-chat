@@ -2,6 +2,7 @@
   <component
     v-bind="$attrs"
     :is="as"
+    :type="type"
     class="px-4 py-2 font-bold rounded-md border-gray-300 focus:border-blue-700"
     :class="[block ? 'block' : 'inline-block', color ? colorClass : 'border']"
   >
@@ -26,6 +27,10 @@ export default defineComponent({
     color: {
       type: String,
       default: () => null
+    },
+    type: {
+      type: String,
+      default: () => 'button'
     }
   },
   setup(props) {

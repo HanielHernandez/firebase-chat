@@ -8,25 +8,29 @@
       title
     }}</label>
     <input
-      class="
-        p-3
-        w-full
-        border
-        outline-none
-        text-gray-900
-        focus:border-blue-400
-        border-gray-300
-        rounded-md
-      "
+      v-model="value"
+      class="p-3 w-full border outline-none text-gray-900 rounded-md"
+      :class="[
+        error
+          ? 'border-red-400 focus:border-red-600'
+          : 'focus:border-blue-400 border-gray-300'
+      ]"
       :placeholder="placeholder"
       :type="type"
+      @input="$emit('update:modelValue', $event.target.value)"
     />
+    <p
+      v-if="error && hasErrorSlotPopulate == false"
+      class="text-sm text-red-600 mt-1"
+    >
+      {{ errorMessage }}
+    </p>
     <slot name="error"></slot>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 
 export default defineComponent({
   name: 'TextField',
@@ -34,6 +38,10 @@ export default defineComponent({
     error: {
       type: Boolean,
       default: () => false
+    },
+    errorMessage: {
+      type: String,
+      default: () => null
     },
     type: {
       type: String,
@@ -46,10 +54,19 @@ export default defineComponent({
     placeholder: {
       type: String,
       default: () => null
+    },
+    modelValue: {
+      type: String,
+      default: () => null
     }
   },
-  setup() {
-    return {}
+  emits: ['update:modelValue'],
+  setup(props, { slots }) {
+    const value = ref(props.modelValue)
+    const hasErrorSlotPopulate = computed(() => {
+      return !!slots.error
+    })
+    return { value, hasErrorSlotPopulate }
   }
 })
 </script>

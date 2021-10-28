@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import LogIn from '@/views/LogIn.vue'
+import SignIn from '@/views/SignIn.vue'
+
 import Messenger from '@/views/Messenger.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -13,6 +15,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/log-in',
     name: 'LogIn',
     component: LogIn
+  },
+  {
+    path: '/sign-in',
+    name: 'SignIn',
+    component: SignIn
   },
 
   {
