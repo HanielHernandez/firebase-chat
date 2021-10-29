@@ -5,7 +5,6 @@ import PageNotFound from '@/views/PageNotFound.vue'
 import Messenger from '@/views/Messenger.vue'
 import { AuthGuard, NoAuthGuard } from './AuthGuard'
 import AuthForgotPassword from '@/views/AuthForgotPassword.vue'
-
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',

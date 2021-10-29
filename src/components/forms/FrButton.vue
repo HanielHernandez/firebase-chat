@@ -4,12 +4,8 @@
     :is="as"
     :disabled="disabled"
     :type="type"
-    class="px-4 py-2 font-bold rounded border-gray-300 focus:border-blue-700"
-    :class="[
-      block ? 'block' : 'inline-block',
-      color ? colorClass : 'border',
-      disabled ? 'opacity-75' : ''
-    ]"
+    class="font-bold rounded focus:border-blue-700"
+    :class="classes"
   >
     <div class="flex justify-center items-center">
       <slot v-if="!loading"></slot>
@@ -43,20 +39,46 @@ export default defineComponent({
     },
     color: {
       type: String,
-      default: () => null
+      default: () => 'gray-600'
     },
     type: {
       type: String,
       default: () => 'button'
+    },
+    flat: {
+      type: Boolean,
+      default: () => false
+    },
+    bordered: {
+      type: Boolean,
+      default: () => false
+    },
+    rounded: {
+      type: Boolean,
+      default: () => false
+    },
+    icon: {
+      type: Boolean,
+      default: () => false
     }
   },
   setup(props) {
-    const classes = computed(() => {
-      return {
-        block: props.block
-      }
-    })
     const colorClass = computed(() => `bg-${props.color}`)
+
+    const classes = computed(() => {
+      const borderClass = 'border border-gray-300'
+      const flatClass = 'bg-gray-600 bg-opacity-0 hover:bg-opacity-30'
+      const paddingClass = props.icon ? 'px-2 py-2' : 'px-4 py-2'
+
+      return [
+        props.block ? 'block' : 'inline-block',
+        props.flat ? flatClass : '',
+        colorClass,
+        paddingClass,
+        props.rounded ? 'rounded-full px-2 py-2' : '',
+        props.bordered ? borderClass : ''
+      ]
+    })
     return { classes, colorClass }
   }
 })

@@ -18,7 +18,17 @@
       <input
         :model-value="value"
         v-bind="field"
-        class="p-3 w-full border outline-none text-gray-900 rounded"
+        class="
+          p-3
+          w-full
+          border
+          outline-none
+          text-gray-900
+          rounded
+          transition-colors
+          duration-150
+          ease-in-out
+        "
         :class="[
           !!errorMessage
             ? 'border-red-400 focus:border-red-600'

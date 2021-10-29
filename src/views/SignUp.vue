@@ -22,7 +22,7 @@
           <TextField
             name="email"
             rules="required|email"
-            type="password"
+            type="email"
             :title="$t('auth.email')"
             :placeholder="$t('signup.email_placeholder')"
             class="mb-3"
@@ -38,7 +38,7 @@
           <TextField
             name="confirm_password"
             rules="required"
-            type="eamil"
+            type="password"
             :title="$t('auth.confirm_password')"
             :placeholder="$t('signup.confirm_password_placeholder')"
             class="mb-3"
@@ -92,8 +92,8 @@ export default {
     const register = async (values: RegisterRequest): Promise<void> => {
       loading.value = true
       try {
-        ///const response = await Auth.register(values as RegisterRequest)
-        console.log(values)
+        const response = await Auth.register(values as RegisterRequest)
+        console.log(response)
         alert('usuario guardado')
         loading.value = false
       } catch (e) {

@@ -7,22 +7,30 @@ import './index.css'
 import Globals from '@/components/globals'
 import './plugins/vee-validate'
 import i18n from './plugins/i18n/vue-i18n'
-import { initializeApp } from 'firebase/app'
+import { FirebaseApp, initializeApp } from 'firebase/app'
 import { firebaseConfig } from './config/variables'
 const app = createApp(App)
 
 // Object.keys(Globals).forEach((component:string) => {
 //   app.component(component, Globals[component])
 // })
-const firebaseapp = initializeApp(firebaseConfig)
+const initFirebase = (): Promise<FirebaseApp> => {
+  return new Promise((resolve, reject) => {
+    const firebaseapp = initializeApp(firebaseConfig)
+    resolve(firebaseapp)
+  })
+}
 
-console.log(firebaseapp)
+const initApp = async (): Promise<void> => {
+  await initFirebase()
+  Globals.forEach((component) => {
+    app.component(component.name, component)
+  })
 
-Globals.forEach((component) => {
-  app.component(component.name, component)
-})
+  app.use(i18n)
+  app.use(store)
+  app.use(router)
+  app.mount('#app')
+}
 
-app.use(i18n)
-app.use(store)
-app.use(router)
-app.mount('#app')
+initApp()

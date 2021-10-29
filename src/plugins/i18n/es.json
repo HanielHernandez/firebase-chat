@@ -31,5 +31,8 @@
   },
   "validations":{
     "required":"es requerido"
+  },
+  "navbar": {
+    "log_out_text": "Cerrar sesión"
   }
 }

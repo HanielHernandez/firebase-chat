@@ -10,6 +10,10 @@
       w-1 w-96
     "
   >
+    <fr-button flat rounded>
+      <span class="material-icons"> more_vert </span>
+    </fr-button>
+
     <ConversationsList />
   </div>
 </template>

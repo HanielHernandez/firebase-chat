@@ -30,5 +30,8 @@
   },
   "validations":{
     "required":"is required"
+  },
+  "navbar": {
+    "log_out_text": "Log out"
   }
 }

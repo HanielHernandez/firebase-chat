@@ -101,6 +101,7 @@ import { LoginRequest } from '@/models/auth'
 import auth from '@/plugins/firebase/auth'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   components: { CenteredLayout, VeeForm },
@@ -110,6 +111,8 @@ export default defineComponent({
       email: ''
     })
     const { t } = useI18n()
+    const store = useStore()
+    const setCurrentUser = () => store.dispatch('fetchCurrentUser')
     const errorMessage = ref()
     const router = useRouter()
     const loading = ref(false)
@@ -118,6 +121,7 @@ export default defineComponent({
       try {
         const response = await auth.singin(values)
         console.log(response)
+        setCurrentUser()
         router.push({ name: 'Messenger' })
         loading.value = false
       } catch (e: any) {
