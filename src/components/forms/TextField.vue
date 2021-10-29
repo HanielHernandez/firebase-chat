@@ -93,7 +93,7 @@ export default defineComponent({
 
 <style lang="scss">
 .text-field {
-  &:not(:nth-last-child()) {
+  &:not(:nth-last-child) {
     margin-bottom: 1rem;
   }
 }

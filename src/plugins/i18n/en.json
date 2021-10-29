@@ -33,5 +33,10 @@
   },
   "navbar": {
     "log_out_text": "Log out"
+  },
+  "sidebar": {
+    "conversations_title_text": "Conversations",
+    "new_conversation_text": "New Conversation",
+    "join_conversation_text": "Join Conversation"
   }
 }

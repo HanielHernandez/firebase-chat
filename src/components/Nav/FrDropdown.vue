@@ -39,22 +39,27 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref, toRefs, watch } from 'vue'
 
 export default defineComponent({
   name: 'FrDropdown',
   props: {
+    modelValue: {
+      type: Boolean,
+      default: () => false
+    },
     optionsWidth: {
       type: [String, Number],
-      default: () => '150px'
+      default: () => '250px'
     },
     align: {
       type: String,
       default: () => 'left'
     }
   },
-  setup(props) {
-    const isOpen = ref(false)
+  emits: ['update:modelValue'],
+  setup(props, { emit }) {
+    const isOpen = ref(props.modelValue)
     const optionsContainer = ref<any>(null)
 
     const contentHeight = computed(() =>
@@ -63,7 +68,17 @@ export default defineComponent({
 
     const handleClick = () => {
       isOpen.value = !isOpen.value
+      emit('update:modelValue', isOpen.value)
     }
+
+    watch(
+      () => props.modelValue,
+      (first: boolean, second: boolean) => {
+        //console.log('cambio modelo', first, second)
+        isOpen.value = props.modelValue
+      }
+    )
+
     onMounted(() => {
       console.log(props.align)
     })

@@ -4,7 +4,7 @@
     :is="as"
     :disabled="disabled"
     :type="type"
-    class="font-bold rounded focus:border-blue-700"
+    class="font-bold rounded text-gray-900 focus:border-blue-700"
     :class="classes"
   >
     <div class="flex justify-center items-center">
@@ -66,9 +66,9 @@ export default defineComponent({
     const colorClass = computed(() => `bg-${props.color}`)
 
     const classes = computed(() => {
-      const borderClass = 'border border-gray-300'
+      const borderClass = `border border-${props.color} text-${props.color}`
       const flatClass = 'bg-gray-600 bg-opacity-0 hover:bg-opacity-30'
-      const paddingClass = props.icon ? 'px-2 py-2' : 'px-4 py-2'
+      const paddingClass = props.rounded ? 'px-2 py-2' : 'px-4 py-2'
 
       return [
         props.block ? 'block' : 'inline-block',
