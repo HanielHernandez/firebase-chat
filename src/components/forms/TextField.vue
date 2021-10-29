@@ -6,7 +6,7 @@
   >
     <div
       class="w-full text-field"
-      :class="{ 'text-red-400': error }"
+      :class="{ 'text-red-400': !!errorMessage }"
       v-bind="$attrs"
     >
       <label
@@ -18,7 +18,7 @@
       <input
         :model-value="value"
         v-bind="field"
-        class="p-3 w-full border outline-none text-gray-900 rounded-md"
+        class="p-3 w-full border outline-none text-gray-900 rounded"
         :class="[
           !!errorMessage
             ? 'border-red-400 focus:border-red-600'

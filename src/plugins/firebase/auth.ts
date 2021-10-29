@@ -1,7 +1,12 @@
 import { LoginRequest, RegisterRequest, User } from '@/models/auth'
 import { addDoc, collection } from '@firebase/firestore'
 
-import { createUserWithEmailAndPassword, UserCredential } from 'firebase/auth'
+import {
+  createUserWithEmailAndPassword,
+  UserCredential,
+  signInWithEmailAndPassword,
+  signOut
+} from 'firebase/auth'
 import { auth, db } from '.'
 
 export class Auth {
@@ -20,8 +25,15 @@ export class Auth {
     )
   }
 
+  singin(data: LoginRequest): Promise<UserCredential> {
+    return signInWithEmailAndPassword(auth, data.email, data.password)
+  }
+
   users() {
     return collection(db, 'users')
+  }
+  signOut() {
+    return signOut(auth)
   }
 }
 export default new Auth()

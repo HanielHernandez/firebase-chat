@@ -12,14 +12,6 @@
           @submit="register"
         >
           <TextField
-            name="name"
-            rules="required"
-            type="text"
-            :title="$t('auth.name')"
-            :placeholder="$t('signup.name_placeholder')"
-            class="mb-3"
-          />
-          <TextField
             name="email"
             rules="required|email"
             type="password"
@@ -27,22 +19,7 @@
             :placeholder="$t('signup.email_placeholder')"
             class="mb-3"
           />
-          <TextField
-            name="password"
-            rules="required"
-            type="password"
-            :title="$t('auth.password')"
-            :placeholder="$t('signup.password_placeholder')"
-            class="mb-3"
-          />
-          <TextField
-            name="confirm_password"
-            rules="required"
-            type="eamil"
-            :title="$t('auth.confirm_password')"
-            :placeholder="$t('signup.confirm_password_placeholder')"
-            class="mb-3"
-          />
+
           <fr-button
             :disabled="loading || !meta.valid"
             type="submit"
@@ -72,10 +49,8 @@
 
 <script lang="ts">
 import CenteredLayout from '@/components/Layouts/CenteredLayout.vue'
-import { useForm, useField } from 'vee-validate'
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
-import Auth from '@/plugins/firebase/auth'
 import { RegisterRequest } from '@/models/auth'
 import { Form as VeeForm } from 'vee-validate'
 export default {
@@ -84,12 +59,12 @@ export default {
     const { t } = useI18n()
     const loading = ref(false)
     const initialValues = ref({
-      name: ''
+      email: ''
     })
 
     // fields instance
 
-    const register = async (values: RegisterRequest): Promise<void> => {
+    const handleSubmit = async (values: RegisterRequest): Promise<void> => {
       loading.value = true
       try {
         ///const response = await Auth.register(values as RegisterRequest)
@@ -106,7 +81,7 @@ export default {
     return {
       initialValues,
       loading,
-      register
+      handleSubmit
     }
   }
 }

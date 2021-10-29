@@ -2,7 +2,7 @@
   "signup":{
     "title":"Register a new firechat account",
     "name_placeholder":"Jhon McClaren",
-    "email_placeholder":"jmclaren@mycompany.com",
+    "email_placeholder":"jmclaren{'@'}mycompany.com",
     "password_placeholder":"XXXXXX",
     "confirm_password_placeholder":"XXXXXX",
     "button_text": "Sign Up",
@@ -15,6 +15,12 @@
     "forgot_password_text": "¿No recuerdas tu contraseña?",
     "no_account_text": "¿No tienes cuenta?",
     "click_here_text":"Crea tu cuenta"
+  },
+  "forgot_password":{
+    "title": "Forgot your password?",
+    "subtitle": "Enter your email to send a reset link",
+    "button_text": "Send reset email"
+
   },
   "auth":{
     "name":"Name",

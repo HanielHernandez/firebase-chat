@@ -1,12 +1,18 @@
 <template>
-  <div><TheSidebar /></div>
+  <div>
+    <dashboard-layout>
+      <TheSidebar />
+    </dashboard-layout>
+  </div>
 </template>
 
 <script lang="ts">
+import DashboardLayout from '@/components/Layouts/DashboardLayout.vue'
 import TheSidebar from '@/components/messenger/Sidebar.vue'
 export default {
   components: {
-    TheSidebar
+    TheSidebar,
+    DashboardLayout
   },
   setup(): unknown {
     return {}

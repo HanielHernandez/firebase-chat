@@ -1,33 +1,53 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
-import Home from '../views/Home.vue'
 import SignIn from '@/views/SignIn.vue'
 import SignUp from '@/views/SignUp.vue'
-
+import PageNotFound from '@/views/PageNotFound.vue'
 import Messenger from '@/views/Messenger.vue'
+import { AuthGuard, NoAuthGuard } from './AuthGuard'
+import AuthForgotPassword from '@/views/AuthForgotPassword.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    redirect: {
+      name: 'Messenger'
+    }
   },
+
   {
     path: '/sign-in',
     name: 'SignIn',
-    component: SignIn
+    component: SignIn,
+    meta: {
+      requiresNoAuth: true
+    }
   },
   {
     path: '/sign-up',
     name: 'SignUp',
-    component: SignUp
+    component: SignUp,
+    meta: {
+      requiresNoAuth: true
+    }
   },
 
   {
     path: '/messenger',
     name: 'Messenger',
-    component: Messenger
+    component: Messenger,
+    meta: {
+      requiresAuth: true
+    }
   },
-
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: AuthForgotPassword,
+    meta: {
+      requiresNoAuth: true
+    }
+  },
+  { path: '/:pathMatch(.*)*', component: PageNotFound },
   {
     path: '/about',
     name: 'About',
@@ -43,5 +63,7 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
+router.beforeEach(AuthGuard)
+router.beforeEach(NoAuthGuard)
 
 export default router
