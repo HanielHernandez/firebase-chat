@@ -6,6 +6,9 @@
     <div class="fr-card-body">
       <slot></slot>
     </div>
+    <div class="fr-card-actions">
+      <slot name="actions"></slot>
+    </div>
   </div>
 </template>
 
@@ -55,6 +58,9 @@ export default defineComponent({
     &:last-child {
       @apply pb-4;
     }
+  }
+  &-actions {
+    @apply pt-2 px-4 pb-4;
   }
 }
 </style>

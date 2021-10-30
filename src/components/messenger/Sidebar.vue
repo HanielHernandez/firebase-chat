@@ -43,17 +43,31 @@
       </fr-dropdown>
     </div>
     <ConversationsList />
-    <fr-modal v-model="showNewConvModal" size="sm">
+    <fr-modal v-slot="{ closeModal }" v-model="showNewConvModal" size="sm">
       <fr-card>
         <template #title>
-          <fr-card-title> Confirmar nueva conversación </fr-card-title>
+          <fr-card-title class="text-center">
+            {{ $t('sidebar.new_conversation_modal.title') }}
+          </fr-card-title>
         </template>
         <template #default>
           <div class="text-center">
             <FrLoading v-if="loading" size="16" thickness="8" />
             <p class="text-gray-600">
-              ¿Estás seguro que quieres Iniar una nueva conversación?
+              {{ $t('sidebar.new_conversation_modal.message') }}
             </p>
+          </div>
+        </template>
+        <template #actions>
+          <div class="text-center">
+            <fr-button class="mr-3" color="blue-600 text-white">
+              {{
+                $t('sidebar.new_conversation_modal.confirmation_button_text')
+              }}
+            </fr-button>
+            <fr-button color="red-600 text-white" @click="closeModal">
+              {{ $t('sidebar.new_conversation_modal.cancel_button_text') }}
+            </fr-button>
           </div>
         </template>
       </fr-card>

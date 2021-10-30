@@ -38,6 +38,15 @@
   "sidebar": {
     "conversations_title_text": "Conversaciones",
     "new_conversation_text": "Nueva conversación",
-    "join_conversation_text": "Unirse a un conversación"
+    "join_conversation_text": "Unirse a un conversación",
+    "new_conversation_modal" :
+    {
+      "title":"Crear nueva conversación",
+      "message":"¿Estás seguro en crear una nueva conversación?",
+      "confirmation_button_text" : "Crear",
+      "cancel_button_text" : "Cancelar"
+
+    }
+
   }
 }

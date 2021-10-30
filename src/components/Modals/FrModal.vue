@@ -10,7 +10,7 @@
     </transition>
     <transition name="modal-content">
       <div v-if="isModalOpen" class="modal-content">
-        <slot></slot>
+        <slot :closeModal="closeModal"></slot>
       </div>
     </transition>
   </div>
