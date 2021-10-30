@@ -70,7 +70,7 @@
             type="submit"
             block
             :loading="loading"
-            color="blue-600 w-full"
+            color="blue-600"
             class="text-white"
             >{{ $t('signin.button_text') }}</fr-button
           >

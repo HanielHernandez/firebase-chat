@@ -1,19 +1,22 @@
 <template>
-  <div class="fixed top-0 flex left-0 w-screen justify-between">
+  <div class="fixed top-0 flex left-0 w-screen p-2 justify-between">
     <div></div>
     <div class="flex justify-items-end items-center">
-      <span @click="logout">Logout</span>
       <fr-dropdown class="ml-4" options-width="250px" align="right">
         <template #default="{ handleClick }">
           <div
             v-if="currentUser"
             class="
               flex
+              p-2
+              rounded-full
               justify-end
               items-center
+              rounded
+              transition-colors
+              duration-300
+              easin-out
               flex-nowrap
-              px-4
-              py-2
               hover:bg-gray-900 hover:bg-opacity-20
             "
             @click="handleClick"
@@ -26,7 +29,7 @@
               class="rounded-full mr-3"
             />
             <div class="">
-              <p class="text-sm font-bold leading-none text-gray-900">
+              <p class="font-bold leading-none text-gray-900">
                 {{ currentUser.displayName }}
               </p>
             </div>

@@ -17,7 +17,7 @@
 import { onMounted } from '@vue/runtime-core'
 import { ref } from 'vue'
 import axios from 'axios'
-import ConversationItem from '@/components/messenger/ConversationItem.vue'
+import ConversationItem from '@/components/Messenger/ConversationItem.vue'
 export default {
   components: {
     ConversationItem

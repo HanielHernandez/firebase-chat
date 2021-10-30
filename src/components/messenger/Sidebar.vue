@@ -42,26 +42,43 @@
         </template>
       </fr-dropdown>
     </div>
-
     <ConversationsList />
+    <fr-modal v-model="showNewConvModal" size="sm">
+      <fr-card>
+        <template #title>
+          <fr-card-title> Confirmar nueva conversación </fr-card-title>
+        </template>
+        <template #default>
+          <div class="text-center">
+            <FrLoading v-if="loading" size="16" thickness="8" />
+            <p class="text-gray-600">
+              ¿Estás seguro que quieres Iniar una nueva conversación?
+            </p>
+          </div>
+        </template>
+      </fr-card>
+    </fr-modal>
   </div>
 </template>
 
 <script>
-import ConversationsList from '@/components/messenger/ConversationsList.vue'
+import ConversationsList from '@/components/Messenger/ConversationsList.vue'
 import { ref } from 'vue'
 export default {
   components: {
     ConversationsList
   },
   setup(props) {
+    const showNewConvModal = ref(false)
     const createConv = () => {
       openOptions.value = false
+      showNewConvModal.value = true
       console.log('creating new conv')
     }
     const openOptions = ref(false)
     return {
       openOptions,
+      showNewConvModal,
       createConv
     }
   }

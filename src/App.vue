@@ -1,6 +1,7 @@
 <template>
   <div :class="[darkMode ? 'dark' : '']">
     <router-view />
+    <div id="modals"></div>
   </div>
 </template>
 <script lang="ts">
