@@ -37,17 +37,32 @@
         </template>
 
         <template #options>
-          <ul>
-            <li>
-              <a
-                href="#"
-                class="py-2 px-4 block hover:bg-black hover:bg-opacity-20"
-                @click="logout"
-              >
+          <fr-list hoverable bordered>
+            <fr-list-item>
+              <template #avatar>
+                <i class="material-icons">person</i>
+              </template>
+              <a href="#" class="text-gray-600" @click="logout">
+                {{ $t('navbar.my_profile_text') }}
+              </a>
+            </fr-list-item>
+            <fr-list-item>
+              <template #avatar>
+                <i class="material-icons">settings</i>
+              </template>
+              <a href="#" class="text-gray-600" @click="logout">
+                {{ $t('navbar.settings_text') }}
+              </a>
+            </fr-list-item>
+            <fr-list-item>
+              <template #avatar>
+                <i class="material-icons">logout</i>
+              </template>
+              <a href="#" class="text-gray-600" @click="logout">
                 {{ $t('navbar.log_out_text') }}
               </a>
-            </li>
-          </ul>
+            </fr-list-item>
+          </fr-list>
         </template>
       </fr-dropdown>
     </div>

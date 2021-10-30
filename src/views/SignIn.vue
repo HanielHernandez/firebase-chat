@@ -1,35 +1,28 @@
 <template>
   <centered-layout>
     <div class="flex flex-col md:mx-0 md:w-1/3 xl:w-1/4 px-4">
-      <h3 class="text-3xl font-bold text-gray-900 text-center mb-6 t">
-        {{ $t('signin.title') }}
-      </h3>
-      <div
-        v-if="errorMessage"
-        class="text-red-600 bg-red-100 relative border-red-300 rounded p-4 mb-4"
-      >
-        {{ errorMessage }}
-        <button
-          type="button"
-          class="
-            rounded-full
-            w-6
-            h-6
-            p-1
-            shadow-xl
-            text-xs
-            bg-red-400
-            absolute
-            text-gray-900
-            bold
-            -top-3
-            -right-3
-          "
-          @click="errorMessage = ''"
-        >
-          x
-        </button>
+      <div class="text-center">
+        <img
+          src="@/assets/logo.svg"
+          class="mx-auto mb-4"
+          alt=""
+          width="150"
+          height="150"
+        />
+
+        <h3 class="text-3xl font-bold text-gray-900 text-center mb-6 t">
+          {{ $t('signin.title') }}
+        </h3>
       </div>
+
+      <fr-alert
+        v-if="message.text"
+        show-dismiss
+        type="error"
+        @onClose="message.text = null"
+      >
+        {{ message.text }}
+      </fr-alert>
 
       <div class="w-full w-lg flex flex-col rounded border p-4">
         <vee-form
@@ -111,6 +104,14 @@ export default defineComponent({
       email: ''
     })
     const { t } = useI18n()
+    const message = ref<{
+      type: string
+      text: string | null
+    }>({
+      type: 'success',
+      text: null
+    })
+    const showSuccessMessage = ref(true)
     const store = useStore()
     const setCurrentUser = () => store.dispatch('fetchCurrentUser')
     const errorMessage = ref()
@@ -126,12 +127,16 @@ export default defineComponent({
         loading.value = false
       } catch (e: any) {
         console.log(e.code, e.message)
-
+        message.value.type = 'error'
         if (e.code && e.message) {
           if (e.code == 'auth/user-not-found') {
-            errorMessage.value = t('auth.user_not_found_text')
+            message.value.text = t('auth.user_not_found_text')
           } else {
-            errorMessage.value = `Error ${e.code}: ${e.message}`
+            message.value.text = `Error ${e.code}: ${e.message}`
+          }
+        } else {
+          if (e == 'Error, email not verified') {
+            message.value.text = t('signin.email_not_verified_text')
           }
         }
 
@@ -141,7 +146,14 @@ export default defineComponent({
       }
     }
 
-    return { loading, initialValues, handleSubmit, errorMessage }
+    return {
+      showSuccessMessage,
+      loading,
+      initialValues,
+      handleSubmit,
+      message,
+      errorMessage
+    }
   }
 })
 </script>

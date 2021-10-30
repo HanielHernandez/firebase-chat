@@ -12,6 +12,16 @@ import {
   sendEmailVerification
 } from 'firebase/auth'
 import { auth, db } from '.'
+const generateUserCode = (email: string): string => {
+  let result = ''
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const charactersLength = characters.length
+  for (let i = 0; i < email.length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+  }
+  return result
+}
 
 export class Auth {
   register(data: RegisterRequest): Promise<UserCredential> {
@@ -20,7 +30,8 @@ export class Auth {
         const userProfile = {
           name: data.name,
           email: data.email,
-          profile_image_url: null
+          profile_image_url: null,
+          code: generateUserCode(data.email)
         } as User
         const user = await this.currentUser()
         await updateProfile(user, {
@@ -41,7 +52,9 @@ export class Auth {
     return signInWithEmailAndPassword(auth, data.email, data.password).then(
       async (cred: UserCredential) => {
         const user = await this.currentUser()
+        console.log(user)
         if (!user.emailVerified) {
+          this.signOut()
           throw 'Error, email not verified'
         }
         return cred

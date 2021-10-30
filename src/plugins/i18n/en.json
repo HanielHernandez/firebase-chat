@@ -7,14 +7,18 @@
     "confirm_password_placeholder":"XXXXXX",
     "button_text": "Sign Up",
     "already_registered_text": "Already have an account?",
-    "click_here_text": "Log in"
+    "click_here_text": "Log in",
+    "error_message": "An erro ocur while creating your account, try later.",
+    "success_message": "Cuenta creada exitosamente, hemos enviado un enlace a tu correo para que confirmes tu cuenta"
   },
   "signin":{
     "title": "Log in on Firechat",
     "button_text": "Sign in",
     "forgot_password_text": "¿No recuerdas tu contraseña?",
     "no_account_text": "¿No tienes cuenta?",
-    "click_here_text":"Crea tu cuenta"
+    "click_here_text":"Crea tu cuenta",
+    "email_not_verified_text": "Your emal has not been verified, enter your email and click on the link in order to verified your email"
+
   },
   "forgot_password":{
     "title": "Forgot your password?",
@@ -32,7 +36,9 @@
     "required":"is required"
   },
   "navbar": {
-    "log_out_text": "Log out"
+    "log_out_text": "Log out",
+    "my_profile_text": "My Profile",
+    "settings_text": "Settings"
   },
   "sidebar": {
     "conversations_title_text": "Conversations",

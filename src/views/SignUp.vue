@@ -4,7 +4,14 @@
       <h3 class="text-3xl font-bold text-gray-900 text-center mb-6 t">
         {{ $t('signup.title') }}
       </h3>
-
+      <fr-alert
+        v-if="message.message"
+        show-dismiss
+        :type="message.type"
+        @onClose="message.message = null"
+      >
+        {{ message.message }}
+      </fr-alert>
       <div class="w-full w-lg flex flex-col rounded border p-4">
         <vee-form
           v-slot="{ meta }"
@@ -78,6 +85,7 @@ import { ref } from 'vue'
 import Auth from '@/plugins/firebase/auth'
 import { RegisterRequest } from '@/models/auth'
 import { Form as VeeForm } from 'vee-validate'
+import { useAlerts } from '@/mixins'
 export default {
   components: { CenteredLayout, VeeForm },
   setup(): unknown {
@@ -86,6 +94,7 @@ export default {
     const initialValues = ref({
       name: ''
     })
+    const { message } = useAlerts('succcess')
 
     // fields instance
 
@@ -94,10 +103,13 @@ export default {
       try {
         const response = await Auth.register(values as RegisterRequest)
         console.log(response)
-        alert('usuario guardado')
+        message.value.type = 'success'
+        message.value.message = t('signup.success_message')
         loading.value = false
       } catch (e) {
         console.error(e)
+        message.value.type = 'error'
+        message.value.message = t('signup.error_message')
         loading.value = false
         alert(e)
       }
@@ -106,7 +118,8 @@ export default {
     return {
       initialValues,
       loading,
-      register
+      register,
+      message
     }
   }
 }

@@ -10,14 +10,16 @@ import { booleanProp } from '@/mixins'
 export default {
   name: 'FrList',
   props: {
-    hoverable: booleanProp(false)
+    hoverable: booleanProp(false),
+    boredered: booleanProp(false)
   },
   setup(props) {
     const classes = computed(() => {
       return [
         props.hoverable
           ? 'hoverable trasition-colors easin-in-out duration-300'
-          : ''
+          : '',
+        props.boredered ? 'bordered' : ''
       ]
     })
     return { classes }
@@ -46,6 +48,16 @@ export default {
       &-item {
         &:hover {
           background-color: $hoverable-color;
+        }
+      }
+    }
+  }
+
+  &.boredered {
+    .fr-list {
+      &-item {
+        &:not(:last-child) {
+          @apply border-b border-gray-300;
         }
       }
     }

@@ -7,6 +7,7 @@ import FrListItem from './Nav/FrListItem.vue'
 import FrModal from './Modals/FrModal.vue'
 import FrCard from './Cards/FrCard.vue'
 import FrCardTitle from './Cards/FrCardTitle.vue'
+import FrAlert from './Alerts/Alert.vue'
 export default [
   TextField,
   FrButton,
@@ -15,6 +16,7 @@ export default [
   FrList,
   FrListItem,
   FrModal,
+  FrAlert,
   FrCard,
   FrCardTitle
 ]
