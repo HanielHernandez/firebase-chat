@@ -16,14 +16,18 @@ import { CommitFunction, PaginatedStoreState, RootState } from '.'
 import {
   FETCH_ITEMS_ACTIONS,
   FIND_ITEM_ACTION,
-  LISTEN_CHANGES_ACTION
+  LISTEN_CHANGES_ACTION,
+  LOAD_MORE_ACTION
 } from './actions'
 import { GET_ITEM_BY_ID_GETTER, GET_ITEM_INDEX_GETTER } from './getters'
 import {
+  ADD_ITEMS_MUTATION,
   CREATE_ITEM,
   REMOVE_ITEM,
+  SET_END_REACHED,
   SET_ITEMS_MUTATION,
   SET_LOADING_MUTATION,
+  SET_PAGE_MUTATION,
   SET_SELECTED_MUTATION,
   UPDATE_ITEM
 } from './mutations'
@@ -39,6 +43,8 @@ export const createPaginatedStore = <T extends ItemWithId>(
 ) => {
   const state: PaginatedStoreState<T> = {
     items: [],
+    page: 1,
+    endReach: false,
     selected: null,
     loading: true
   }
@@ -52,6 +58,9 @@ export const createPaginatedStore = <T extends ItemWithId>(
     },
     [SET_ITEMS_MUTATION]: (state: PaginatedStoreState<T>, payload: T[]) => {
       state.items = payload
+    },
+    [ADD_ITEMS_MUTATION]: (state: PaginatedStoreState<T>, payload: T[]) => {
+      state.items = [...state.items, ...payload]
     },
     [SET_SELECTED_MUTATION]: (state: PaginatedStoreState<T>, payload: T) => {
       state.selected = payload
@@ -115,15 +124,33 @@ export const createPaginatedStore = <T extends ItemWithId>(
       })
     },
     [FETCH_ITEMS_ACTIONS]: async (
-      { commit, dispatch }: ActionContext<PaginatedStoreState<T>, RootState>,
+      {
+        state,
+        commit,
+        dispatch
+      }: ActionContext<PaginatedStoreState<T>, RootState>,
       payload?: QueryConstraint[]
     ): Promise<void> => {
+      commit(SET_END_REACHED, false)
       commit(SET_LOADING_MUTATION, true)
       const items = await service.index(payload)
       commit(SET_LOADING_MUTATION, false)
-      commit(SET_ITEMS_MUTATION, items)
-
-      //return await dispatch(FETCH_ITEMS_ACTIONS, payload)
+      if (state.page == 1) {
+        commit(SET_ITEMS_MUTATION, items)
+      } else {
+        commit(ADD_ITEMS_MUTATION, items)
+      }
+      if (items.length == 0) {
+        commit(SET_END_REACHED, true)
+      }
+    },
+    [LOAD_MORE_ACTION]: async ({
+      state,
+      commit
+    }: ActionContext<PaginatedStoreState<T>, RootState>) => {
+      if (!state.endReach) {
+        commit(SET_PAGE_MUTATION, state.page++)
+      }
     },
     [FIND_ITEM_ACTION]: async (
       {

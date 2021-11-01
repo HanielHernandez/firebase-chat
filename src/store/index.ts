@@ -7,6 +7,8 @@ import messages from './messages.store'
 export interface PaginatedStoreState<I> {
   items: I[]
   loading: boolean
+  page: number
+  endReach: boolean
   selected: I | null
 }
 
