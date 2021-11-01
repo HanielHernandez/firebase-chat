@@ -27,8 +27,10 @@ export class FirebaseApiService<T> {
     this.ref = collection(db, docsRef)
   }
 
-  async index(...queryConstraints: QueryConstraint[]): Promise<T[]> {
-    const q = query<T>(this.getRef(), ...queryConstraints)
+  async index(filters?: QueryConstraint[]): Promise<T[]> {
+    const q = filters
+      ? query<T>(this.getRef(), ...filters)
+      : query<T>(this.getRef())
     const querySnapshot = await getDocs<T>(q)
     return querySnapshot.docs.map((doc) => {
       return {
@@ -50,23 +52,20 @@ export class FirebaseApiService<T> {
       }
     })
   }
-  getFilterQuery(...filters: QueryConstraint[]): Query<T> {
+  getFilterQuery(filters: QueryConstraint[]): Query<T> {
     return query<T>(this.getRef(), ...filters)
   }
   onChanges(
-    filters: QueryConstraint[],
-    callback: (messages: T[]) => void
+    filters: QueryConstraint[] | null = null,
+    callback: (sanpshots: QuerySnapshot<T>) => void
   ): Unsubscribe {
-    const q = this.getFilterQuery(...filters)
+    console.log(this.getRef().path)
+    const q = filters ? this.getFilterQuery(filters) : query<T>(this.getRef())
     return onSnapshot(
       q,
       (querySnapshot: QuerySnapshot<T>) => {
-        console.log(querySnapshot)
-        callback(
-          querySnapshot.docs.map<T>((doc) => {
-            return { id: doc.id, ...doc.data() }
-          })
-        )
+        console.log(querySnapshot.metadata)
+        callback(querySnapshot)
       },
       (error) => {
         console.error(error)
@@ -75,13 +74,12 @@ export class FirebaseApiService<T> {
   }
 
   async find(id: string): Promise<T | null> {
-    console.log(this.docsRef)
     const docItemRef = doc(db, this.docsRef, id)
     const item = await getDoc(docItemRef)
     if (item.exists()) {
-      console.log(item.data)
       return { id: item.id, ...item.data() } as unknown as T
     } else {
+      console.log('no exist')
       return null
     }
   }

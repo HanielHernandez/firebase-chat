@@ -1,15 +1,16 @@
+import { Unsubscribe } from '@firebase/util'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 
 export default (moduleName: string) => {
   const store = useStore()
 
-  const fetch = (...args: unknown[]) => {
-    return store.dispatch(`${moduleName}/fetchItems`, args)
+  const fetch = (payload: unknown): Promise<Unsubscribe> => {
+    return store.dispatch(`${moduleName}/fetchItems`, payload)
   }
 
-  const find = (...args: unknown[]) => {
-    return store.dispatch(`${moduleName}/find`, args)
+  const find = (id: string) => {
+    return store.dispatch(`${moduleName}/find`, id)
   }
   const items = computed(() => {
     return store.state[moduleName].items

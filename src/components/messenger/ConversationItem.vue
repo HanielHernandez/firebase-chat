@@ -2,7 +2,7 @@
   <div
     class="
       hover:bg-white
-      transition-colors
+      transition-all
       duration-300
       ease-in-out
       py-2

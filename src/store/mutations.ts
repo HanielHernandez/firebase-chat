@@ -1,3 +1,6 @@
 export const SET_ITEMS_MUTATION = 'setItems'
 export const SET_LOADING_MUTATION = 'setLoading'
 export const SET_SELECTED_MUTATION = 'setSelected'
+export const UPDATE_ITEM = 'updateItem'
+export const CREATE_ITEM = 'createItem'
+export const REMOVE_ITEM = 'deleteItem'

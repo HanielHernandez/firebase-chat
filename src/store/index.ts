@@ -1,15 +1,18 @@
+import { User } from '@/models/auth'
 import Auth from '@/plugins/firebase/auth'
 import { createStore } from 'vuex'
 import conversationsStore from './conversations.store'
 import messages from './messages.store'
 
 export interface PaginatedStoreState<I> {
-  items: I[] | null
+  items: I[]
   loading: boolean
   selected: I | null
 }
 
 export type CommitFunction = (key: string, payload: unknown) => void
+export type ActionFunction = (key: string, payload: unknown) => Promise<unknown>
+
 export type SetterFunction = (
   state: { [key: string]: unknown },
   payload: unknown
@@ -19,6 +22,9 @@ export const setterFunction = (key: string): SetterFunction => {
     console.log('state', state)
     state[key] = payload
   }
+}
+export type RootState = {
+  currentUser: User | null
 }
 
 const store = createStore({

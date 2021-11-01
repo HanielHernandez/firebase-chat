@@ -24,24 +24,24 @@ export class Conversations extends FirebaseApiService<Conversation> {
     this.ref = collection(db, 'conversations')
   }
 
-  store(conversation: Conversation): Promise<Conversation> {
-    return addDoc(this.ref, conversation).then((conv) => {
-      return {
-        id: conv.id,
-        ...conversation
-      }
-    })
-  }
-  async index(...queryConstraints: QueryConstraint[]): Promise<Conversation[]> {
-    const q = query<Conversation>(this.ref, ...queryConstraints)
-    const querySnapshot = await getDocs<Conversation>(q)
-    return querySnapshot.docs.map((doc) => {
-      return {
-        id: doc.id,
-        ...doc.data()
-      } as Conversation
-    })
-  }
+  // store(conversation: Conversation): Promise<Conversation> {
+  //   return addDoc(this.ref, conversation).then((conv) => {
+  //     return {
+  //       id: conv.id,
+  //       ...conversation
+  //     }
+  //   })
+  // }
+  // async index(...queryConstraints: QueryConstraint[]): Promise<Conversation[]> {
+  //   const q = query<Conversation>(this.ref, ...queryConstraints)
+  //   const querySnapshot = await getDocs<Conversation>(q)
+  //   return querySnapshot.docs.map((doc) => {
+  //     return {
+  //       id: doc.id,
+  //       ...doc.data()
+  //     } as Conversation
+  //   })
+  // }
 
   // async find(id: string): Promise<Conversation | null> {
   //   console.log('t')

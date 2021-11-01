@@ -7,6 +7,7 @@ import { CommitFunction } from '.'
 import { FETCH_ITEMS_ACTIONS } from './actions'
 import { createPaginatedStore } from './base.store'
 import { SET_LOADING_MUTATION, SET_ITEMS_MUTATION } from './mutations'
+
 const messagesStr = createPaginatedStore<Message>(nodesApi)
 
 export default {
@@ -19,14 +20,11 @@ export default {
       }: {
         commit: CommitFunction
       },
-      payload: { nodeId: string; queries: QueryConstraint[] }
-    ): Promise<Unsubscribe> => {
+      payload: { node: string; queries: QueryConstraint[] }
+    ): Promise<Message[]> => {
       commit(SET_LOADING_MUTATION, true)
-      messagesApi.setId(payload.nodeId)
-      return messagesApi.onChanges(payload.queries, (items: Message[]) => {
-        commit(SET_LOADING_MUTATION, false)
-        commit(SET_ITEMS_MUTATION, items)
-      })
+      messagesApi.setId(payload.node)
+      return []
     }
   }
 }
