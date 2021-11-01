@@ -9,10 +9,6 @@
           width="150"
           height="150"
         />
-
-        <h3 class="text-3xl font-bold text-gray-900 text-center mb-6 t">
-          {{ $t('signin.title') }}
-        </h3>
       </div>
 
       <fr-alert
@@ -25,6 +21,9 @@
       </fr-alert>
 
       <div class="w-full w-lg flex flex-col rounded border p-4">
+        <h3 class="text-2xl font-bold text-gray-900 text-center mb-4 t">
+          {{ $t('signin.title') }}
+        </h3>
         <vee-form
           v-slot="{ meta }"
           :initial-values="initialValues"
@@ -95,6 +94,7 @@ import auth from '@/plugins/firebase/auth'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
+import { EMAIL_NOT_VERIFIED } from '@/config/variables'
 
 export default defineComponent({
   components: { CenteredLayout, VeeForm },
@@ -135,7 +135,7 @@ export default defineComponent({
             message.value.text = `Error ${e.code}: ${e.message}`
           }
         } else {
-          if (e == 'Error, email not verified') {
+          if (e == EMAIL_NOT_VERIFIED) {
             message.value.text = t('signin.email_not_verified_text')
           }
         }

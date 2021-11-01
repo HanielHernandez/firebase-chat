@@ -6,7 +6,7 @@
     <div class="fr-card-body">
       <slot></slot>
     </div>
-    <div class="fr-card-actions">
+    <div v-if="hasSlotPopulated('title')" class="fr-card-actions">
       <slot name="actions"></slot>
     </div>
   </div>

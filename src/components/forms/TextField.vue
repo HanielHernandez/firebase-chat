@@ -78,6 +78,10 @@ export default defineComponent({
     modelValue: {
       type: String,
       default: () => null
+    },
+    rules: {
+      type: String,
+      default: () => ''
     }
   },
   emits: ['update:modelValue'],

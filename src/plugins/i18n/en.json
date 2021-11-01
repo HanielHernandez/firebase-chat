@@ -47,11 +47,14 @@
       "new_conversation_modal" :
     {
       "title":"Create new conversation",
-      "message":"Are you sure you want to create a new conversation?",
+      "message":"Fill the folling form to create a new conversation",
       "confirmation_button_text" : "Create",
-      "cancel_button_text" : "Cancel"
+      "cancel_button_text" : "Cancel",
+      "recipient_id_label" : "Recipient ID"
 
     }
-    
+  },
+  "verify_email":{
+    "success_message": "Your account has been verified successfly, click the link below to sign in"
   }
 }

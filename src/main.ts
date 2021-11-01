@@ -9,6 +9,7 @@ import './plugins/vee-validate'
 import i18n from './plugins/i18n/vue-i18n'
 import { FirebaseApp, initializeApp } from 'firebase/app'
 import { firebaseConfig } from './config/variables'
+import { Form } from 'vee-validate'
 const app = createApp(App)
 
 // Object.keys(Globals).forEach((component:string) => {
@@ -27,6 +28,7 @@ const initApp = async (): Promise<void> => {
     app.component(component.name, component)
   })
 
+  app.component('VeeForm', Form)
   app.use(i18n)
   app.use(store)
   app.use(router)

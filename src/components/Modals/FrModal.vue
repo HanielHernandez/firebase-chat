@@ -25,7 +25,7 @@ export default defineComponent({
     modelValue: booleanProp(false),
     size: {
       type: String,
-      default: () => 'md'
+      default: () => 'default'
     }
   },
   emits: ['update:modelValue'],

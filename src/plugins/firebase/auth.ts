@@ -1,5 +1,6 @@
+import { EMAIL_NOT_VERIFIED } from '@/config/variables'
 import { LoginRequest, RegisterRequest, User } from '@/models/auth'
-import { addDoc, collection } from '@firebase/firestore'
+import { addDoc, collection, getDoc, query, where } from '@firebase/firestore'
 
 import {
   createUserWithEmailAndPassword,
@@ -9,29 +10,35 @@ import {
   onAuthStateChanged,
   updateProfile,
   User as FirebaseUser,
-  sendEmailVerification
+  sendEmailVerification,
+  applyActionCode
 } from 'firebase/auth'
 import { auth, db } from '.'
-const generateUserCode = (email: string): string => {
+import users from './users'
+
+export const generateCode = (length: number): string => {
   let result = ''
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   const charactersLength = characters.length
-  for (let i = 0; i < email.length; i++) {
+  for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength))
   }
   return result
 }
 
 export class Auth {
+  constructor() {
+    auth.useDeviceLanguage()
+  }
   register(data: RegisterRequest): Promise<UserCredential> {
     return createUserWithEmailAndPassword(auth, data.email, data.password).then(
       async (crendetials: UserCredential) => {
         const userProfile = {
           name: data.name,
           email: data.email,
-          profile_image_url: null,
-          code: generateUserCode(data.email)
+          profile_image_url: `https://ui-avatars.com/api/?name=${data.name}`,
+          code: generateCode(8)
         } as User
         const user = await this.currentUser()
         await updateProfile(user, {
@@ -42,6 +49,7 @@ export class Auth {
         await sendEmailVerification(user, {
           url: 'http://localhost:8080/email-confirmation'
         })
+        localStorage.setItem('userToVerifyEmail', data.email)
         await signOut(auth)
         return crendetials
       }
@@ -54,8 +62,10 @@ export class Auth {
         const user = await this.currentUser()
         console.log(user)
         if (!user.emailVerified) {
+          sendEmailVerification(user)
+
           this.signOut()
-          throw 'Error, email not verified'
+          throw EMAIL_NOT_VERIFIED
         }
         return cred
       }
@@ -79,6 +89,28 @@ export class Auth {
         },
         reject
       )
+    })
+  }
+
+  async verifyEmail(actionCode: string): Promise<void> {
+    return applyActionCode(auth, actionCode)
+  }
+
+  async sendVerifyEmail() {
+    return this.currentUser().then((user: FirebaseUser) => {
+      return sendEmailVerification(user, {
+        url: 'http://localhost:8080/email-confirmation'
+      })
+    })
+  }
+
+  currentUserProfile(): Promise<User | null> {
+    return this.currentUser().then(async (user: FirebaseUser) => {
+      let userProfile = null
+      if (user && user.email) {
+        userProfile = await users.findByEmail(user.email)
+      }
+      return userProfile
     })
   }
 }

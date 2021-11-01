@@ -22,7 +22,11 @@
             @click="handleClick"
           >
             <img
-              :src="currentUser.photoURL"
+              :src="
+                currentUser.profile_image_url
+                  ? currentUser.profile_image_url
+                  : `https://ui-avatars.com/api/?name=${currentUser.name}`
+              "
               width="40"
               height="40"
               alt=""
@@ -30,8 +34,9 @@
             />
             <div class="">
               <p class="font-bold leading-none text-gray-900">
-                {{ currentUser.displayName }}
+                {{ currentUser.name }}
               </p>
+              <small class="text-gray-600">{{ currentUser.code }}</small>
             </div>
           </div>
         </template>

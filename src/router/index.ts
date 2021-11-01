@@ -3,13 +3,24 @@ import SignIn from '@/views/SignIn.vue'
 import SignUp from '@/views/SignUp.vue'
 import PageNotFound from '@/views/PageNotFound.vue'
 import Messenger from '@/views/Messenger.vue'
+
 import { AuthGuard, NoAuthGuard } from './AuthGuard'
 import AuthForgotPassword from '@/views/AuthForgotPassword.vue'
+import VerifyEmail from '@/views/VerifyEmail.vue'
+import messengerRoutes from './messenger.routes'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     redirect: {
       name: 'Messenger'
+    }
+  },
+  {
+    path: '/verify-email',
+    name: 'VerifyEmail',
+    component: VerifyEmail,
+    meta: {
+      requiresNoAuth: true
     }
   },
 
@@ -36,8 +47,10 @@ const routes: Array<RouteRecordRaw> = [
     component: Messenger,
     meta: {
       requiresAuth: true
-    }
+    },
+    children: messengerRoutes
   },
+
   {
     path: '/forgot-password',
     name: 'ForgotPassword',

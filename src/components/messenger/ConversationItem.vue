@@ -13,46 +13,45 @@
     "
   >
     <img
-      :src="conv.avatar"
+      :src="conversation.recipient.profile_image_url"
       alt=""
       width="40"
       class="mr-4 rounded-full"
       height="40"
     />
     <div class="flex flex-col flex-1 overflow-hidden">
-      <div class="flex flex-nowrap justify-between">
+      <div class="flex flex-nowrap justify-between items-center">
         <p class="font-bold">
-          {{ `${conv.recipient_first_name} ${conv.recipient_last_name}` }}
+          {{ `${conversation.recipient.name}` }}
         </p>
-        <span class="text-blue-600 text-xs font-medium">
-          {{ formatDate(conv.date) }}
+        <span class="text-blue-600 text-xs font-medium"
+          >{{ formatDate(conversation.lastMessage.date) }}
         </span>
       </div>
 
-      <span class="text-sm h-5 truncate flex-grow">{{
-        conv.last_message
+      <span class="text-sm text-gray-600 h-5 truncate flex-grow">{{
+        $t(conversation.lastMessage.text)
       }}</span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import dayjs from 'dayjs'
 export default defineComponent({
   props: {
     conversation: {
       type: Object,
-      default: () => null
+      required: true
     }
   },
-  setup(props) {
-    const conv = ref(props.conversation)
+  setup() {
     const formatDate = (date: number) => {
-      return dayjs(new Date(date * 1000)).format('MM/DD/YY hh:mm a')
+      return dayjs(date).format('MM/DD/YY hh:mm a')
     }
     return {
-      conv,
+      //conversation,
       formatDate
     }
   }

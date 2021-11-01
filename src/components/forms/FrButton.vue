@@ -1,10 +1,18 @@
 <template>
   <component
     v-bind="$attrs"
-    :is="as"
+    :is="link ? RouterLink : 'button'"
+    :to="to"
     :disabled="disabled"
     :type="type"
-    class="font-bold rounded focus:border-blue-700"
+    class="
+      font-bold
+      rounded
+      transition-colors
+      ease-in-out
+      duration-150
+      focus:border-blue-700
+    "
     :class="classes"
   >
     <div class="flex justify-center items-center">
@@ -17,6 +25,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import FrLoading from './FrLoading.vue'
+import { RouterLink, useLink } from 'vue-router'
 export default defineComponent({
   name: 'FrButton',
   components: { FrLoading },
@@ -25,9 +34,13 @@ export default defineComponent({
       type: Boolean,
       default: () => false
     },
-    as: {
-      type: String,
-      default: () => 'button'
+    to: {
+      type: [String, Object],
+      default: () => ''
+    },
+    link: {
+      type: Boolean,
+      default: () => false
     },
     loading: {
       type: Boolean,
@@ -39,7 +52,7 @@ export default defineComponent({
     },
     color: {
       type: String,
-      default: () => 'gray-600 text-gray-900'
+      default: () => 'gray-600'
     },
     type: {
       type: String,
@@ -63,6 +76,19 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const { navigate, href, route, isActive, isExactActive } = useLink(props)
+    const textClass = computed(() => {
+      const last = props.color.split('-')
+      if (last[0] != 'gray') {
+        return Number.parseInt(last[1]) >= 600
+          ? 'text-gray-100'
+          : 'text-gray-900'
+      } else {
+        return Number.parseInt(last[1]) >= 600
+          ? 'text-gray-900'
+          : 'text-gray-100'
+      }
+    })
     const classes = computed(() => {
       const borderClass = `border border-${props.color} text-${props.color}`
       const flatClass = 'bg-gray-600 bg-opacity-0 hover:bg-opacity-30'
@@ -74,12 +100,13 @@ export default defineComponent({
         props.flat ? flatClass : '',
         colorClass,
         paddingClass,
+        textClass.value,
         props.disabled ? 'opacity-75' : '',
         props.rounded ? 'rounded-full px-2 py-2' : '',
         props.bordered ? borderClass : ''
       ]
     })
-    return { classes }
+    return { classes, RouterLink }
   }
 })
 </script>

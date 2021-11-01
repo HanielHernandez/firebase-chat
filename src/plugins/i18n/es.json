@@ -18,7 +18,7 @@
     "forgot_password_text": "¿No recuerdas tu contraseña?",
     "no_account_text": "¿No tienes cuenta?",
     "click_here_text":"Crea tu cuenta",
-    "email_not_verified_text": "Tu correo no ha sido verificado, porfavor entra a tu correo para verficar"
+    "email_not_verified_text": "Tu correo no ha sido verificado, hemos reenviado en enlace de verificación a tu correo para que verifiques tu cuenta "
   },
   "forgot_password":{
     "title": "¿Olvidaste tu contraseña?",
@@ -48,10 +48,16 @@
     "new_conversation_modal" :
     {
       "title":"Crear nueva conversación",
-      "message":"¿Estás seguro en crear una nueva conversación?",
+      "message":"Llena la siguiente información para crear la conversación",
       "confirmation_button_text" : "Crear",
-      "cancel_button_text" : "Cancelar"
+      "cancel_button_text" : "Cancelar",
+      "recipient_id_label" : "Id del Destinatario"
 
     }
-  }
+  },
+  "verify_email":{
+    "success_message": "Tu Cuenta ha sido verificada exitosamente, haz click en link de abajo para iniciar sesión",
+    "error_message":"Tu cuenta no pudo ser verificada, Intenta mas tarde, o Intenta Iniciar sesión para reenviar el correo de confirmación"
+  },
+  "CONVERSATION_CREATED": "Conversación creada"
 }

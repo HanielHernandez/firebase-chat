@@ -14,7 +14,8 @@ configure({
         name: 'Name',
         email: 'Email',
         password: 'Password',
-        confirm_password: 'Password Confirmation'
+        confirm_password: 'Password Confirmation',
+        recipientId: 'Recipient Id'
       }
     },
     es: {
@@ -23,7 +24,8 @@ configure({
         name: 'Nombre',
         email: 'Correo Electrónico',
         password: 'Contraseña',
-        confirm_password: 'Confirmación de contraseña'
+        confirm_password: 'Confirmación de contraseña',
+        recipientId: 'Id del Destinatario'
       }
     }
   })
