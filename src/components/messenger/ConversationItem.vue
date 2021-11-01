@@ -1,8 +1,13 @@
 <template>
-  <div
+  <router-link
+    :to="{
+      name: 'Messenger Conversation',
+      params: { conversationId: conversation.id }
+    }"
     class="
       hover:bg-white
       transition-all
+      bg-gray-100
       duration-300
       ease-in-out
       py-2
@@ -33,7 +38,7 @@
         $t(conversation.lastMessage.text)
       }}</span>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script lang="ts">

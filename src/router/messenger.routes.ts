@@ -4,7 +4,7 @@ export default [
   {
     path: ':conversationId',
     name: 'Messenger Conversation',
-    component: MessengerConversation,
+    component: (): unknown => import('@/views/MessengerConversation.vue'),
     meta: {
       requiresAuth: true
     }

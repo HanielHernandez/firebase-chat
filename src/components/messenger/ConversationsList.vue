@@ -5,43 +5,40 @@
     </div>
 
     <div>
-      <transition-group name="conversations" tag="div" appear>
-        <router-link
-          v-for="(conv, index) in conversations"
-          :key="`conv-${index}`"
-          :to="{
-            name: 'Messenger Conversation',
-            params: { conversationId: conv.id }
-          }"
+      <transition name="list-content" mode="out-in">
+        <div v-if="!loading && conversations.length > 0">
+          <transition-group name="conversations" tag="div" appear>
+            <ConversationItem
+              v-for="conv in conversations"
+              :key="`conv-${conv.id}`"
+              :conversation="conv"
+            />
+          </transition-group>
+        </div>
+        <p
+          v-else-if="!loading && conversations.length == 0"
+          class="small text-gray-500"
         >
-          <ConversationItem :conversation="conv" />
-        </router-link>
-      </transition-group>
-    </div>
-    <div class="text-center">
-      <div v-if="loading">
-        <div
-          v-for="t in 5"
-          :key="`skeleton-${t}`"
-          class="px-4 py-2 flex justify-start"
-        >
-          <fr-skeleton
-            circle
-            width="40px"
-            class="mr-4 flex-shrink-0"
-          ></fr-skeleton>
-          <div class="flex w-full flex-col">
-            <fr-skeleton height="1.25rem" class="mb-1"></fr-skeleton>
-            <fr-skeleton height="1.25rem"></fr-skeleton>
+          {{ 'No hay conversaciónes que listar' }}
+        </p>
+        <div v-else-if="loading">
+          <div
+            v-for="t in 5"
+            :key="`skeleton-${t}`"
+            class="px-4 py-2 flex justify-start"
+          >
+            <fr-skeleton
+              circle
+              width="40px"
+              class="mr-4 flex-shrink-0"
+            ></fr-skeleton>
+            <div class="flex w-full flex-col">
+              <fr-skeleton height="1.25rem" class="mb-1"></fr-skeleton>
+              <fr-skeleton height="1.25rem"></fr-skeleton>
+            </div>
           </div>
         </div>
-      </div>
-      <p
-        v-if="(conversations == null || conversations.length == 0) && !loading"
-        class="small text-gray-500"
-      >
-        No hay conversaciónes que listar
-      </p>
+      </transition>
     </div>
   </div>
 </template>
@@ -57,7 +54,7 @@ import {
   FETCH_CONVERSATION_ITEMS_ACTION,
   LISTEN_CONVERSATION_ITEMS_ACTION
 } from '@/store/actions'
-import { where } from 'firebase/firestore'
+import { orderBy, where } from 'firebase/firestore'
 export default defineComponent({
   components: {
     ConversationItem
@@ -78,7 +75,8 @@ export default defineComponent({
     const fetchConversations = async () => {
       try {
         await store.dispatch(FETCH_CONVERSATION_ITEMS_ACTION, [
-          where('senderId', '==', currentUser.value.code)
+          where('senderId', '==', currentUser.value.code),
+          orderBy('lastMessage.date', 'desc')
         ])
         unsubscribe = await store.dispatch(LISTEN_CONVERSATION_ITEMS_ACTION)
       } catch (e) {
@@ -112,40 +110,45 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.conversations-enter-to,
-.conversations-leave-from {
-  opacity: 1;
-  transform: none;
-}
-.conversations-enter-active,
-.conversations-leave-active {
-  transition: all 1s ease;
-}
-.conversations-leave-active {
-  position: absolute;
-  transition: all 1s ease;
-}
-.conversations-enter-from,
-.conversations-leave-to {
-  opacity: 0;
-  transition: all 1s ease;
-  transform: translateX(-30px);
-}
-.conversations-move {
-  transition: all 1s ease;
+.conversations {
+  &-enter-to,
+  &-leave-from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  &-enter-active,
+  &-leave-active {
+    transition: all 0.3s ease;
+  }
+  &-leave-active {
+    width: 100%;
+    transition: all 0.3 ease;
+    position: absolute;
+  }
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  &-move {
+    transition: all 0.3 ease;
+  }
 }
 
-//.conversations-item {
-//   display: inline-block;
-//   margin-right: 10px;
-// }
-//.conversations-enter-active,
-//.conversations-leave-active {
-//   transition: all 1s ease;
-// }
-//.conversations-enter-from,
-//.conversations-leave-to {
-//   opacity: 0;
-//   transform: translateY(30px);
-// }
+.list-content {
+  &-enter-from,
+  &-leave-to {
+    opacity: 0;
+    //transform: translateY(-20px);
+  }
+  &-enter-to,
+  &-leave-from {
+    opacity: 1;
+    //transform: translateY(0);
+  }
+  &-enter-active,
+  &-leave-active {
+    transition: all 0.3s ease;
+  }
+}
 </style>
