@@ -6,6 +6,7 @@ export interface Conversation extends ItemWithId {
   senderPhoneNumber?: string
   node?: string
   updatedAt: Date
+  conversationImageUrl: string
   title: string
   type: string
   lastMessage?: Message

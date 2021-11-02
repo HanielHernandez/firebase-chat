@@ -18,7 +18,7 @@
     "
   >
     <img
-      :src="conversation.recipient.profile_image_url"
+      :src="conversation.conversationImageUrl"
       alt=""
       width="40"
       class="mr-4 rounded-full"
@@ -27,7 +27,7 @@
     <div class="flex flex-col flex-1 overflow-hidden">
       <div class="flex flex-nowrap justify-between items-center">
         <p class="font-bold">
-          {{ `${conversation.recipient.name}` }}
+          {{ `${conversation.title}` }}
         </p>
         <span class="text-blue-600 text-xs font-medium"
           >{{ formatDate(conversation.lastMessage.date) }}

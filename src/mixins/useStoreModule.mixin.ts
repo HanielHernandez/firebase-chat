@@ -9,6 +9,10 @@ export default (moduleName: string) => {
     return store.dispatch(`${moduleName}/fetchItems`, payload)
   }
 
+  const loading = computed(() => {
+    return store.state[moduleName].loading
+  })
+
   const find = (id: string) => {
     return store.dispatch(`${moduleName}/find`, id)
   }
@@ -23,6 +27,7 @@ export default (moduleName: string) => {
   return {
     items,
     fetch,
+    loading,
     find,
     selected
   }

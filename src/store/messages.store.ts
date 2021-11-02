@@ -20,11 +20,15 @@ export default {
       }: {
         commit: CommitFunction
       },
-      payload: { node: string; queries: QueryConstraint[] }
+      { node, queries }: { node: string; queries: QueryConstraint[] }
     ): Promise<Message[]> => {
       commit(SET_LOADING_MUTATION, true)
-      messagesApi.setId(payload.node)
-      return []
+      messagesApi.setId(node)
+      const items = await messagesApi.index(queries)
+      commit(SET_ITEMS_MUTATION, items)
+      commit(SET_LOADING_MUTATION, false)
+
+      return items
     }
   }
 }

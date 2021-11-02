@@ -69,10 +69,10 @@ export default defineComponent({
       console.log('values', values)
       loading.value = true
       try {
+        // create new conversation
         const conv = await storeConversation(values.recipientId)
-        console.log(conv)
-        alert('Creado')
         loading.value = false
+        emit('created', conv)
       } catch (e) {
         loading.value = false
         alert(e)

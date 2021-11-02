@@ -9,6 +9,7 @@ import FrCard from './Cards/FrCard.vue'
 import FrCardTitle from './Cards/FrCardTitle.vue'
 import FrAlert from './Alerts/Alert.vue'
 import FrSkeleton from './Skeleton/FrSkeleton.vue'
+import FrMessagePlaceholder from './Messenger/MessagePlaceholder.vue'
 
 export default [
   TextField,
@@ -21,5 +22,6 @@ export default [
   FrAlert,
   FrCard,
   FrCardTitle,
-  FrSkeleton
+  FrSkeleton,
+  FrMessagePlaceholder
 ]

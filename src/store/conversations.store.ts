@@ -65,6 +65,7 @@ export const storeConversation = async (
   const conversation = await conversationsApi.store({
     recipient,
     title: recipient.name,
+    conversationImageUrl: recipient.profileImageUrl,
     node: node.id,
     senderPhoneNumber: currentUser.phoneNumber,
     updatedAt: new Date(),

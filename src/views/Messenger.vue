@@ -2,7 +2,7 @@
   <div>
     <dashboard-layout>
       <TheSidebar />
-      <div class="md:pl-96" style="padding-top: 4.5rem">
+      <div class="md:pl-96 h-screen" style="padding-top: 4.5rem">
         <router-view></router-view>
       </div>
     </dashboard-layout>

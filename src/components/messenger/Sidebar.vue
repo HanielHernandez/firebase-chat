@@ -44,7 +44,7 @@
     </div>
     <ConversationsList />
     <fr-modal v-slot="{ closeModal }" v-model="showNewConvModal">
-      <ConversationForm @cancel="closeModal" />
+      <ConversationForm @cancel="closeModal" @created="handleCreated" />
     </fr-modal>
   </div>
 </template>
@@ -54,6 +54,7 @@ import ConversationsList from '@/components/Messenger/ConversationsList.vue'
 import ConversationForm from '@/components/Messenger/ConversationForm.vue'
 
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 export default {
   components: {
     ConversationsList,
@@ -61,11 +62,18 @@ export default {
   },
   setup(props) {
     const showNewConvModal = ref(false)
-
+    const router = useRouter()
     const createConv = () => {
       openOptions.value = false
       showNewConvModal.value = true
       console.log('creating new conv')
+    }
+    const handleCreated = (conv) => {
+      showNewConvModal.value = false
+      router.push({
+        name: 'Messenger Conversation',
+        params: { conversationId: conv.id }
+      })
     }
     const openOptions = ref(false)
     return {
@@ -73,6 +81,7 @@ export default {
       showNewConvModal,
       // initialValues,
       // onSubmit,
+      handleCreated,
       createConv
     }
   }

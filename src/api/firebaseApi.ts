@@ -4,16 +4,11 @@ import {
   query,
   getDocs,
   collection,
-  CollectionReference,
-  DocumentData,
   addDoc,
   WithFieldValue,
-  DocumentReference,
-  setDoc,
   onSnapshot,
   QuerySnapshot,
   Unsubscribe,
-  where,
   Query,
   getDoc,
   doc
@@ -28,9 +23,9 @@ export class FirebaseApiService<T> {
   }
 
   async index(filters?: QueryConstraint[]): Promise<T[]> {
-    const q = filters
-      ? query<T>(this.getRef(), ...filters)
-      : query<T>(this.getRef())
+    const ref = this.getRef()
+    console.log(ref.path)
+    const q = filters ? query<T>(ref, ...filters) : query<T>(ref)
     const querySnapshot = await getDocs<T>(q)
     return querySnapshot.docs.map((doc) => {
       return {
@@ -59,7 +54,6 @@ export class FirebaseApiService<T> {
     filters: QueryConstraint[] | null = null,
     callback: (sanpshots: QuerySnapshot<T>) => void
   ): Unsubscribe {
-    console.log(this.getRef().path)
     const q = filters ? this.getFilterQuery(filters) : query<T>(this.getRef())
     return onSnapshot(
       q,
@@ -79,7 +73,6 @@ export class FirebaseApiService<T> {
     if (item.exists()) {
       return { id: item.id, ...item.data() } as unknown as T
     } else {
-      console.log('no exist')
       return null
     }
   }

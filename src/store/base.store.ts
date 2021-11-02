@@ -108,7 +108,6 @@ export const createPaginatedStore = <T extends ItemWithId>(
             const index = getters[GET_ITEM_BY_ID_GETTER](item.id)
             if (!index) {
               commit(CREATE_ITEM, item)
-              console.log('Item created: ', item)
             }
           }
           if (change.type === 'modified') {
@@ -118,7 +117,6 @@ export const createPaginatedStore = <T extends ItemWithId>(
           if (change.type === 'removed') {
             const index = getters[GET_ITEM_INDEX_GETTER](item.id)
             commit(REMOVE_ITEM, index)
-            console.log(`Item removed at index ${index}`, item)
           }
         })
       })
