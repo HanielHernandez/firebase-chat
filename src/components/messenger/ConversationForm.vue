@@ -16,8 +16,8 @@
         </p>
 
         <text-field
-          id="recipientId"
-          title="Id del Destinatario"
+          id="phoneNumber"
+          :title="$t('conversation_form.recipient_phone_number')"
           placeholder="xxxxxxxx"
           name="recipientId"
           type="text"

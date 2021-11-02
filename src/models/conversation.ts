@@ -3,8 +3,10 @@ import { ItemWithId, Message } from './message'
 
 export interface Conversation extends ItemWithId {
   recipient: User | User[]
-  senderId?: string
+  senderPhoneNumber?: string
   node?: string
   updatedAt: Date
+  title: string
+  type: string
   lastMessage?: Message
 }

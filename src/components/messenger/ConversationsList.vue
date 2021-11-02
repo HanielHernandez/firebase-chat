@@ -17,7 +17,7 @@
         </div>
         <p
           v-else-if="!loading && conversations.length == 0"
-          class="small text-gray-500"
+          class="small text-gray-500 text-center px-4 py-2"
         >
           {{ 'No hay conversaciónes que listar' }}
         </p>

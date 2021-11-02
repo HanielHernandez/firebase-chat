@@ -27,11 +27,11 @@ const setLoadingFn = (): SetterFunction => setterFunction('loading')
 
 export const storeConversation = async (
   state: unknown,
-  recipientId: string
+  phoneNumber: string
 ): Promise<Conversation> => {
-  console.log(recipientId)
+  console.log(phoneNumber)
   //verify if user exist
-  const recipient = await users.find(recipientId)
+  const recipient = await users.findBy('phoneNumber', phoneNumber)
   const currentUser = await auth.currentUserProfile()
 
   // if recipient does not exist throw exception
@@ -39,7 +39,6 @@ export const storeConversation = async (
     throw USER_NOT_FOUND
   }
   // get current user
-
   if (!currentUser) {
     throw NOT_LOG_IN
   }
@@ -65,8 +64,9 @@ export const storeConversation = async (
   // saveCurrentConversation
   const conversation = await conversationsApi.store({
     recipient,
+    title: recipient.name,
     node: node.id,
-    senderId: currentUser.code,
+    senderPhoneNumber: currentUser.phoneNumber,
     updatedAt: new Date(),
     lastMessage
   } as Conversation)

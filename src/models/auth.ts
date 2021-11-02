@@ -4,12 +4,14 @@ export interface LoginRequest {
 }
 export interface RegisterRequest extends LoginRequest {
   name: string
-  confirm_password: string
+  phoneNumber: string
+  confirmPassword: string
 }
 export interface User {
   id?: string
   name: string
   email: string
-  image_url?: string
+  profileImageUrl?: string
   code?: string
+  phoneNumber: string
 }

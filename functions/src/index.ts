@@ -19,39 +19,48 @@ exports.addConversation = functions.https.onRequest(async (req, res) => {
 // on converstion create firebase
 exports.onConversationCreate = functions.firestore
   .document('/conversations/{conversaitonId}')
-  .onCreate(async (snap, context) => {
+  .onCreate(async (snap, context): Promise<boolean> => {
     const newConv = snap.data()
-
+    console.log('Conversación nueva ', newConv)
     // find conversations with same recipient id and sender id
-    const exitsConv = await admin
-      .firestore()
-      .collection('conversations')
-      .where('recipient.id', '==', newConv.senderid)
-      .where('senderId', '==', newConv.recipient.id)
-      .limit(1)
-      .get()
+    try {
+      const exitsConv = await admin
+        .firestore()
+        .collection('conversations')
+        .where('recipient.code', '==', newConv.senderId)
+        .where('senderId', '==', newConv.recipient.id)
+        .limit(1)
+        .get()
 
-    // if conversaiton exist exit funciton
-    if (exitsConv.docs.length > 0) {
-      console.log(
-        'Ya existe una conversación con recipient id ' + newConv.senderId
-      )
-      return true
+      // if conversaiton exist exit funciton
+      if (exitsConv.docs.length > 0) {
+        console.log(
+          'Ya existe una conversación con recipient id ' + newConv.senderId
+        )
+        return false
+      } else {
+        // create recipient conversation once sender creates one
+        const recipient = admin
+          .firestore()
+          .collection('users')
+          .where('recipient.phone', '==', newConv.sender.phone)
+
+        const recipientConv = await admin
+          .firestore()
+          .collection('conversations')
+          .add({
+            recipient: {
+              id: newConv.senderId
+            },
+            senderId: newConv.recipient.id
+          })
+
+        console.log(
+          'Se creo un conversación de recipient con id ' + recipientConv.id
+        )
+      }
+    } catch (e) {
+      console.error(e)
     }
-
-    // create recipient conversation once sender creates one
-    const recipientConv = await admin
-      .firestore()
-      .collection('conversations')
-      .add({
-        recipient: {
-          id: newConv.senderId
-        },
-        senderId: newConv.recipient.id
-      })
-
-    console.log(
-      'Se creo un conversación de recipient con id ' + recipientConv.id
-    )
     return true
   })
