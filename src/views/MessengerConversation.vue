@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MessageBubble from '@/components/Messenger/MessageBubble.vue'
+import MessageList from '@/components/Messenger/MessageList.vue'
 import { useStoreModule, useUser } from '@/mixins'
 import { computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -42,15 +42,11 @@ onUnmounted(() => {
 
 <template>
   <div class="px-4 h-full container-xl mx-auto container-lg">
-    <div class="h-full flex flex-col-reverse relative pb-24">
+    <div class="h-full flex flex-col relative pb-24">
       <div class="w-full p-4 absolute bottom-0 right-0 bg-white">
         <text-field id="text" rules="" name="text"> </text-field>
       </div>
-      <MessageBubble
-        v-for="message in messages"
-        :key="message.id"
-        :message="message"
-      />
+      <MessageList :messages="messages" />
 
       <template v-if="loading">
         <FrMessagePlaceholder
