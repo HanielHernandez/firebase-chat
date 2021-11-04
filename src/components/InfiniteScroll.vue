@@ -35,13 +35,16 @@ export default defineComponent({
     const onLoadingEnded = () => {
       hasReachLoading.value = false
     }
+    const onEnd = () => {
+      hasReachEnd.value = true
+    }
     onMounted(() => {
       // // console.log(container.value)
       if (container.value != null) {
         observer.value = new IntersectionObserver(([entry]) => {
-          if (entry && entry.isIntersecting) {
+          if (entry && entry.isIntersecting && hasReachEnd.value == false) {
             hasReachLoading.value = true
-            emit('loadMore', onLoadingEnded)
+            emit('loadMore', { onLoadingEnded, onEnd })
           }
         }, props.options)
         observer.value.observe(container.value)

@@ -1,5 +1,9 @@
 <template>
-  <div class="w-full flex py-4" :class="{ 'justify-end': sender }">
+  <div
+    :id="`message-${message.id}`"
+    class="message w-full flex py-4"
+    :class="{ 'justify-end': sender }"
+  >
     <div
       class="message-inner flex w-4/6 md:w-2/5 items-center"
       :class="{
@@ -33,6 +37,20 @@
       <fr-button flat rounded :class="{ 'mr-2': sender, 'ml-2': !sender }">
         <i class="material-icons">more_vert</i>
       </fr-button>
+      <div
+        :class="{ 'mr-2': sender, 'ml-2': !sender }"
+        class="
+          message-date-tooltip
+          bg-black bg-opacity-30
+          text-xs
+          px-4
+          py-2
+          text-white
+          rounded-full
+        "
+      >
+        {{ $date(message.date) }}
+      </div>
     </div>
   </div>
 </template>
@@ -57,7 +75,7 @@ export default defineComponent({
     })
 
     const formatDate = (date: number): string => {
-      return dayjs(date).format('MM/DD/YY hh:mm a')
+      return dayjs(date).format('hh:mm a')
     }
     return {
       sender,
@@ -68,8 +86,22 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-.message-inner {
-  transition: all 0.3s cubic-bezier(0.42, 0, 0.52, 2.04);
+<style scoped lang="scss">
+.message {
+  &-inner {
+    transition: all 0.3s cubic-bezier(0.42, 0, 0.52, 2.04);
+    .message {
+      &-date-tooltip {
+        opacity: 0;
+      }
+    }
+    &:hover {
+      .message {
+        &-date-tooltip {
+          opacity: 1;
+        }
+      }
+    }
+  }
 }
 </style>

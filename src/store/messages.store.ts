@@ -1,7 +1,12 @@
 import messagesApi, { MessagesApi } from '@/api/messagesApi'
 import nodesApi from '@/api/nodesApi'
 import { Message } from '@/models/message'
-import { endAt, limitToLast, QueryConstraint } from '@firebase/firestore'
+import {
+  endAt,
+  endBefore,
+  limitToLast,
+  QueryConstraint
+} from '@firebase/firestore'
 import { Unsubscribe } from '@firebase/util'
 import { where, orderBy, limit } from 'firebase/firestore'
 import { ActionContext } from 'vuex'
@@ -11,7 +16,8 @@ import { createPaginatedStore } from './base.store'
 import {
   SET_LOADING_MUTATION,
   SET_ITEMS_MUTATION,
-  CREATE_ITEM
+  CREATE_ITEM,
+  ADD_ITEMS_MUTATION
 } from './mutations'
 
 const messagesStr = createPaginatedStore<Message>(messagesApi)
@@ -20,16 +26,16 @@ export default {
   ...messagesStr,
   mutations: {
     ...messagesStr.mutations,
-    [CREATE_ITEM]: (
+    [ADD_ITEMS_MUTATION]: (
       state: PaginatedStoreState<Message>,
-      newItem: Message
+      paylod: Message[]
     ): void => {
-      state.items = [...state.items, newItem]
+      state.items = [...paylod, ...state.items]
     }
   },
   getters: {
-    lastMessageDate: ({ items }: PaginatedStoreState<Message>) => {
-      return items.length > 0 ? items[0].date : new Date().getTime()
+    lastMessageDate: (state: PaginatedStoreState<Message>) => {
+      return state.items[0].date
     }
   },
   actions: {
@@ -37,25 +43,34 @@ export default {
     [FETCH_ITEMS_ACTIONS]: async (
       {
         commit,
-        getters
+        getters,
+        state
       }: ActionContext<PaginatedStoreState<Message>, RootState>,
-      { node }: { node: string }
-    ): Promise<Message[]> => {
-      commit(SET_LOADING_MUTATION, true)
-      messagesApi.setId(node)
-      // // console.log(getters)
-      const lastMessageDate = getters.lastMessageDate
-      // // console.log(lastMessageDate)
-      const queries = [
-        orderBy('date', 'asc'),
-        endAt(lastMessageDate),
-        limitToLast(25)
-      ]
-      const items = await messagesApi.index(queries)
-      commit(SET_ITEMS_MUTATION, items)
-      commit(SET_LOADING_MUTATION, false)
+      node: string
+    ): Promise<Message[] | null> => {
+      if (state.loading == false) {
+        commit(SET_LOADING_MUTATION, true)
+        console.log(state.items)
 
-      return items
+        messagesApi.setId(node)
+
+        const lastMessageDate =
+          state.items.length > 0
+            ? getters.lastMessageDate
+            : new Date().getTime()
+        console.log(lastMessageDate)
+        const queries = [
+          orderBy('date', 'asc'),
+          endBefore(lastMessageDate),
+          limitToLast(25)
+        ]
+        const items = await messagesApi.index(queries)
+        commit(ADD_ITEMS_MUTATION, items)
+        commit(SET_LOADING_MUTATION, false)
+
+        return items
+      }
+      return null
     }
   }
 }

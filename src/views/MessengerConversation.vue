@@ -47,7 +47,7 @@ const {
 onMounted(async () => {
   await findConversation(conversationId.value)
 
-  scrollToBottom()
+  // scrollToBottom()
 })
 onUnmounted(() => {
   unsubscribe()

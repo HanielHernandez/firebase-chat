@@ -18,26 +18,66 @@ const props = defineProps({
 })
 
 const { selected: currentConv } = useStoreModule('conversations')
-
+const scrollPosition = ref(0)
 const { currentUser } = useUser()
 const { loading, fetch } = useStoreModule('messages')
 onMounted(() => {
-  // // console.log('message list added', messagesList)
   if (messagesList.value) {
     messagesList.value.scrollTo(0, 0)
   }
 })
-const scrollReached = async (onEndLoading: () => void) => {
-  // // console.log('ya pasó el loaidng')
-  if (currentConv.value) {
-    await fetch(currentConv.value.node)
-    onEndLoading()
-  } else {
-    onEndLoading()
+const lastMessage = ref<Element>()
+const scrollToBotom = () => {
+  if (messagesList.value) {
+    console.log(
+      'scroll hegiht',
+      messagesList.value.scrollHeight,
+      scrollPosition.value
+    )
+    if (lastMessage.value) {
+      lastMessage.value.scrollIntoView()
+      //messagesList.value.scrollIntoView(`#${lastMessage.value.id}`)
+    } else {
+      messagesList.value.scrollTo(0, messagesList.value.scrollHeight)
+    }
+
+    // messagesList.value.scrollTo(
+    //   0,
+    //   messagesList.value.scrollHeight - scrollPosition.value
+    // )
   }
 }
+const scrollReached = async ({
+  onLoadingEnded,
+  onEnd
+}: {
+  onLoadingEnded: () => void
+  onEnd: () => void
+}) => {
+  console.log('alcanzo scroll ', currentConv.value)
+  console.log(messagesList.value?.scrollTop)
+  storePosition()
+  if (messagesList.value) {
+    scrollPosition.value = messagesList.value.scrollHeight
+  }
+  const items = await fetch(currentConv.value.node)
+  if (items == null || items.length == 0) {
+    onEnd()
+  }
+  console.log('terminó  fetch ')
+  scrollToBotom()
+  onLoadingEnded()
+}
+
+const storePosition = () => {
+  if (messagesList.value) {
+    const lastChild = [...messagesList.value.querySelectorAll('.message')]
+    lastMessage.value = lastChild[0]
+    console.log('Last chidl', lastChild[0])
+  }
+}
+
 const beforeEnter = (el: HTMLElement): void => {
-  // // console.log('INDEX IS', el.dataset.index)
   el.style.opacity = '0'
   el.style.transform = 'rotateX(-45deg) scale(0.3)'
 }
@@ -90,7 +130,11 @@ const sameDayAsBefore = (i: number): boolean => {
     "
     style="max-height: calc(100vh - 9.625rem)"
   >
-    <FrInfiniteScroll v-if="currentConv" @loadMore="scrollReached">
+    <FrInfiniteScroll
+      v-if="currentConv"
+      :options="{ threshold: 0.2 }"
+      @loadMore="scrollReached"
+    >
       <template #loading>
         <div>
           <FrMessagePlaceholder

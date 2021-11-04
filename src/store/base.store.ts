@@ -52,7 +52,7 @@ export const createPaginatedStore = <T extends ItemWithId>(
     page: 1,
     endReach: false,
     selected: null,
-    loading: true
+    loading: false
   }
 
   const mutations = {
