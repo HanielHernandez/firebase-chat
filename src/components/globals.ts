@@ -10,6 +10,7 @@ import FrCardTitle from './Cards/FrCardTitle.vue'
 import FrAlert from './Alerts/Alert.vue'
 import FrSkeleton from './Skeleton/FrSkeleton.vue'
 import FrMessagePlaceholder from './Messenger/MessagePlaceholder.vue'
+import FrInfiniteScroll from './InfiniteScroll.vue'
 
 export default [
   TextField,
@@ -23,5 +24,6 @@ export default [
   FrCard,
   FrCardTitle,
   FrSkeleton,
-  FrMessagePlaceholder
+  FrMessagePlaceholder,
+  FrInfiniteScroll
 ]

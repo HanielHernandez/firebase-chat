@@ -107,12 +107,12 @@ export default {
     // fields instance
 
     const register = async (values: RegisterRequest): Promise<void> => {
-      //console.log(values)
+      //// // console.log(values)
 
       loading.value = true
       try {
         const response = await Auth.register(values as RegisterRequest)
-        console.log(response)
+        // // console.log(response)
         message.value.type = 'success'
         message.value.message = t('signup.success_message')
         loading.value = false

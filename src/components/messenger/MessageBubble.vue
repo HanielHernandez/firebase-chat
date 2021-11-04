@@ -1,31 +1,38 @@
 <template>
-  <div class="w-100 flex py-4" :class="{ 'justify-end': sender }">
+  <div class="w-full flex py-4" :class="{ 'justify-end': sender }">
     <div
-      class="flex w-4/6 md:w-2/5 items-center jst"
+      class="message-inner flex w-4/6 md:w-2/5 items-center"
       :class="{
         'flex-row-reverse': sender,
-        'justify-end': sender,
         'justify-center': message.sender == 'SYSTEM'
       }"
     >
-      <img src="" alt="" />
+      <img
+        :src="message.senderImageUrl"
+        alt=""
+        width="40"
+        height="40"
+        class="rounded-full"
+        :class="{ 'ml-2': sender, 'mr-2': !sender }"
+      />
+
       <div
-        class="p-4 rounded-md shadow-md"
+        class="p-4 rounded-md shadow-sm text-gray-900 max-w-full break-words"
         :class="{
-          'w-1/3 ': message.senderId != 'SYSTEM',
           'bg-blue-200': sender,
           'bg-yellow-100': message.sender != 'SYSTEM' && !sender
         }"
       >
         {{ message.text }}
+        <br />
+        <p class="text-gray-500 text-xs" :class="{ 'text-right': sender }">
+          {{ formatDate(message.date) }}
+        </p>
       </div>
 
-      <fr-skeleton
-        v-if="message.sender == 'SYSTEM'"
-        class="w-1/3"
-        height="100px"
-      >
-      </fr-skeleton>
+      <fr-button flat rounded :class="{ 'mr-2': sender, 'ml-2': !sender }">
+        <i class="material-icons">more_vert</i>
+      </fr-button>
     </div>
   </div>
 </template>
@@ -33,7 +40,8 @@
 <script lang="ts">
 import { useUser } from '@/mixins'
 import { Message } from '@/models/message'
-import { defineComponent, PropType } from 'vue'
+import dayjs from 'dayjs'
+import { computed, defineComponent, PropType } from 'vue'
 export default defineComponent({
   props: {
     message: {
@@ -42,16 +50,26 @@ export default defineComponent({
     }
   },
   setup(props) {
-    console.log(props.message)
     const { currentUser } = useUser()
-    const sender = () => {
-      return currentUser.value.code == props.message.senderId
+
+    const sender = computed(() => {
+      return currentUser.value.id == props.message.senderId
+    })
+
+    const formatDate = (date: number): string => {
+      return dayjs(date).format('MM/DD/YY hh:mm a')
     }
-    {
+    return {
+      sender,
+      formatDate,
       currentUser
     }
   }
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+.message-inner {
+  transition: all 0.3s cubic-bezier(0.42, 0, 0.52, 2.04);
+}
+</style>

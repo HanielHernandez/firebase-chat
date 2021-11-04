@@ -34,11 +34,11 @@ export default defineComponent({
     const isModalOpen = ref(props.modelValue)
 
     const transitionEnter = (el: any, done: () => void): void => {
-      console.log('entra', el)
+      // // console.log('entra', el)
       done()
     }
     const transitionLeave = (el: any, done: () => void): void => {
-      console.log('entra', el)
+      // // console.log('entra', el)
       done()
     }
     const closeModal = () => {
@@ -49,7 +49,7 @@ export default defineComponent({
     watch(
       () => props.modelValue,
       (first: boolean, second: boolean) => {
-        console.log('cambio modelo', first, second)
+        // // console.log('cambio modelo', first, second)
         isModalOpen.value = props.modelValue
       }
     )

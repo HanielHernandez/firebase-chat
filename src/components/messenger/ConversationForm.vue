@@ -66,7 +66,7 @@ export default defineComponent({
       emit('cancel', true)
     }
     const onSubmit = async (values) => {
-      console.log('values', values)
+      // // console.log('values', values)
       loading.value = true
       try {
         // create new conversation

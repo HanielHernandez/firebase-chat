@@ -44,13 +44,13 @@ export class Conversations extends FirebaseApiService<Conversation> {
   // }
 
   // async find(id: string): Promise<Conversation | null> {
-  //   console.log('t')
+  //   // // console.log('t')
   //   const convRef = await getDoc(doc(db, this.docsRef, id))
   //   if (convRef.exists()) {
-  //     console.log('Existe', convRef.data())
+  //     // // console.log('Existe', convRef.data())
   //     return { id: convRef.id, ...convRef.data() } as Conversation
   //   } else {
-  //     console.log('notExiste')
+  //     // // console.log('notExiste')
 
   //     return null
   //   }

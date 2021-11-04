@@ -1,5 +1,5 @@
 import { FirebaseApiService } from '@/api/firebaseApi'
-import { ItemWithId } from '@/models/message'
+import { ItemWithId, Message } from '@/models/message'
 import {
   QueryConstraint,
   QueryDocumentSnapshot,
@@ -17,7 +17,8 @@ import {
   FETCH_ITEMS_ACTIONS,
   FIND_ITEM_ACTION,
   LISTEN_CHANGES_ACTION,
-  LOAD_MORE_ACTION
+  LOAD_MORE_ACTION,
+  STORE_ITEM_ACTION
 } from './actions'
 import { GET_ITEM_BY_ID_GETTER, GET_ITEM_INDEX_GETTER } from './getters'
 import {
@@ -37,6 +38,11 @@ export type onChangesFunction = (
   id: string,
   callback: onChagesCallback
 ) => Unsubscribe
+export type onChangesActions = {
+  onCreated: () => void
+  onUpdate: () => void
+  onRemoved: () => void
+}
 
 export const createPaginatedStore = <T extends ItemWithId>(
   service: FirebaseApiService<any>
@@ -65,19 +71,22 @@ export const createPaginatedStore = <T extends ItemWithId>(
     [SET_SELECTED_MUTATION]: (state: PaginatedStoreState<T>, payload: T) => {
       state.selected = payload
     },
+    [SET_END_REACHED]: (state: PaginatedStoreState<T>, payload: boolean) => {
+      state.endReach = payload
+    },
     [UPDATE_ITEM]: (
       state: PaginatedStoreState<T>,
       { item, index }: { item: T; index: number }
     ): void => {
       state.items[index] = item
-      console.log('Item updated: ', item)
+      // // console.log('Item updated: ', item)
     },
     [CREATE_ITEM]: (state: PaginatedStoreState<T>, newItem: T): void => {
       state.items = [newItem, ...state.items]
     },
     [REMOVE_ITEM]: (state: PaginatedStoreState<T>, index: number): void => {
       state.items.splice(index, 1)
-      console.log('Item removed at index: ', index)
+      // // console.log('Item removed at index: ', index)
     }
   }
 
@@ -95,8 +104,8 @@ export const createPaginatedStore = <T extends ItemWithId>(
   const actions = {
     [LISTEN_CHANGES_ACTION]: async (
       {
+        state,
         commit,
-        dispatch,
         getters
       }: ActionContext<PaginatedStoreState<T>, RootState>,
       payload?: QueryConstraint[]
@@ -104,17 +113,16 @@ export const createPaginatedStore = <T extends ItemWithId>(
       return service.onChanges(payload, (snapshot: QuerySnapshot) => {
         snapshot.docChanges().forEach((change) => {
           const item = { id: change.doc.id, ...change.doc.data() }
+
           if (change.type === 'added') {
-            const index = getters[GET_ITEM_BY_ID_GETTER](item.id)
-            if (!index) {
+            const index = state.items.find((x) => x.id == item.id)
+            if (index == null) {
               commit(CREATE_ITEM, item)
             }
-          }
-          if (change.type === 'modified') {
+          } else if (change.type === 'modified') {
             const index = getters[GET_ITEM_INDEX_GETTER](item.id)
             commit(UPDATE_ITEM, { item, index })
-          }
-          if (change.type === 'removed') {
+          } else if (change.type === 'removed') {
             const index = getters[GET_ITEM_INDEX_GETTER](item.id)
             commit(REMOVE_ITEM, index)
           }
@@ -160,6 +168,13 @@ export const createPaginatedStore = <T extends ItemWithId>(
     ) => {
       const item = await service.find(id)
       commit(SET_SELECTED_MUTATION, item)
+      return item
+    },
+    [STORE_ITEM_ACTION]: async (
+      context: ActionContext<PaginatedStoreState<T>, RootState>,
+      payload: T
+    ): Promise<T> => {
+      const item = await service.store(payload)
       return item
     }
   }

@@ -24,7 +24,7 @@ export class FirebaseApiService<T> {
 
   async index(filters?: QueryConstraint[]): Promise<T[]> {
     const ref = this.getRef()
-    console.log(ref.path)
+    // // console.log(ref.path)
     const q = filters ? query<T>(ref, ...filters) : query<T>(ref)
     const querySnapshot = await getDocs<T>(q)
     return querySnapshot.docs.map((doc) => {
@@ -58,7 +58,6 @@ export class FirebaseApiService<T> {
     return onSnapshot(
       q,
       (querySnapshot: QuerySnapshot<T>) => {
-        console.log(querySnapshot.metadata)
         callback(querySnapshot)
       },
       (error) => {

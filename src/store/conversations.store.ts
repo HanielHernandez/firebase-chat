@@ -1,4 +1,4 @@
-import conversationsApi, { Conversations } from '@/api/conversationsApi'
+import conversationsApi from '@/api/conversationsApi'
 import nodesApi from '@/api/nodesApi'
 import {
   CONVERSATION_CREATED,
@@ -11,25 +11,14 @@ import { Message, MessageType } from '@/models/message'
 import auth from '@/plugins/firebase/auth'
 import users from '@/plugins/firebase/users'
 import { where } from '@firebase/firestore'
-import { Unsubscribe } from '@firebase/util'
-import {
-  CommitFunction,
-  PaginatedStoreState,
-  SetterFunction,
-  setterFunction
-} from '.'
-import { FETCH_ITEMS_ACTIONS, STORE_ITEM_ACTION } from './actions'
+import { STORE_ITEM_ACTION } from './actions'
 import { createPaginatedStore } from './base.store'
-import { SET_ITEMS_MUTATION, SET_LOADING_MUTATION } from './mutations'
-
-const setItemsFn = (): SetterFunction => setterFunction('items')
-const setLoadingFn = (): SetterFunction => setterFunction('loading')
 
 export const storeConversation = async (
   state: unknown,
   phoneNumber: string
 ): Promise<Conversation> => {
-  console.log(phoneNumber)
+  // // console.log(phoneNumber)
   //verify if user exist
   const recipient = await users.findBy('phoneNumber', phoneNumber)
   const currentUser = await auth.currentUserProfile()
@@ -47,7 +36,7 @@ export const storeConversation = async (
     where('senderId', '==', currentUser.code),
     where('recipient.code', '==', recipient.code)
   ])
-  console.log(conversations)
+  // // console.log(conversations)
   if (conversations.length > 0) {
     throw CONVRESATION_AREADY_EXIST
   }

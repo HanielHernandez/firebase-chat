@@ -66,7 +66,7 @@ export default {
     const createConv = () => {
       openOptions.value = false
       showNewConvModal.value = true
-      console.log('creating new conv')
+      // // console.log('creating new conv')
     }
     const handleCreated = (conv) => {
       showNewConvModal.value = false

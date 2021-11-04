@@ -21,7 +21,7 @@ exports.onConversationCreate = functions.firestore
   .document('/conversations/{conversaitonId}')
   .onCreate(async (snap, context): Promise<boolean> => {
     const newConv = snap.data()
-    console.log('Conversación nueva ', newConv)
+    // // console.log('Conversación nueva ', newConv)
     // find conversations with same recipient id and sender id
     try {
       const exitsConv = await admin
@@ -34,7 +34,7 @@ exports.onConversationCreate = functions.firestore
 
       // if conversaiton exist exit funciton
       if (exitsConv.docs.length > 0) {
-        console.log(
+        // // console.log(
           'Ya existe una conversación con recipient id ' + newConv.senderId
         )
         return false
@@ -55,7 +55,7 @@ exports.onConversationCreate = functions.firestore
             senderId: newConv.recipient.id
           })
 
-        console.log(
+        // // console.log(
           'Se creo un conversación de recipient con id ' + recipientConv.id
         )
       }

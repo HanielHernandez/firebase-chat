@@ -68,7 +68,7 @@ export default {
       loading.value = true
       try {
         ///const response = await Auth.register(values as RegisterRequest)
-        console.log(values)
+        // // console.log(values)
         alert('usuario guardado')
         loading.value = false
       } catch (e) {

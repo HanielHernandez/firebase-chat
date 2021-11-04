@@ -11,7 +11,7 @@
         :class="[sender ? 'ml-2' : 'mr-2']"
       >
       </fr-skeleton>
-      <fr-skeleton class="w-1/3" height="100px"> </fr-skeleton>
+      <fr-skeleton class="w-1/3" height="2.5rem"> </fr-skeleton>
     </div>
   </div>
 </template>

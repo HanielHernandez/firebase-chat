@@ -72,7 +72,7 @@ export class Auth {
     return signInWithEmailAndPassword(auth, data.email, data.password).then(
       async (cred: UserCredential) => {
         const user = await this.currentUser()
-        console.log(user)
+        // // console.log(user)
         if (!user.emailVerified) {
           sendEmailVerification(user)
 

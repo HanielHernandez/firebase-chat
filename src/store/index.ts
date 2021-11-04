@@ -21,7 +21,7 @@ export type SetterFunction = (
 ) => void
 export const setterFunction = (key: string): SetterFunction => {
   return (state: { [key: string]: unknown }, payload: unknown): void => {
-    console.log('state', state)
+    // // console.log('state', state)
     state[key] = payload
   }
 }
