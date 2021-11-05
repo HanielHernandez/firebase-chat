@@ -25,6 +25,7 @@ import {
   ADD_ITEMS_MUTATION,
   CREATE_ITEM,
   REMOVE_ITEM,
+  RESET_ITEMS,
   SET_END_REACHED,
   SET_ITEMS_MUTATION,
   SET_LOADING_MUTATION,
@@ -79,14 +80,17 @@ export const createPaginatedStore = <T extends ItemWithId>(
       { item, index }: { item: T; index: number }
     ): void => {
       state.items[index] = item
-      // // console.log('Item updated: ', item)
     },
     [CREATE_ITEM]: (state: PaginatedStoreState<T>, newItem: T): void => {
       state.items = [newItem, ...state.items]
     },
     [REMOVE_ITEM]: (state: PaginatedStoreState<T>, index: number): void => {
       state.items.splice(index, 1)
-      // // console.log('Item removed at index: ', index)
+    },
+    [RESET_ITEMS]: (state: PaginatedStoreState<T>): void => {
+      state.items = []
+      state.endReach = false
+      state.page = 1
     }
   }
 

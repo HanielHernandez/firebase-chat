@@ -1,4 +1,5 @@
 import { LISTEN_CHANGES_ACTION } from '@/store/actions'
+import { RESET_ITEMS } from '@/store/mutations'
 import { Unsubscribe } from '@firebase/util'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
@@ -16,7 +17,10 @@ export default (moduleName: string) => {
   })
 
   const selected = computed(() => {
-    return storeModule.state.conversations.selected
+    return storeModule.state[moduleName].selected
+  })
+  const endReachded = computed<boolean>(() => {
+    return storeModule.state[moduleName].endReach
   })
 
   // methods
@@ -34,6 +38,9 @@ export default (moduleName: string) => {
       payload
     )
   }
+  const reset = () => {
+    return storeModule.commit(`${moduleName}/${RESET_ITEMS}`)
+  }
 
   const store = (payload: unknown) => {
     return storeModule.dispatch(`${moduleName}/store`, payload)
@@ -43,8 +50,10 @@ export default (moduleName: string) => {
     items,
     fetch,
     loading,
+    reset,
     find,
     store,
+    endReachded,
     selected
   }
 }

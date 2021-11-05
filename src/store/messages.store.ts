@@ -17,7 +17,8 @@ import {
   SET_LOADING_MUTATION,
   SET_ITEMS_MUTATION,
   CREATE_ITEM,
-  ADD_ITEMS_MUTATION
+  ADD_ITEMS_MUTATION,
+  SET_END_REACHED
 } from './mutations'
 
 const messagesStr = createPaginatedStore<Message>(messagesApi)
@@ -50,10 +51,7 @@ export default {
     ): Promise<Message[] | null> => {
       if (state.loading == false) {
         commit(SET_LOADING_MUTATION, true)
-        console.log(state.items)
-
         messagesApi.setId(node)
-
         const lastMessageDate =
           state.items.length > 0
             ? getters.lastMessageDate
@@ -66,8 +64,11 @@ export default {
         ]
         const items = await messagesApi.index(queries)
         commit(ADD_ITEMS_MUTATION, items)
-        commit(SET_LOADING_MUTATION, false)
+        if (items.length == 0) {
+          commit(SET_END_REACHED, true)
+        }
 
+        commit(SET_LOADING_MUTATION, false)
         return items
       }
       return null

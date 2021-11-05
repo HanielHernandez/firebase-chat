@@ -12,27 +12,24 @@
     "
     style="max-height: calc(100vh - 9.625rem)"
   >
-    <FrInfiniteScroll
+    <VueEternalLoading
       v-if="currentConv"
-      :options="{ threshold: 0.2 }"
-      @loadMore="scrollReached"
+      v-model:is-initial="isInitial"
+      position="top"
+      margin="200px"
+      :load="scrollReached"
+      :container="messagesList"
     >
       <template #loading>
         <div class="text-center">
           <fr-loading></fr-loading>
         </div>
       </template>
-    </FrInfiniteScroll>
-    <!-- 
-    <transition-group
-      name="messages"
-      :css="false"
-      appear
-      tag="div"
-      @before-enter="beforeEnter"
-      @enter="enter"
-      @leave="leave"
-    > -->
+      <template #no-more>
+        <div class="opacity-0">There is no more content.</div>
+      </template>
+    </VueEternalLoading>
+
     <div
       v-for="(message, index) in messages"
       :key="message.id"
@@ -49,7 +46,7 @@
       </div>
 
       <div
-        v-if="sameDayAsBefore(index) == false"
+        v-if="index > 0 && sameDayAsBefore(index) == false"
         class="text-center py-2 text-gray-500"
       >
         <div class="w-full text-xs">
@@ -69,13 +66,14 @@ import {
   PropType,
   ref,
   defineEmits,
-  computed
+  computed,
+  watch
 } from 'vue'
 import { Message } from '@/models/message'
 import { useStoreModule, useUser } from '@/mixins'
 import gsap from 'gsap'
-import Bounce from 'gsap'
-import Linear from 'gsap'
+
+import { VueEternalLoading, LoadAction } from '@ts-pro/vue-eternal-loading'
 
 import MessageBubble from './MessageBubble.vue'
 import dayjs from 'dayjs'
@@ -91,13 +89,27 @@ const props = defineProps({
 const { selected: currentConv } = useStoreModule('conversations')
 const scrollPosition = ref(0)
 const { currentUser } = useUser()
-const { loading, fetch } = useStoreModule('messages')
+const { endReachded, fetch, reset: resetMessages } = useStoreModule('messages')
+const lastMessage = ref<Element>()
+const isInitial = ref(true)
+
+watch(
+  () => currentConv.value,
+  () => {
+    reset()
+  }
+)
+
+function reset() {
+  resetMessages()
+  isInitial.value = true
+}
+
 onMounted(() => {
   if (messagesList.value) {
     messagesList.value.scrollTo(0, 0)
   }
 })
-const lastMessage = ref<Element>()
 const scrollToBotom = () => {
   if (messagesList.value) {
     console.log(
@@ -113,25 +125,18 @@ const scrollToBotom = () => {
   }
 }
 const scrollReached = async ({
-  onLoadingEnded,
-  onEnd
+  loaded,
+  noMore
 }: {
-  onLoadingEnded: () => void
-  onEnd: () => void
+  loaded: () => void
+  noMore: () => void
 }) => {
-  console.log('alcanzo scroll ', currentConv.value)
-  console.log(messagesList.value?.scrollTop)
-  if (messagesList.value) {
-    scrollPosition.value = messagesList.value.scrollHeight
-    storePosition()
+  if (endReachded.value === false) {
+    const items = await fetch(currentConv.value.node)
+    loaded()
+  } else {
+    noMore()
   }
-  const items = await fetch(currentConv.value.node)
-  if (items == null || items.length == 0) {
-    onEnd()
-  }
-  scrollToBotom()
-
-  onLoadingEnded()
 }
 
 const offset = () => {

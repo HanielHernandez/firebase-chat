@@ -46,9 +46,16 @@ const {
 // )
 onMounted(async () => {
   await findConversation(conversationId.value)
-
   // scrollToBottom()
 })
+watch(
+  () => conversationId.value,
+  async () => {
+    console.log('cnversaiton id change')
+    await findConversation(conversationId.value)
+  }
+)
+
 onUnmounted(() => {
   unsubscribe()
 })
