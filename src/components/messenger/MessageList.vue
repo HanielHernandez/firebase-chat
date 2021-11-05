@@ -1,5 +1,76 @@
+<template>
+  <div
+    id="messagesList"
+    ref="messagesList"
+    class="
+      h-full
+      flex flex-col
+      relative
+      px-4
+      overflow-y-auto overflow-x-hidden
+      flex-1
+    "
+    style="max-height: calc(100vh - 9.625rem)"
+  >
+    <FrInfiniteScroll
+      v-if="currentConv"
+      :options="{ threshold: 0.2 }"
+      @loadMore="scrollReached"
+    >
+      <template #loading>
+        <div class="text-center">
+          <fr-loading></fr-loading>
+        </div>
+      </template>
+    </FrInfiniteScroll>
+    <!-- 
+    <transition-group
+      name="messages"
+      :css="false"
+      appear
+      tag="div"
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @leave="leave"
+    > -->
+    <div
+      v-for="(message, index) in messages"
+      :key="message.id"
+      :data-index="index"
+    >
+      <div
+        v-if="message.senderId == 'SYSTEM'"
+        class="text-center py-2 text-gray-500"
+      >
+        <div class="w-full text-xs">
+          {{ $date(message.date) }}
+        </div>
+        <p class="text-sm">{{ $t(message.text) }}</p>
+      </div>
+
+      <div
+        v-if="sameDayAsBefore(index) == false"
+        class="text-center py-2 text-gray-500"
+      >
+        <div class="w-full text-xs">
+          {{ $date(message.date) }}
+        </div>
+      </div>
+      <MessageBubble v-else :message="message" />
+    </div>
+    <!-- </transition-group> -->
+  </div>
+</template>
+
 <script setup lang="ts">
-import { defineProps, onMounted, PropType, ref, defineEmits } from 'vue'
+import {
+  defineProps,
+  onMounted,
+  PropType,
+  ref,
+  defineEmits,
+  computed
+} from 'vue'
 import { Message } from '@/models/message'
 import { useStoreModule, useUser } from '@/mixins'
 import gsap from 'gsap'
@@ -36,15 +107,9 @@ const scrollToBotom = () => {
     )
     if (lastMessage.value) {
       lastMessage.value.scrollIntoView()
-      //messagesList.value.scrollIntoView(`#${lastMessage.value.id}`)
     } else {
       messagesList.value.scrollTo(0, messagesList.value.scrollHeight)
     }
-
-    // messagesList.value.scrollTo(
-    //   0,
-    //   messagesList.value.scrollHeight - scrollPosition.value
-    // )
   }
 }
 const scrollReached = async ({
@@ -56,17 +121,21 @@ const scrollReached = async ({
 }) => {
   console.log('alcanzo scroll ', currentConv.value)
   console.log(messagesList.value?.scrollTop)
-  storePosition()
   if (messagesList.value) {
     scrollPosition.value = messagesList.value.scrollHeight
+    storePosition()
   }
   const items = await fetch(currentConv.value.node)
   if (items == null || items.length == 0) {
     onEnd()
   }
-  console.log('terminó  fetch ')
   scrollToBotom()
+
   onLoadingEnded()
+}
+
+const offset = () => {
+  return messagesList.value?.scrollTop
 }
 
 const storePosition = () => {
@@ -116,73 +185,6 @@ const sameDayAsBefore = (i: number): boolean => {
   }
 }
 </script>
-<template>
-  <div
-    id="messagesList"
-    ref="messagesList"
-    class="
-      h-full
-      flex flex-col
-      relative
-      px-4
-      overflow-y-auto overflow-x-hidden
-      flex-1
-    "
-    style="max-height: calc(100vh - 9.625rem)"
-  >
-    <FrInfiniteScroll
-      v-if="currentConv"
-      :options="{ threshold: 0.2 }"
-      @loadMore="scrollReached"
-    >
-      <template #loading>
-        <div>
-          <FrMessagePlaceholder
-            v-for="i in 7"
-            :key="`${i}-loader`"
-            :sender="!(i % 2) == 0"
-          />
-        </div>
-      </template>
-    </FrInfiniteScroll>
-    <!-- 
-    <transition-group
-      name="messages"
-      :css="false"
-      appear
-      tag="div"
-      @before-enter="beforeEnter"
-      @enter="enter"
-      @leave="leave"
-    > -->
-    <div
-      v-for="(message, index) in messages"
-      :key="message.id"
-      :data-index="index"
-    >
-      <div
-        v-if="message.senderId == 'SYSTEM'"
-        class="text-center py-2 text-gray-500"
-      >
-        <div class="w-full text-xs">
-          {{ $date(message.date) }}
-        </div>
-        <p class="text-sm">{{ $t(message.text) }}</p>
-      </div>
-
-      <div
-        v-if="sameDayAsBefore(index) == false"
-        class="text-center py-2 text-gray-500"
-      >
-        <div class="w-full text-xs">
-          {{ $date(message.date) }}
-        </div>
-      </div>
-      <MessageBubble v-else :message="message" />
-    </div>
-    <!-- </transition-group> -->
-  </div>
-</template>
 
 <style lang="scss" scoped>
 .messages {

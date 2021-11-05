@@ -62,7 +62,7 @@ export default {
         const queries = [
           orderBy('date', 'asc'),
           endBefore(lastMessageDate),
-          limitToLast(25)
+          limitToLast(10)
         ]
         const items = await messagesApi.index(queries)
         commit(ADD_ITEMS_MUTATION, items)

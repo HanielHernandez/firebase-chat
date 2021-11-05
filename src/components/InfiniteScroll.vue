@@ -1,5 +1,5 @@
 <template>
-  <div :id="id" ref="container">
+  <div :id="id" ref="container" class="h-96">
     <transition name="loading" mode="in-out" tag="div" appear="">
       <slot v-if="hasReachLoading" name="loading"></slot>
     </transition>
@@ -47,6 +47,7 @@ export default defineComponent({
             emit('loadMore', { onLoadingEnded, onEnd })
           }
         }, props.options)
+
         observer.value.observe(container.value)
       }
     })
