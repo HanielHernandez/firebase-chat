@@ -75,10 +75,13 @@ export default defineComponent({
     const fetchConversations = async () => {
       try {
         await store.dispatch(FETCH_CONVERSATION_ITEMS_ACTION, [
-          where('senderId', '==', currentUser.value.code),
+          where('senderPhoneNumber', '==', currentUser.value.phoneNumber),
           orderBy('lastMessage.date', 'desc')
         ])
-        unsubscribe = await store.dispatch(LISTEN_CONVERSATION_ITEMS_ACTION)
+        unsubscribe = await store.dispatch(LISTEN_CONVERSATION_ITEMS_ACTION, [
+          where('senderPhoneNumber', '==', currentUser.value.phoneNumber),
+          orderBy('lastMessage.date', 'desc')
+        ])
       } catch (e) {
         alert(e)
         console.error(e)
