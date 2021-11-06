@@ -30,32 +30,42 @@
       </template>
     </VueEternalLoading>
 
-    <div
-      v-for="(message, index) in messages"
-      :key="message.id"
-      :data-index="index"
+    <transition-group
+      name="messages"
+      :css="false"
+      mode="in-out"
+      appear
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @leave="leave"
     >
       <div
-        v-if="message.senderId == 'SYSTEM'"
-        class="text-center py-2 text-gray-500"
+        v-for="(message, index) in messages"
+        :key="message.id"
+        class="message-row"
+        :data-index="index"
       >
-        <div class="w-full text-xs">
-          {{ $date(message.date) }}
+        <div
+          v-if="message.senderId == 'SYSTEM'"
+          class="text-center py-2 text-gray-500"
+        >
+          <div class="w-full text-xs">
+            {{ $date(message.date) }}
+          </div>
+          <p class="text-sm">{{ $t(message.text) }}</p>
         </div>
-        <p class="text-sm">{{ $t(message.text) }}</p>
-      </div>
 
-      <div
-        v-if="index > 0 && sameDayAsBefore(index) == false"
-        class="text-center py-2 text-gray-500"
-      >
-        <div class="w-full text-xs">
-          {{ $date(message.date) }}
+        <div
+          v-else-if="index > 0 && sameDayAsBefore(index) == false"
+          class="text-center py-2 text-gray-500"
+        >
+          <div class="w-full text-xs">
+            {{ $date(message.date) }}
+          </div>
         </div>
+        <MessageBubble v-else :message="message" />
       </div>
-      <MessageBubble v-else :message="message" />
-    </div>
-    <!-- </transition-group> -->
+    </transition-group>
   </div>
 </template>
 
@@ -92,7 +102,7 @@ const { currentUser } = useUser()
 const { endReachded, fetch, reset: resetMessages } = useStoreModule('messages')
 const lastMessage = ref<Element>()
 const isInitial = ref(true)
-
+const animatedMessages = ref(0)
 watch(
   () => currentConv.value,
   () => {
@@ -104,6 +114,8 @@ function reset() {
   resetMessages()
   isInitial.value = true
 }
+
+const unsubscribe = ref(null)
 
 onMounted(() => {
   if (messagesList.value) {
@@ -156,16 +168,25 @@ const beforeEnter = (el: HTMLElement): void => {
   el.style.transform = 'rotateX(-45deg) scale(0.3)'
 }
 const enter = (el: any, done: () => void) => {
+  const totalElements = getListOfChilds()
   gsap.to(el, {
     opacity: 1,
     transformOrigin: 'right',
     duration: 0.15,
     transform: 'rotateX(0deg) scale(1)',
-    delay: el.dataset.index * 0.15,
+    delay: (totalElements - el.dataset.index) * 0.15,
     ease: 'elastic.inOut(1, 0.3)',
-
+    position: -el.dataset.index,
     onComplete: done
   })
+  animatedMessages.value++
+}
+
+const getListOfChilds = () => {
+  if (messagesList.value) {
+    return messagesList.value.childElementCount - animatedMessages.value
+  }
+  return 0
 }
 const leave = (el: any, done: () => void) => {
   gsap.to(el, {
@@ -173,7 +194,7 @@ const leave = (el: any, done: () => void) => {
     duration: 0.15,
     transform: 'rotateX(-45deg) scale(0.3)',
     ease: 'elastic.inOut(1, 0.3)',
-
+    position: 1,
     delay: el.dataset.index * 0.15,
     onComplete: done
   })

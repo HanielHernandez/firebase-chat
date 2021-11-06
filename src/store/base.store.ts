@@ -53,7 +53,8 @@ export const createPaginatedStore = <T extends ItemWithId>(
     page: 1,
     endReach: false,
     selected: null,
-    loading: false
+    loading: false,
+    subcription: null
   }
 
   const mutations = {
@@ -122,13 +123,17 @@ export const createPaginatedStore = <T extends ItemWithId>(
             const index = state.items.find((x) => x.id == item.id)
             if (index == null) {
               commit(CREATE_ITEM, item)
+              console.log('ITEM ADDED', item)
             }
           } else if (change.type === 'modified') {
-            const index = getters[GET_ITEM_INDEX_GETTER](item.id)
+            const index = state.items.findIndex((x) => x.id == item.id) // getters[GET_ITEM_INDEX_GETTER](item.id)
+
             commit(UPDATE_ITEM, { item, index })
+            console.log('ITEM UPDATED', item)
           } else if (change.type === 'removed') {
             const index = getters[GET_ITEM_INDEX_GETTER](item.id)
             commit(REMOVE_ITEM, index)
+            console.log('ITEM REMOVED', item)
           }
         })
       })

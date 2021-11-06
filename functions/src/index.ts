@@ -21,41 +21,54 @@ exports.onConversationCreate = functions.firestore
   .document('/conversations/{conversaitonId}')
   .onCreate(async (snap, context): Promise<boolean> => {
     const newConv = snap.data()
-    // // console.log('Conversación nueva ', newConv)
+    console.log('Conversación nueva ', newConv)
     // find conversations with same recipient id and sender id
     try {
       const exitsConv = await admin
         .firestore()
         .collection('conversations')
-        .where('recipient.code', '==', newConv.senderId)
+        .where('recipient.id', '==', newConv.senderId)
         .where('senderId', '==', newConv.recipient.id)
         .limit(1)
         .get()
 
       // if conversaiton exist exit funciton
       if (exitsConv.docs.length > 0) {
-        // // console.log(
+        console.log(
           'Ya existe una conversación con recipient id ' + newConv.senderId
         )
         return false
       } else {
-        // create recipient conversation once sender creates one
-        const recipient = admin
+        // gets sender
+        const senderRef = await admin
           .firestore()
           .collection('users')
-          .where('recipient.phone', '==', newConv.sender.phone)
+          .where('phoneNumber', '==', newConv.sender.phone)
+          .limit(1)
+          .get()
+        const sender = senderRef.docs[0].data()
+
+        // create a conversation where recipient its sender and sender its recipient
+        const { lastMessage, node } = newConv
 
         const recipientConv = await admin
           .firestore()
           .collection('conversations')
           .add({
+            lastMessage,
+            node,
+            title: sender.name,
+            updatedAt: new Date(),
             recipient: {
-              id: newConv.senderId
+              id: newConv.senderId,
+              ...sender
             },
+
+            senderPhoneNumber: sender.phoneNumber,
             senderId: newConv.recipient.id
           })
 
-        // // console.log(
+        console.log(
           'Se creo un conversación de recipient con id ' + recipientConv.id
         )
       }

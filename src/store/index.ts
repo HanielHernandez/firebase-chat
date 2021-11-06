@@ -1,5 +1,6 @@
 import { User } from '@/models/auth'
 import Auth from '@/plugins/firebase/auth'
+import { Unsubscribe } from '@firebase/util'
 import { createStore } from 'vuex'
 import conversationsStore from './conversations.store'
 import messages from './messages.store'
@@ -10,6 +11,7 @@ export interface PaginatedStoreState<I> {
   page: number
   endReach: boolean
   selected: I | null
+  subcription: Unsubscribe | null
 }
 
 export type CommitFunction = (key: string, payload: unknown) => void
