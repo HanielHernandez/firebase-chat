@@ -9,5 +9,6 @@ export interface Conversation extends ItemWithId {
   conversationImageUrl: string
   title: string
   type: string
-  lastMessage?: Message
+  unreadedMessages: number
+  lastMessage: Message
 }

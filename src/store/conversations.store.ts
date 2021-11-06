@@ -58,6 +58,7 @@ export const storeConversation = async (
     node: node.id,
     senderPhoneNumber: currentUser.phoneNumber,
     updatedAt: new Date(),
+    unreadedMessages: 0,
     lastMessage
   } as Conversation)
   return conversation

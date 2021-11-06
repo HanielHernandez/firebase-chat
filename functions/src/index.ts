@@ -5,11 +5,13 @@ import updateLastMessage from './update-last-message'
 import sentMessageFunction from './http/sentMessage.function'
 admin.initializeApp()
 
-const getUser = async (userId: string): Promise<any> => {
+export const getUser = async (userId: string): Promise<any> => {
   const userDoc = await admin.firestore().collection('users').doc(userId).get()
   return { id: userDoc.id, ...userDoc.data() }
 }
-const getUserNyPhoneNumber = async (phoneNumber: string): Promise<any> => {
+export const getUserNyPhoneNumber = async (
+  phoneNumber: string
+): Promise<any> => {
   const response = await admin
     .firestore()
     .collection('users')
@@ -73,7 +75,8 @@ exports.addConversation = functions.https.onRequest(async (req, res) => {
         node: node.id,
         senderPhoneNumber: sender.phoneNumber,
         updatedAt: new Date(),
-        lastMessage
+        lastMessage,
+        unreadedMessages: 0
       }
       const writeResult = await admin
         .firestore()
@@ -132,7 +135,8 @@ exports.onConversationCreate = functions.firestore
               ...sender
             },
             conversationImageUrl: sender.profileImageUrl,
-            senderPhoneNumber: recipient.phoneNumber
+            senderPhoneNumber: recipient.phoneNumber,
+            unreadedMessages: 1
           })
 
         console.log(
