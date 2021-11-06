@@ -1,6 +1,8 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 import * as faker from 'faker'
+import updateLastMessage from './update-last-message'
+import sentMessageFunction from './http/sentMessage.function'
 admin.initializeApp()
 
 const getUser = async (userId: string): Promise<any> => {
@@ -31,6 +33,7 @@ const createDumUser = async () => {
   }
 }
 // add conversation function for testing
+exports.sentMessage = sentMessageFunction
 exports.addConversation = functions.https.onRequest(async (req, res) => {
   // Push the new message into Firestore using the Firebase Admin SDK.
 
@@ -141,3 +144,5 @@ exports.onConversationCreate = functions.firestore
     }
     return true
   })
+
+exports.onMessageCreate = updateLastMessage
