@@ -1,19 +1,92 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
-
+import * as faker from 'faker'
 admin.initializeApp()
 
+const getUser = async (userId: string): Promise<any> => {
+  const userDoc = await admin.firestore().collection('users').doc(userId).get()
+  return { id: userDoc.id, ...userDoc.data() }
+}
+const getUserNyPhoneNumber = async (phoneNumber: string): Promise<any> => {
+  const response = await admin
+    .firestore()
+    .collection('users')
+    .where('phoneNumber', '==', phoneNumber)
+    .limit(1)
+    .get()
+  return { id: response.docs[0].id, ...response.docs[0].data() }
+}
+
+const createDumUser = async () => {
+  const dummyData = {
+    name: faker.name.firstName(),
+    phoneNumber: faker.phone.phoneNumber(),
+    profileImageUrl: faker.image.avatar()
+  }
+
+  const response = await admin.firestore().collection('users').add(dummyData)
+  return {
+    id: response.id,
+    ...dummyData
+  }
+}
 // add conversation function for testing
 exports.addConversation = functions.https.onRequest(async (req, res) => {
-  // Grab the text parameter.
-  //const original = req.query.text;
   // Push the new message into Firestore using the Firebase Admin SDK.
-  const writeResult = await admin
-    .firestore()
-    .collection('conversations')
-    .add({ recipient: { id: 'pepe' }, senderId: 'chepe' })
-  // Send back a message that we've successfully written the message
-  res.json({ result: `Conversation created with ID: ${writeResult.id} added.` })
+
+  try {
+    const sender = await createDumUser()
+    const recipient = await createDumUser()
+
+    console.log({
+      senderId: sender.id,
+      recipientId: recipient.id
+    })
+    if (!recipient) {
+      res.status(422).json({
+        message: 'recipient not found'
+      })
+    } else if (!sender) {
+      res.status(422).json({
+        message: 'sender not found'
+      })
+    } else {
+      // create first message
+      const lastMessage = {
+        date: new Date().getTime(),
+        type: 'SYSTEM',
+        text: 'CONVERSATION_CREATED',
+        status: 'sended',
+        senderId: 'SYSTEM'
+      }
+      // store messge on a random node
+      const node = await admin.firestore().collection('nodes').add({})
+      await node.collection('messages').add(lastMessage)
+
+      const conv = {
+        recipient,
+        title: recipient && recipient.name,
+        conversationImageUrl: recipient.profileImageUrl,
+        node: node.id,
+        senderPhoneNumber: sender.phoneNumber,
+        updatedAt: new Date(),
+        lastMessage
+      }
+      const writeResult = await admin
+        .firestore()
+        .collection('conversations')
+        .add(conv)
+      // Send back a message that we've successfully written the message
+      res.json({
+        result: `Conversation created with ID: ${writeResult.id} added.`
+      })
+    }
+  } catch (e) {
+    console.error(e)
+    res.status(422).json({
+      error: e
+    })
+  }
 })
 
 // on converstion create firebase
@@ -22,13 +95,15 @@ exports.onConversationCreate = functions.firestore
   .onCreate(async (snap, context): Promise<boolean> => {
     const newConv = snap.data()
     console.log('Conversación nueva ', newConv)
+    const sender = await getUserNyPhoneNumber(newConv.senderPhoneNumber)
+    const recipient = await getUser(newConv.recipient.id)
     // find conversations with same recipient id and sender id
     try {
       const exitsConv = await admin
         .firestore()
         .collection('conversations')
-        .where('recipient.id', '==', newConv.senderId)
-        .where('senderId', '==', newConv.recipient.id)
+        .where('recipient.id', '==', sender.id)
+        .where('senderPhoneNumber', '==', recipient.phoneNumber)
         .limit(1)
         .get()
 
@@ -39,15 +114,6 @@ exports.onConversationCreate = functions.firestore
         )
         return false
       } else {
-        // gets sender
-        const senderRef = await admin
-          .firestore()
-          .collection('users')
-          .where('phoneNumber', '==', newConv.sender.phone)
-          .limit(1)
-          .get()
-        const sender = senderRef.docs[0].data()
-
         // create a conversation where recipient its sender and sender its recipient
         const { lastMessage, node } = newConv
 
@@ -60,12 +126,10 @@ exports.onConversationCreate = functions.firestore
             title: sender.name,
             updatedAt: new Date(),
             recipient: {
-              id: newConv.senderId,
               ...sender
             },
-
-            senderPhoneNumber: sender.phoneNumber,
-            senderId: newConv.recipient.id
+            conversationImageUrl: sender.profileImageUrl,
+            senderPhoneNumber: recipient.phoneNumber
           })
 
         console.log(
