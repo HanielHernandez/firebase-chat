@@ -42,12 +42,13 @@
             conversation.unreadedMessages && conversation.unreadedMessages > 0
           "
           class="
-            bg-yellow-500
+            bg-yellow-400
             rounded-full
             text-center text-gray-200 text-xs
             h-4
             w-4
           "
+          style="font-size: 10px"
         >
           {{ conversation.unreadedMessages }}
         </span>

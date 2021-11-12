@@ -11,8 +11,10 @@ import { Message, MessageType } from '@/models/message'
 import auth from '@/plugins/firebase/auth'
 import users from '@/plugins/firebase/users'
 import { where } from '@firebase/firestore'
-import { STORE_ITEM_ACTION } from './actions'
+import { CommitFunction } from '.'
+import { FIND_ITEM_ACTION, STORE_ITEM_ACTION } from './actions'
 import { createPaginatedStore } from './base.store'
+import { SET_SELECTED_MUTATION } from './mutations'
 
 export const storeConversation = async (
   state: unknown,
@@ -75,6 +77,25 @@ export default {
   ...store,
   actions: {
     ...store.actions,
-    [STORE_ITEM_ACTION]: storeConversation
+    [STORE_ITEM_ACTION]: storeConversation,
+    [FIND_ITEM_ACTION]: async (
+      {
+        commit
+      }: {
+        commit: CommitFunction
+      },
+      id: string
+    ) => {
+      const item = await conversationsApi.find(id)
+      commit(SET_SELECTED_MUTATION, item)
+      if (item) {
+        await conversationsApi.update(item?.id as string, {
+          ...item,
+          unreadedMessages: 0
+        })
+      }
+
+      return item
+    }
   }
 }

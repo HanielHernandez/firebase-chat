@@ -11,7 +11,8 @@ import {
   Unsubscribe,
   Query,
   getDoc,
-  doc
+  doc,
+  updateDoc
 } from '@firebase/firestore'
 
 export class FirebaseApiService<T> {
@@ -74,5 +75,11 @@ export class FirebaseApiService<T> {
     } else {
       return null
     }
+  }
+
+  async update(id: string, data: T): Promise<T> {
+    const docItemRef = doc(db, this.docsRef, id)
+    await updateDoc(docItemRef, data)
+    return data
   }
 }

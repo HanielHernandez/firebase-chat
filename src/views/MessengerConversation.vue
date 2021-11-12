@@ -27,23 +27,7 @@ const {
   loading,
   fetch: fetchMessages
 } = useStoreModule('messages')
-//const getConversation = () => {}
 
-// watch(
-//   () => conversation.value,
-//   async (newval, oldval) => {
-//     // // console.log('Conversación cargada', newval)
-//     await fetchMessages({
-//       node: newval.node,
-//       queries: [orderBy('date'), limit(25)]
-//     })
-//     scrollToBottom()
-//     // unsubscribe = await listenMessagesChanges([
-//     //   orderBy('date', 'desc'),
-//     //   limit(25)
-//     // ])
-//   }
-// )
 onMounted(async () => {
   await findConversation(conversationId.value)
   // scrollToBottom()

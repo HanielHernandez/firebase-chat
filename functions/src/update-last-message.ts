@@ -29,7 +29,7 @@ export default firestore
         .update({
           lastMessage,
           unreadedMessages:
-            lastMessage.senderId == user.id
+            lastMessage.senderId != user.id
               ? conv.unreadedMessages + 1
               : conv.unreadedMessages
               ? conv.unreadedMessages
