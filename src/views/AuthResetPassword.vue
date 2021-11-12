@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import CenteredLayout from '@/components/Layouts/CenteredLayout.vue'
+import CenteredLayout from '@/components/layouts/CenteredLayout.vue'
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import { RegisterRequest } from '@/models/auth'

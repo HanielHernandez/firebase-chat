@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts">
-import CenteredLayout from '@/components/Layouts/CenteredLayout.vue'
+import CenteredLayout from '@/components/layouts/CenteredLayout.vue'
 import { useForm, useField } from 'vee-validate'
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'

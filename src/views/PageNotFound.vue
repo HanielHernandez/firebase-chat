@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import CenteredLayout from '@/components/Layouts/CenteredLayout.vue'
+import CenteredLayout from '@/components/layouts/CenteredLayout.vue'
 export default {
   components: {
     CenteredLayout

@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import CenteredLayout from '@/components/Layouts/CenteredLayout.vue'
+import CenteredLayout from '@/components/layouts/CenteredLayout.vue'
 import { useAlerts } from '@/mixins'
 import auth from '@/plugins/firebase/auth'
 import { defineComponent, onMounted, ref } from 'vue'

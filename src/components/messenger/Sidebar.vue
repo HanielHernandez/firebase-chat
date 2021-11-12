@@ -51,8 +51,8 @@
 </template>
 
 <script>
-import ConversationsList from '@/components/Messenger/ConversationsList.vue'
-import ConversationForm from '@/components/Messenger/ConversationForm.vue'
+import ConversationsList from '@/components/messenger/ConversationsList.vue'
+import ConversationForm from '@/components/messenger/ConversationForm.vue'
 
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'

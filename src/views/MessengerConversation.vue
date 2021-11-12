@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import MessageList from '@/components/Messenger/MessageList.vue'
+import MessageList from '@/components/messenger/MessageList.vue'
 import { useStoreModule, useUser } from '@/mixins'
 import { Message, MessageType } from '@/models/message'
 import { limit, orderBy } from '@firebase/firestore'

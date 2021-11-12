@@ -8,8 +8,8 @@
 </template>
 
 <script lang="ts">
-import DashboardLayout from '@/components/Layouts/DashboardLayout.vue'
-import TheSidebar from '@/components/Messenger/Sidebar.vue'
+import DashboardLayout from '@/components/layouts/DashboardLayout.vue'
+import TheSidebar from '@/components/messenger/Sidebar.vue'
 export default {
   components: {
     TheSidebar,

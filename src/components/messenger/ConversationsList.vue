@@ -46,7 +46,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted } from '@vue/runtime-core'
 import { watch, computed } from 'vue'
-import ConversationItem from '@/components/Messenger/ConversationItem.vue'
+import ConversationItem from '@/components/messenger/ConversationItem.vue'
 import { useUser } from '@/mixins'
 import { useStore } from 'vuex'
 import { User } from '@/models/auth'
