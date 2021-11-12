@@ -33,6 +33,19 @@ export class Users {
     })
   }
 
+  /**
+   * Search a user by a property
+   * @param property string property ause to find the user
+   * @param value value of the property use to find the user
+   * @returns Promise<User|null> if user Not found promise will return null
+   */
+
+  async findBy(property: string, value: string | number): Promise<User | null> {
+    const q = query(this.documentRef, where(property, '==', value), limit(1))
+    return await getDocs(q).then((querySnapshot: QuerySnapshot) => {
+      return this.parseSnapshop(querySnapshot)
+    })
+  }
   parseSnapshop(snapshot: QuerySnapshot) {
     if (snapshot.docs.length > 0) {
       const user = {

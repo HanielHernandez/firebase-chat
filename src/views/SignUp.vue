@@ -35,6 +35,14 @@
             class="mb-3"
           />
           <TextField
+            name="phoneNumber"
+            rules="required"
+            type="text"
+            :title="$t('auth.phone_number')"
+            :placeholder="$t('signup.phonumber_placeholder')"
+            class="mb-3"
+          />
+          <TextField
             name="password"
             rules="required"
             type="password"
@@ -43,7 +51,7 @@
             class="mb-3"
           />
           <TextField
-            name="confirm_password"
+            name="confirmPassword"
             rules="required"
             type="password"
             :title="$t('auth.confirm_password')"
@@ -99,10 +107,12 @@ export default {
     // fields instance
 
     const register = async (values: RegisterRequest): Promise<void> => {
+      //// // console.log(values)
+
       loading.value = true
       try {
         const response = await Auth.register(values as RegisterRequest)
-        console.log(response)
+        // // console.log(response)
         message.value.type = 'success'
         message.value.message = t('signup.success_message')
         loading.value = false

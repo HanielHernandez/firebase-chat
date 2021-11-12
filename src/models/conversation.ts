@@ -1,11 +1,14 @@
 import { User } from './auth'
-import { Message } from './message'
+import { ItemWithId, Message } from './message'
 
-export interface Conversation {
-  id?: string
+export interface Conversation extends ItemWithId {
   recipient: User | User[]
-  senderId?: string
+  senderPhoneNumber?: string
   node?: string
   updatedAt: Date
-  lastMessage?: Message
+  conversationImageUrl: string
+  title: string
+  type: string
+  unreadedMessages: number
+  lastMessage: Message
 }

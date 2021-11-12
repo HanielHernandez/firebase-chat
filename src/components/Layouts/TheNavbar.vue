@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed top-0 flex left-0 w-screen p-2 justify-between">
+  <div class="fixed top-0 flex left-0 w-screen p-2 justify-between z-10">
     <div></div>
     <div class="flex justify-items-end items-center">
       <fr-dropdown class="ml-4" options-width="250px" align="right">

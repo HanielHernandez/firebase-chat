@@ -1,10 +1,11 @@
-import MessengerConversation from '@/views/MessengerConversation.vue'
-
 export default [
   {
     path: ':conversationId',
     name: 'Messenger Conversation',
-    component: MessengerConversation,
+    component: (): unknown =>
+      /* webpackChunkName: "messenger-conversation" */ import(
+        '@/views/MessengerConversation.vue'
+      ),
     meta: {
       requiresAuth: true
     }

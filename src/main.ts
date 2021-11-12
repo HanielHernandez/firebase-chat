@@ -10,6 +10,7 @@ import i18n from './plugins/i18n/vue-i18n'
 import { FirebaseApp, initializeApp } from 'firebase/app'
 import { firebaseConfig } from './config/variables'
 import { Form } from 'vee-validate'
+import dayjs from 'dayjs'
 const app = createApp(App)
 
 // Object.keys(Globals).forEach((component:string) => {
@@ -27,7 +28,9 @@ const initApp = async (): Promise<void> => {
   Globals.forEach((component) => {
     app.component(component.name, component)
   })
-
+  app.config.globalProperties.$date = (timeStamp: number): string => {
+    return dayjs(timeStamp).format('MM/DD/YY hh:mm a')
+  }
   app.component('VeeForm', Form)
   app.use(i18n)
   app.use(store)

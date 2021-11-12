@@ -74,14 +74,11 @@ export default defineComponent({
     watch(
       () => props.modelValue,
       (first: boolean, second: boolean) => {
-        //console.log('cambio modelo', first, second)
+        //// // console.log('cambio modelo', first, second)
         isOpen.value = props.modelValue
       }
     )
 
-    onMounted(() => {
-      console.log(props.align)
-    })
     return {
       isOpen,
       optionsContainer,

@@ -16,8 +16,8 @@
         </p>
 
         <text-field
-          id="recipientId"
-          title="Id del Destinatario"
+          id="phoneNumber"
+          :title="$t('conversation_form.recipient_phone_number')"
           placeholder="xxxxxxxx"
           name="recipientId"
           type="text"
@@ -66,13 +66,13 @@ export default defineComponent({
       emit('cancel', true)
     }
     const onSubmit = async (values) => {
-      console.log('values', values)
+      // // console.log('values', values)
       loading.value = true
       try {
+        // create new conversation
         const conv = await storeConversation(values.recipientId)
-        console.log(conv)
-        alert('Creado')
         loading.value = false
+        emit('created', conv)
       } catch (e) {
         loading.value = false
         alert(e)

@@ -12,6 +12,7 @@ export class MessagesApi extends FirebaseApiService<Message> {
   }
 
   setId(id: string): void {
+    console.log(id)
     this.ref = collection(db, 'nodes', id, 'messages')
   }
 }

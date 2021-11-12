@@ -18,19 +18,21 @@
     "no_account_text": "¿No tienes cuenta?",
     "click_here_text":"Crea tu cuenta",
     "email_not_verified_text": "Your emal has not been verified, enter your email and click on the link in order to verified your email"
-
   },
   "forgot_password":{
     "title": "Forgot your password?",
     "subtitle": "Enter your email to send a reset link",
-    "button_text": "Send reset email"
-
+    "button_text": "Send reset email",
+    "click_here_text":"Sign In"
   },
   "auth":{
     "name":"Name",
     "email":"Email",
     "password":"Password",
-    "confirm_password":"Confirm password"
+    "user_not_found_text": "User not found",
+    "confirm_password":"Confirm password",
+    "phone_number": "Phone number"
+
   },
   "validations":{
     "required":"is required"
@@ -55,6 +57,11 @@
     }
   },
   "verify_email":{
-    "success_message": "Your account has been verified successfly, click the link below to sign in"
+    "success_message": "Your account has been verified successfly, click the link below to sign in",
+    "error_message":"Your account has not been verified. we have resent an email with a confirmation link"
+  },
+  "CONVERSATION_CREATED": "Conversación creada",
+  "conversation_form": {
+    "recipient_phone_number": "Recipient Phone number"
   }
 }

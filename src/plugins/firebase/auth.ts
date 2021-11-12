@@ -1,4 +1,7 @@
-import { EMAIL_NOT_VERIFIED } from '@/config/variables'
+import {
+  EMAIL_NOT_VERIFIED,
+  USER_ALREADY_EXIS_EXCEPTION
+} from '@/config/variables'
 import { LoginRequest, RegisterRequest, User } from '@/models/auth'
 import { addDoc, collection, getDoc, query, where } from '@firebase/firestore'
 
@@ -31,16 +34,25 @@ export class Auth {
   constructor() {
     auth.useDeviceLanguage()
   }
-  register(data: RegisterRequest): Promise<UserCredential> {
+  async register(data: RegisterRequest): Promise<UserCredential> {
+    const alreadExist = await users.findBy('phone_number', data.phoneNumber)
+
+    if (alreadExist) {
+      throw USER_ALREADY_EXIS_EXCEPTION
+    }
+
     return createUserWithEmailAndPassword(auth, data.email, data.password).then(
       async (crendetials: UserCredential) => {
+        const { email, name, phoneNumber } = data
         const userProfile = {
-          name: data.name,
-          email: data.email,
-          profile_image_url: `https://ui-avatars.com/api/?name=${data.name}`,
+          name,
+          email,
+          phoneNumber,
+          profileImageUrl: `https://ui-avatars.com/api/?name=${data.name}`,
           code: generateCode(8)
         } as User
         const user = await this.currentUser()
+
         await updateProfile(user, {
           displayName: data.name,
           photoURL: `https://ui-avatars.com/api/?name=${data.name}`
@@ -60,7 +72,7 @@ export class Auth {
     return signInWithEmailAndPassword(auth, data.email, data.password).then(
       async (cred: UserCredential) => {
         const user = await this.currentUser()
-        console.log(user)
+        // // console.log(user)
         if (!user.emailVerified) {
           sendEmailVerification(user)
 

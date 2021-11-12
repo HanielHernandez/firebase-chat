@@ -137,11 +137,11 @@ export default defineComponent({
       loading.value = true
       try {
         const response = await auth.singin(values)
-        console.log(response)
+        // // console.log(response)
         router.push({ name: 'Messenger' })
         loading.value = false
       } catch (e: any) {
-        console.log(e.code, e.message)
+        // // console.log(e.code, e.message)
 
         if (e.code && e.message) {
           if (e.code == 'auth/user-not-found') {

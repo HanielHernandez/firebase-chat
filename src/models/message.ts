@@ -1,6 +1,11 @@
-export interface Message {
+export interface ItemWithId {
+  id?: string | number
+}
+
+export interface Message extends ItemWithId {
   text: string
   date: number
+  senderImageUrl: string
   type: MessageType
   senderId?: string
   status: string

@@ -4,19 +4,15 @@ import {
   query,
   getDocs,
   collection,
-  CollectionReference,
-  DocumentData,
   addDoc,
   WithFieldValue,
-  DocumentReference,
-  setDoc,
   onSnapshot,
   QuerySnapshot,
   Unsubscribe,
-  where,
   Query,
   getDoc,
-  doc
+  doc,
+  updateDoc
 } from '@firebase/firestore'
 
 export class FirebaseApiService<T> {
@@ -27,8 +23,10 @@ export class FirebaseApiService<T> {
     this.ref = collection(db, docsRef)
   }
 
-  async index(...queryConstraints: QueryConstraint[]): Promise<T[]> {
-    const q = query<T>(this.getRef(), ...queryConstraints)
+  async index(filters?: QueryConstraint[]): Promise<T[]> {
+    const ref = this.getRef()
+    // // console.log(ref.path)
+    const q = filters ? query<T>(ref, ...filters) : query<T>(ref)
     const querySnapshot = await getDocs<T>(q)
     return querySnapshot.docs.map((doc) => {
       return {
@@ -50,23 +48,18 @@ export class FirebaseApiService<T> {
       }
     })
   }
-  getFilterQuery(...filters: QueryConstraint[]): Query<T> {
+  getFilterQuery(filters: QueryConstraint[]): Query<T> {
     return query<T>(this.getRef(), ...filters)
   }
   onChanges(
-    filters: QueryConstraint[],
-    callback: (messages: T[]) => void
+    filters: QueryConstraint[] | null = null,
+    callback: (sanpshots: QuerySnapshot<T>) => void
   ): Unsubscribe {
-    const q = this.getFilterQuery(...filters)
+    const q = filters ? this.getFilterQuery(filters) : query<T>(this.getRef())
     return onSnapshot(
       q,
       (querySnapshot: QuerySnapshot<T>) => {
-        console.log(querySnapshot)
-        callback(
-          querySnapshot.docs.map<T>((doc) => {
-            return { id: doc.id, ...doc.data() }
-          })
-        )
+        callback(querySnapshot)
       },
       (error) => {
         console.error(error)
@@ -75,14 +68,18 @@ export class FirebaseApiService<T> {
   }
 
   async find(id: string): Promise<T | null> {
-    console.log(this.docsRef)
     const docItemRef = doc(db, this.docsRef, id)
     const item = await getDoc(docItemRef)
     if (item.exists()) {
-      console.log(item.data)
       return { id: item.id, ...item.data() } as unknown as T
     } else {
       return null
     }
+  }
+
+  async update(id: string, data: T): Promise<T> {
+    const docItemRef = doc(db, this.docsRef, id)
+    await updateDoc(docItemRef, data)
+    return data
   }
 }
