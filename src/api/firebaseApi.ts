@@ -61,7 +61,7 @@ export class FirebaseApiService<T> {
       (querySnapshot: QuerySnapshot<T>) => {
         callback(querySnapshot)
       },
-      (error) => {
+      (error: Error) => {
         console.error(error)
       }
     )
