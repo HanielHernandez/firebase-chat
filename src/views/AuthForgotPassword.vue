@@ -88,7 +88,7 @@
             type="submit"
             block
             :loading="loading"
-            color="blue-600 w-full"
+            color="primary w-full"
             class="text-white"
             >{{ $t('forgot_password.button_text') }}</fr-button
           >

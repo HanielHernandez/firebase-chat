@@ -25,7 +25,7 @@
             type="submit"
             block
             :loading="loading"
-            color="blue-600 w-full"
+            color="primary w-full"
             class="text-white"
             >{{ $t('signup.button_text') }}</fr-button
           >

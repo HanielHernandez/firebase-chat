@@ -13,7 +13,7 @@
       duration-150
       focus:border-blue-700
     "
-    :class="classes"
+    :class="[classes]"
   >
     <div class="flex justify-center items-center">
       <slot v-if="!loading"></slot>
@@ -77,36 +77,34 @@ export default defineComponent({
   },
   setup(props) {
     const { navigate, href, route, isActive, isExactActive } = useLink(props)
-    const textClass = computed(() => {
-      const last = props.color.split('-')
-      if (last[0] != 'gray') {
-        return Number.parseInt(last[1]) >= 600
-          ? 'text-gray-100'
-          : 'text-gray-900'
-      } else {
-        return Number.parseInt(last[1]) >= 600
-          ? 'text-gray-900'
-          : 'text-gray-100'
+
+    const getColorClass = computed((): string => {
+      switch (props.color) {
+        case 'primary':
+          return 'bg-blue-600 text-white'
+        case 'danger':
+          return 'bg-reed-600 text-white'
+        default:
+          return 'bg-gray-300 text-black-400'
       }
     })
+
     const classes = computed(() => {
       const borderClass = `border border-${props.color} text-${props.color}`
       const flatClass = 'bg-gray-600 bg-opacity-0 hover:bg-opacity-30'
       const paddingClass = props.rounded ? 'px-2 py-2' : 'px-4 py-2'
-      const colorClass = `bg-${props.color}`
 
       return [
         props.block ? 'block w-full' : 'inline-block',
         props.flat ? flatClass : '',
-        colorClass,
         paddingClass,
-        textClass.value,
+        getColorClass.value,
         props.disabled ? 'opacity-75' : '',
         props.rounded ? 'rounded-full px-2 py-2' : '',
         props.bordered ? borderClass : ''
       ]
     })
-    return { classes, RouterLink }
+    return { classes, RouterLink, getColorClass }
   }
 })
 </script>

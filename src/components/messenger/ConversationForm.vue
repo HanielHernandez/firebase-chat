@@ -33,11 +33,11 @@
             :loading="loading"
             :disabled="loading || !meta.valid"
             type="submit"
-            color="blue-600 text-white"
+            color="primary"
           >
             {{ $t('sidebar.new_conversation_modal.confirmation_button_text') }}
           </fr-button>
-          <fr-button block color="red-600 text-white" @click="onCancel">
+          <fr-button block color="danger" @click="onCancel">
             {{ $t('sidebar.new_conversation_modal.cancel_button_text') }}
           </fr-button>
         </div>
