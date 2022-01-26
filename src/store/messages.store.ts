@@ -1,23 +1,14 @@
-import messagesApi, { MessagesApi } from '@/api/messagesApi'
-import nodesApi from '@/api/nodesApi'
+import messagesApi from '@/api/messagesApi'
 import { Message } from '@/models/message'
-import {
-  endAt,
-  endBefore,
-  limitToLast,
-  QueryConstraint,
-  startAfter,
-  startAt
-} from '@firebase/firestore'
+import { endBefore, limitToLast, startAt } from '@firebase/firestore'
 import { Unsubscribe } from '@firebase/util'
-import { where, orderBy, limit } from 'firebase/firestore'
+import { orderBy } from 'firebase/firestore'
 import { ActionContext } from 'vuex'
-import { CommitFunction, PaginatedStoreState, RootState } from '.'
+import { PaginatedStoreState, RootState } from '.'
 import { FETCH_ITEMS_ACTIONS, LISTEN_CHANGES_ACTION } from './actions'
 import { createPaginatedStore } from './base.store'
 import {
   SET_LOADING_MUTATION,
-  SET_ITEMS_MUTATION,
   CREATE_ITEM,
   ADD_ITEMS_MUTATION,
   SET_END_REACHED,
@@ -56,10 +47,10 @@ export default {
     }
   },
   getters: {
-    lastMessageDate: (state: PaginatedStoreState<Message>) => {
+    lastMessageDate: (state: PaginatedStoreState<Message>): number => {
       return state.items[0].date
     },
-    firstItem: (state: PaginatedStoreState<Message>) => {
+    firstItem: (state: PaginatedStoreState<Message>): Message => {
       return state.items[state.items.length - 1]
     },
     firstMessageDate: (state: PaginatedStoreState<Message>) => {

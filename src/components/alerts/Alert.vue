@@ -54,7 +54,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .close {
   position: absolute;
-  @apply shadow-lg rounded-full w-6 h-6;
+  @apply rounded-full w-6 h-6;
   right: 0;
   top: 0;
 
@@ -65,9 +65,10 @@ export default defineComponent({
     position: absolute;
     display: block;
     top: 50%;
+
     left: 50%;
     content: '';
-    border-radius: 2px;
+    border-radius: 5px;
     transform-origin: center center;
   }
   &:before {
