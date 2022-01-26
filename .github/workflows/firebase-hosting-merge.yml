@@ -7,6 +7,7 @@ on:[push]
        
        branches:
           - develop
+          - main
 #4. This is the branch which triggers the workflow and to which the rest of the commands happen.
 jobs:
   firebase-deploy:
