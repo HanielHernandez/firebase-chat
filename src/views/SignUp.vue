@@ -83,19 +83,18 @@
     </div>
   </centered-layout>
 </template>
-
 <script lang="ts">
 import CenteredLayout from '@/components/layouts/CenteredLayout.vue'
-import { useForm, useField } from 'vee-validate'
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import Auth from '@/plugins/firebase/auth'
 import { RegisterRequest } from '@/models/auth'
 import { Form as VeeForm } from 'vee-validate'
 import { useAlerts } from '@/mixins'
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   components: { CenteredLayout, VeeForm },
-  setup(): unknown {
+  setup: () => {
     const { t } = useI18n()
     const loading = ref(false)
     const initialValues = ref({
@@ -127,11 +126,11 @@ export default {
     return {
       initialValues,
       loading,
+      t,
       register,
       message
     }
   }
-}
+})
 </script>
-
 <style lang="scss" scoped></style>
