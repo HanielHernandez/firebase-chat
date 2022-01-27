@@ -1,89 +1,10 @@
-<template>
-  <div
-    id="messagesList"
-    ref="messagesList"
-    class="
-      h-full
-      flex flex-col
-      relative
-      px-4
-      overflow-y-auto overflow-x-hidden
-      flex-1
-    "
-    style="max-height: calc(100vh - 9.625rem)"
-  >
-    <VueEternalLoading
-      v-if="currentConv"
-      v-model:is-initial="isInitial"
-      position="top"
-      margin="200px"
-      :load="scrollReached"
-      :container="messagesList"
-    >
-      <template #loading>
-        <div class="text-center">
-          <fr-loading></fr-loading>
-        </div>
-      </template>
-      <template #no-more>
-        <div class="opacity-0">There is no more content.</div>
-      </template>
-    </VueEternalLoading>
-
-    <transition-group
-      name="messages"
-      :css="false"
-      mode="in-out"
-      appear
-      @before-enter="beforeEnter"
-      @enter="enter"
-      @leave="leave"
-    >
-      <div
-        v-for="(message, index) in messages"
-        :key="message.id"
-        class="message-row"
-        :data-index="index"
-      >
-        <div
-          v-if="message.senderId == 'SYSTEM'"
-          class="text-center py-2 text-gray-500"
-        >
-          <div class="w-full text-xs">
-            {{ $date(message.date) }}
-          </div>
-          <p class="text-sm">{{ $t(message.text) }}</p>
-        </div>
-
-        <div
-          v-else-if="index > 0 && sameDayAsBefore(index) == false"
-          class="text-center py-2 text-gray-500"
-        >
-          <div class="w-full text-xs">
-            {{ $date(message.date) }}
-          </div>
-        </div>
-        <MessageBubble v-else :message="message" />
-      </div>
-    </transition-group>
-  </div>
-</template>
-
 <script setup lang="ts">
-import {
-  defineProps,
-  onMounted,
-  PropType,
-  ref,
-  defineEmits,
-  computed,
-  watch
-} from 'vue'
+import { defineProps, onMounted, PropType, ref, defineEmits, watch } from 'vue'
 import { Message } from '@/models/message'
 import { useStoreModule, useUser } from '@/mixins'
 import gsap from 'gsap'
 
-import { VueEternalLoading, LoadAction } from '@ts-pro/vue-eternal-loading'
+import { VueEternalLoading } from '@ts-pro/vue-eternal-loading'
 
 import MessageBubble from './MessageBubble.vue'
 import dayjs from 'dayjs'
@@ -211,6 +132,69 @@ const sameDayAsBefore = (i: number): boolean => {
   }
 }
 </script>
+<template>
+  <div
+    id="messagesList"
+    ref="messagesList"
+    class="h-full flex flex-col relative px-4 overflow-y-auto overflow-x-hidden flex-1"
+    style="max-height: calc(100vh - 9.625rem)"
+  >
+    <VueEternalLoading
+      v-if="currentConv"
+      v-model:is-initial="isInitial"
+      position="top"
+      margin="200px"
+      :load="scrollReached"
+      :container="messagesList"
+    >
+      <template #loading>
+        <div class="text-center">
+          <fr-loading></fr-loading>
+        </div>
+      </template>
+      <template #no-more>
+        <div class="opacity-0">There is no more content.</div>
+      </template>
+    </VueEternalLoading>
+
+    <transition-group
+      name="messages"
+      :css="false"
+      mode="in-out"
+      appear
+      @before-enter="beforeEnter"
+      @enter="enter"
+      @leave="leave"
+    >
+      <div
+        v-for="(message, index) in messages"
+        :key="message.id"
+        class="message-row"
+        :data-index="index"
+      >
+        <div
+          v-if="message.senderId == 'SYSTEM'"
+          class="text-center py-2 text-gray-500"
+        >
+          <div class="w-full text-xs">
+            {{ $date(message.date) }}
+          </div>
+          <p class="text-sm">{{ $t(message.text) }}</p>
+        </div>
+
+        <div
+          v-else-if="index > 0 && sameDayAsBefore(index) == false"
+          class="text-center py-2 text-gray-500"
+        >
+          <div class="w-full text-xs">
+            {{ $date(message.date) }}
+          </div>
+        </div>
+        <MessageBubble :message="message" />
+      </div>
+    </transition-group>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .messages {
