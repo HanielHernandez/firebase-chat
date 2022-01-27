@@ -5,66 +5,15 @@
         {{ $t('forgot_password.title') }}
       </h3>
 
-      <div
-        v-if="errorMessage"
-        class="text-red-600 bg-red-100 relative border-red-300 rounded p-4 mb-4"
+      <fr-alert
+        v-if="message.text"
+        show-dismiss
+        type="error"
+        @onClose="message.text = null"
       >
-        {{ errorMessage }}
-        <button
-          type="button"
-          class="
-            rounded-full
-            w-6
-            h-6
-            p-1
-            shadow-xl
-            text-xs
-            bg-red-400
-            absolute
-            text-gray-900
-            bold
-            -top-3
-            -right-3
-          "
-          @click="errorMessage = ''"
-        >
-          x
-        </button>
-      </div>
-      <div
-        v-if="successMessage"
-        class="
-          text-green-600
-          bg-green-100
-          relative
-          border-green-300
-          rounded
-          p-4
-          mb-4
-        "
-      >
-        {{ successMessage }}
-        <button
-          type="button"
-          class="
-            rounded-full
-            w-6
-            h-6
-            p-1
-            shadow-xl
-            text-xs
-            bg-green-400
-            absolute
-            text-gray-900
-            bold
-            -top-3
-            -right-3
-          "
-          @click="successMessage = ''"
-        >
-          x
-        </button>
-      </div>
+        {{ message.text }}
+      </fr-alert>
+
       <div class="w-full w-lg flex flex-col rounded border p-4">
         <p class="text-gray-600 text-sm mb-3">
           {{ $t('forgot_password.subtitle') }}
@@ -128,8 +77,13 @@ export default defineComponent({
       email: ''
     })
     const { t } = useI18n()
-    const errorMessage = ref()
-    const successMessage = ref()
+    const message = ref<{
+      type: string
+      text: string | null
+    }>({
+      type: 'succcess',
+      text: ''
+    })
     const router = useRouter()
     const loading = ref(false)
 
@@ -144,10 +98,11 @@ export default defineComponent({
         // // console.log(e.code, e.message)
 
         if (e.code && e.message) {
+          message.value.type = 'error'
           if (e.code == 'auth/user-not-found') {
-            errorMessage.value = t('auth.user_not_found_text')
+            message.value.text = t('auth.user_not_found_text')
           } else {
-            errorMessage.value = `Error ${e.code}: ${e.message}`
+            message.value.text = `Error ${e.code}: ${e.message}`
           }
         }
 
@@ -159,10 +114,9 @@ export default defineComponent({
 
     return {
       loading,
-      successMessage,
+      message,
       initialValues,
-      handleSubmit,
-      errorMessage
+      handleSubmit
     }
   }
 })
