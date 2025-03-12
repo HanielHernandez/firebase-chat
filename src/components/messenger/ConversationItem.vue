@@ -61,7 +61,7 @@
 import { defineComponent, computed, PropType } from 'vue'
 import dayjs from 'dayjs'
 import { useI18n } from 'vue-i18n'
-import { Conversation } from '@/models/conversation'
+import { type Conversation } from '@/models/conversation'
 import { SYSTEM_MESSAGES } from '@/config/variables'
 export default defineComponent({
   props: {

@@ -57,7 +57,7 @@
 
 <script lang="ts">
 import { useUser } from '@/mixins'
-import { Message } from '@/models/message'
+import { type Message } from '@/models/message'
 import dayjs from 'dayjs'
 import { computed, defineComponent, PropType } from 'vue'
 export default defineComponent({

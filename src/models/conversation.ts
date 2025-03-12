@@ -1,5 +1,5 @@
-import { User } from './auth'
-import { ItemWithId, Message } from './message'
+import { type User } from './auth'
+import { type ItemWithId, type Message } from './message'
 
 export interface Conversation extends ItemWithId {
   recipient: User | User[]

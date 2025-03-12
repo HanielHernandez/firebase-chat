@@ -1,4 +1,4 @@
-import { User } from '@/models/auth'
+import { type User } from '@/models/auth'
 import Auth from '@/plugins/firebase/auth'
 import { Unsubscribe } from '@firebase/util'
 import { createStore } from 'vuex'

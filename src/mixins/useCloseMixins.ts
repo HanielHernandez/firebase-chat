@@ -5,7 +5,7 @@ import {
   defineEmits,
   withDefaults,
   toRefs,
-  Ref
+ type Ref
 } from 'vue'
 
 interface UseCloseInteraface {

@@ -1,7 +1,7 @@
-import { computed, ComputedRef } from 'vue'
+import { computed, type ComputedRef } from 'vue'
 import { useStore } from 'vuex'
-import { User as FirebaseUser } from 'firebase/auth'
-import { User } from '@/models/auth'
+import { type User as FirebaseUser } from 'firebase/auth'
+import { type User } from '@/models/auth'
 
 interface UserMixin {
   currentUser: ComputedRef<User>

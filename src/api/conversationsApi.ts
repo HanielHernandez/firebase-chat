@@ -1,5 +1,5 @@
-import { User } from '@/models/auth'
-import { Conversation } from '@/models/conversation'
+import { type User } from '@/models/auth'
+import { type Conversation } from '@/models/conversation'
 import { auth, db } from '@/plugins/firebase'
 import users from '@/plugins/firebase/users'
 import {
@@ -11,7 +11,7 @@ import {
   query,
   QueryConstraint,
   QuerySnapshot,
-  Unsubscribe,
+  type Unsubscribe,
   where
 } from '@firebase/firestore'
 import { doc } from 'firebase/firestore'

@@ -1,10 +1,10 @@
 import { USER_NOT_FOUND } from '@/config/variables'
-import { User } from '@/models/auth'
+import { type User } from '@/models/auth'
 import {
   collection,
   CollectionReference,
   doc,
-  DocumentData,
+  type DocumentData,
   getDoc,
   getDocs,
   limit,

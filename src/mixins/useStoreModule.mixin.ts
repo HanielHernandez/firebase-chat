@@ -1,6 +1,6 @@
 import { LISTEN_CHANGES_ACTION } from '@/store/actions'
 import { RESET_ITEMS } from '@/store/mutations'
-import { Unsubscribe } from '@firebase/util'
+import { type Unsubscribe } from '@firebase/util'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 

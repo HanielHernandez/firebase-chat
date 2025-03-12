@@ -1,5 +1,5 @@
 import messagesApi from '@/api/messagesApi'
-import { Message } from '@/models/message'
+import { type Message } from '@/models/message'
 import { endBefore, limitToLast, startAt } from '@firebase/firestore'
 import { Unsubscribe } from '@firebase/util'
 import { orderBy } from 'firebase/firestore'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineProps, onMounted, PropType, ref, defineEmits, watch } from 'vue'
-import { Message } from '@/models/message'
+import { type Message } from '@/models/message'
 import { useStoreModule, useUser } from '@/mixins'
 import gsap from 'gsap'
 

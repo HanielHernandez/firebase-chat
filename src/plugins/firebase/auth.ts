@@ -2,17 +2,17 @@ import {
   EMAIL_NOT_VERIFIED,
   USER_ALREADY_EXIS_EXCEPTION
 } from '@/config/variables'
-import { LoginRequest, RegisterRequest, User } from '@/models/auth'
+import { type LoginRequest, type RegisterRequest, type User } from '@/models/auth'
 import { addDoc, collection, getDoc, query, where } from '@firebase/firestore'
 
 import {
   createUserWithEmailAndPassword,
-  UserCredential,
+  type UserCredential,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
   updateProfile,
-  User as FirebaseUser,
+  type User as FirebaseUser,
   sendEmailVerification,
   applyActionCode
 } from 'firebase/auth'

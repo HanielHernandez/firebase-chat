@@ -1,4 +1,4 @@
-import { Ref, ref } from '@vue/runtime-dom'
+import { type Ref, ref } from '@vue/runtime-dom'
 
 interface AlertMixin {
   message: Ref<{

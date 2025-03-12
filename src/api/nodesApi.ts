@@ -1,4 +1,4 @@
-import { MessageNode } from '@/models/MessagesNode'
+import { type MessageNode } from '@/models/MessagesNode'
 import { db } from '@/plugins/firebase'
 import { addDoc, collection } from '@firebase/firestore'
 import { DocumentReference } from 'firebase/firestore'

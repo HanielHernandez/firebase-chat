@@ -6,7 +6,7 @@ import {
   NOT_LOG_IN,
   USER_NOT_FOUND
 } from '@/config/variables'
-import { Conversation } from '@/models/conversation'
+import { type Conversation } from '@/models/conversation'
 import { Message, MessageType } from '@/models/message'
 import auth from '@/plugins/firebase/auth'
 import users from '@/plugins/firebase/users'

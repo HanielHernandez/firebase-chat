@@ -101,14 +101,14 @@ export default defineComponent({
       transform: translate(-50%, -50%) scale(0);
     }
   }
-  @each $prefix, $size in $modal-sizes {
-    &.#{$prefix} {
-      .modal {
-        &-content {
-          max-width: $size;
-        }
-      }
-    }
-  }
+  // @each $prefix, $size in $modal-sizes {
+  //   &.#{$prefix} {
+  //     .modal {
+  //       &-content {
+  //         max-width: $size;
+  //       }
+  //     }
+  //   }
+  // }
 }
 </style>

@@ -49,7 +49,7 @@ import { watch, computed } from 'vue'
 import ConversationItem from '@/components/messenger/ConversationItem.vue'
 import { useUser } from '@/mixins'
 import { useStore } from 'vuex'
-import { User } from '@/models/auth'
+import { type User } from '@/models/auth'
 import {
   FETCH_CONVERSATION_ITEMS_ACTION,
   LISTEN_CONVERSATION_ITEMS_ACTION

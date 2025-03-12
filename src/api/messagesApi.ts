@@ -1,4 +1,4 @@
-import { Message } from '@/models/message'
+import { type Message } from '@/models/message'
 import { db } from '@/plugins/firebase'
 import { collection } from '@firebase/firestore'
 import { FirebaseApiService } from './firebaseApi'

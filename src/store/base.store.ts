@@ -1,5 +1,5 @@
 import { FirebaseApiService } from '@/api/firebaseApi'
-import { ItemWithId, Message } from '@/models/message'
+import { type ItemWithId, type Message } from '@/models/message'
 import {
   QueryConstraint,
   QueryDocumentSnapshot,
