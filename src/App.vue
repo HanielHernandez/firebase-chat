@@ -6,23 +6,23 @@
 </template>
 <script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue'
-import { useStore } from 'vuex'
+import useRootStore from './store'
 
 export default defineComponent({
   setup() {
-    const store = useStore()
+    const store = useRootStore()
 
-    const currentUser = computed(() => store.state.currentUser)
-    const fetchCurrentUser = () => store.dispatch('fetchCurrentUser')
+    const currentUser = computed(() => store.currentUser)
+
+
     const darkMode = computed(() => localStorage.getItem('darkmode') == 'true')
     onMounted(() => {
       if (currentUser.value == null) {
-        fetchCurrentUser()
+        store.fetchCurrentUser()
       }
     })
 
     return {
-      fetchCurrentUser,
       darkMode,
       currentUser
     }

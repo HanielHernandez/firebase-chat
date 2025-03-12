@@ -1,24 +1,9 @@
 <template>
-  <vee-field
-    v-slot="{ errorMessage, value, field }"
-    :name="name"
-    :rules="rules"
-  >
-    <div
-      class="w-full text-field"
-      :class="{ 'text-red-400': !!errorMessage }"
-      v-bind="$attrs"
-    >
-      <label
-        v-if="title != null"
-        class="block font-medium text-sm mb-1"
-        for=""
-        >{{ title }}</label
-      >
-      <input
-        :model-value="value"
-        v-bind="field"
-        class="
+  <vee-field v-slot="{ errorMessage, value, field }" :name="name" :rules="rules">
+    <div class="w-full text-field relative" :class="{ 'text-red-400': !!errorMessage }" v-bind="$attrs">
+      <label v-if="title != null" class="block font-medium text-sm mb-1" for="">{{ title }}</label>
+      <div class="w-full relative">
+        <input :model-value="value" v-bind="field" class="
           p-3
           w-full
           border
@@ -28,20 +13,17 @@
           transition-colors
           duration-150
           ease-in-out
-        "
-        :class="[
+        " :class="[
           !!errorMessage
             ? 'border-red-400 focus:border-red-600'
-            : 'focus:border-blue-400 border-gray-300'
-        ]"
-        :placeholder="placeholder"
-        :type="type"
-        @input="$emit('update:modelValue', $event.target.value)"
-      />
-      <p
-        v-if="!!errorMessage && hasErrorSlotPopulate == false"
-        class="text-sm text-red-600 mt-1"
-      >
+            : 'focus:border-blue-400 border-gray-300',
+            type==='password' ? 'pr-12' : ''
+        ]" :placeholder="placeholder" :type="currentType" @input="$emit('update:modelValue', $event.target.value)" />
+        <button v-if="type === 'password'" type="button"  @click="changeType"
+        class="cursor-pointer  text-neutral-600 font-medium absolute text-sm head leading-6  p-3 top-0 right-0"> {{ currentType === 'text' ? 'hide': 'show' }} </button>
+      </div>
+
+      <p v-if="!!errorMessage && hasErrorSlotPopulate == false" class="text-sm text-red-600 mt-1">
         {{ errorMessage }}
       </p>
       <slot name="error" :errorMessage="errorMessage"></slot>
@@ -90,7 +72,14 @@ export default defineComponent({
     const hasErrorSlotPopulate = computed(() => {
       return !!slots.error
     })
-    return { hasErrorSlotPopulate }
+    const currentType =  ref(props.type);
+
+    
+
+    const changeType= ()=> {
+      currentType.value = currentType.value === 'password' ? 'text' : 'password'
+    }
+    return { hasErrorSlotPopulate, changeType, currentType }
   }
 })
 </script>

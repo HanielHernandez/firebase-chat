@@ -1,9 +1,6 @@
 <template>
-  <div
-    class="inline-block rounded-full animate-spin spinner"
-    :class="classes"
-    v-bind="$attrs"
-  ></div>
+  <div class="inline-block rounded-full w-6 h-6 border border-t-4 border-t-white animate-spin " :class="classes"
+    v-bind="$attrs"></div>
 </template>
 
 <script lang="ts">

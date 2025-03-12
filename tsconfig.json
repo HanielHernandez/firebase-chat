@@ -7,15 +7,9 @@
   "compilerOptions": {
     "baseUrl": "./",
     "isolatedModules": false,
+    "target": "es6",
     "paths": {
-      "@/components/*": ["src/components/*"],
-      "@/views/*": ["src/views/*"],
-      "@/api/*": ["src/api/*"],
-      "@/plugins/*": ["src/plugins/*"],
-      "@/config/*": ["src/config/*"],
-      "@/store/*": ["src/store/*"],
-      "@/models/*": ["src/models/*"],
-      "@/mixins/*": ["src/mixins/*"],
+      "@/*": ["./src/*"]
     }
   }
 }

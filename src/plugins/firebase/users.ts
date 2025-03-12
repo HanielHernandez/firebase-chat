@@ -46,6 +46,7 @@ export class Users {
       return this.parseSnapshop(querySnapshot)
     })
   }
+  
   parseSnapshop(snapshot: QuerySnapshot) {
     if (snapshot.docs.length > 0) {
       const user = {

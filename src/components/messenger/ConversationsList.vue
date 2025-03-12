@@ -55,30 +55,41 @@ import {
   LISTEN_CONVERSATION_ITEMS_ACTION
 } from '@/store/actions'
 import { orderBy, where } from 'firebase/firestore'
+import { useConversationsStore } from '@/store/conversations.store'
+import useRootStore from '@/store'
 export default defineComponent({
   components: {
     ConversationItem
   },
   setup() {
-    const { currentUser } = useUser()
-    const store = useStore()
+    const userStore = useRootStore () 
+    const store = useConversationsStore()
+
+
     let unsubscribe = (): void | boolean => {
       return false
     }
     const conversations = computed(() => {
-      return store.state.conversations.items
+      return store.items
     })
     const loading = computed(() => {
-      return store.state.conversations.loading
+      return store.loading
     })
 
+
+    const currentUser = computed(() => userStore.currentUser)
+
     const fetchConversations = async () => {
+      if(typeof currentUser.value == null) {
+        return
+      }
+
       try {
-        await store.dispatch(FETCH_CONVERSATION_ITEMS_ACTION, [
+        await store.fetchItems( [
           where('senderPhoneNumber', '==', currentUser.value.phoneNumber),
           orderBy('lastMessage.date', 'desc')
         ])
-        unsubscribe = await store.dispatch(LISTEN_CONVERSATION_ITEMS_ACTION, [
+        unsubscribe = await store.listenChanges( [
           where('senderPhoneNumber', '==', currentUser.value.phoneNumber),
           orderBy('lastMessage.date', 'desc')
         ])
@@ -88,13 +99,14 @@ export default defineComponent({
       }
     }
 
-    watch(
+    /*watch(
       () => currentUser.value,
       (old: User, nuevo: User) => {
         // // console.log('usuario cambio', old, nuevo)
         fetchConversations()
       }
-    )
+    )*/
+
     onMounted(() => {
       //fetchConversations()
     })

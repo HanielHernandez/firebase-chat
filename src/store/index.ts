@@ -1,9 +1,8 @@
 import { type User } from '@/models/auth'
 import Auth from '@/plugins/firebase/auth'
 import { type Unsubscribe } from '@firebase/util'
-import { createStore } from 'vuex'
-import conversationsStore from './conversations.store'
-import messages from './messages.store'
+
+import { defineStore } from 'pinia'
 
 export interface PaginatedStoreState<I> {
   items: I[]
@@ -11,7 +10,7 @@ export interface PaginatedStoreState<I> {
   page: number
   endReach: boolean
   selected: I | null
-  subcription: Unsubscribe | null
+  subscription: Unsubscribe | null
 }
 
 export type CommitFunction = (key: string, payload: unknown) => void
@@ -31,24 +30,24 @@ export type RootState = {
   currentUser: User | null
 }
 
-const store = createStore({
-  state: {
-    currentUser: null
-  },
-  mutations: {
-    setCurrentUser: (state, payload) => {
-      state.currentUser = payload
-    }
-  },
+const useRootStore = defineStore("root", {
+  state: (): RootState => ({
+    currentUser: null,
+  }),
   actions: {
-    async fetchCurrentUser({ commit }): Promise<void> {
-      commit('setCurrentUser', await Auth.currentUserProfile())
-    }
+    setCurrentUser(payload: User) {
+      this.currentUser = payload;
+    },
+
+    async fetchCurrentUser(): Promise<void> {
+      const currentuser = await Auth.currentUserProfile();
+      if (currentuser) this.setCurrentUser(currentuser);
+    },
   },
-  modules: {
-    conversations: conversationsStore,
-    messages
-  }
-})
+  // modules: {
+  //   conversations: conversationsStore,
+  //   messages
+  // }
+});
 // store.registerModule('conversations', conversationsStore)
-export default store
+export default useRootStore;

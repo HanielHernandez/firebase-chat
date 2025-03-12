@@ -29,15 +29,15 @@ export default {
       state.items = [...paylod, ...state.items]
     },
     [UNSUBSCRIBE_MUTATION]: (state: PaginatedStoreState<Message>): void => {
-      if (state.subcription) {
-        state.subcription()
+      if (state.subscription) {
+        state.subscription()
       }
     },
     [SET_SUBSCRIPTION]: (
       state: PaginatedStoreState<Message>,
       payload: Unsubscribe
     ): void => {
-      state.subcription = payload
+      state.subscription = payload
     },
     [CREATE_ITEM]: (
       state: PaginatedStoreState<Message>,
@@ -71,7 +71,7 @@ export default {
       if (state.loading == false) {
         commit(SET_LOADING_MUTATION, true)
         // if subscriptions on unsubscribe
-        if (state.subcription) {
+        if (state.subscription) {
           commit(UNSUBSCRIBE_MUTATION)
         }
         // set node to to message api

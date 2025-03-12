@@ -1,6 +1,6 @@
 <template>
   <centered-layout>
-    <div class="flex flex-col md:mx-0 md:w-1/3 xl:w-1/4 px-4">
+    <div class="flex flex-col md:mx-0 w-full md:w-lg px-4">
       <div class="text-center">
         <img
           src="@/assets/logo.svg"
@@ -20,7 +20,7 @@
         {{ message.text }}
       </fr-alert>
 
-      <div class="w-full w-lg flex flex-col rounded border p-4">
+      <div class="w-ful flex flex-col rounded border border-neutral-300 p-4">
         <h3 class="text-2xl font-bold text-gray-900 text-center mb-4 t">
           {{ $t('signin.title') }}
         </h3>
@@ -66,7 +66,7 @@
             >{{ $t('signin.button_text') }}</fr-button
           >
 
-          <div class="border-t my-3"></div>
+          <div class="border-t my-3 border-neutral-300"></div>
 
           <p class="text-sm font-medium text-center text-gray-600">
             {{ $t('signin.no_account_text') }}
@@ -88,12 +88,13 @@ import CenteredLayout from '@/components/layouts/CenteredLayout.vue'
 import { defineComponent } from 'vue'
 import { Form as VeeForm } from 'vee-validate'
 import { ref } from 'vue'
-import { LoginRequest } from '@/models/auth'
+import { type LoginRequest } from '@/models/auth'
 import auth from '@/plugins/firebase/auth'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { EMAIL_NOT_VERIFIED } from '@/config/variables'
+import useRootStore from '@/store'
 
 export default defineComponent({
   components: { CenteredLayout, VeeForm },
@@ -111,8 +112,8 @@ export default defineComponent({
       text: null
     })
     const showSuccessMessage = ref(true)
-    const store = useStore()
-    const setCurrentUser = () => store.dispatch('fetchCurrentUser')
+    const store = useRootStore()
+    const setCurrentUser = () => store.fetchCurrentUser()
     const errorMessage = ref()
     const router = useRouter()
     const loading = ref(false)

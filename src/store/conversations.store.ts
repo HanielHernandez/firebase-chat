@@ -7,7 +7,7 @@ import {
   USER_NOT_FOUND
 } from '@/config/variables'
 import { type Conversation } from '@/models/conversation'
-import { type Message, type MessageType } from '@/models/message'
+import { type Message,  MessageType } from '@/models/message'
 import auth from '@/plugins/firebase/auth'
 import users from '@/plugins/firebase/users'
 import { where } from '@firebase/firestore'
@@ -15,6 +15,7 @@ import { type CommitFunction } from '.'
 import { FIND_ITEM_ACTION, STORE_ITEM_ACTION } from './actions'
 import { createPaginatedStore } from './base.store'
 import { SET_SELECTED_MUTATION } from './mutations'
+import { defineStore } from 'pinia'
 
 export const storeConversation = async (
   state: unknown,
@@ -72,30 +73,53 @@ export const storeConversation = async (
 //   mutations,
 //   actions
 // }
-const store = createPaginatedStore(conversationsApi)
-export default {
+
+// const store = createPaginatedStore(conversationsApi)
+// export default {
+//   ...store,
+//   actions: {
+//     ...store.actions,
+//     [STORE_ITEM_ACTION]: storeConversation,
+//     [FIND_ITEM_ACTION]: async (
+//       {
+//         commit
+//       }: {
+//         commit: CommitFunction
+//       },
+//       id: string
+//     ) => {
+//       const item = await conversationsApi.find(id)
+//       commit(SET_SELECTED_MUTATION, item)
+//       if (item) {
+//         await conversationsApi.update(item?.id as string, {
+//           ...item,
+//           unreadedMessages: 0
+//         })
+//       }
+
+//       return item
+//     }
+//   }
+// }
+
+const store = createPaginatedStore<Conversation>(conversationsApi)
+
+export const useConversationsStore = defineStore("conversations", {
   ...store,
   actions: {
     ...store.actions,
-    [STORE_ITEM_ACTION]: storeConversation,
-    [FIND_ITEM_ACTION]: async (
-      {
-        commit
-      }: {
-        commit: CommitFunction
-      },
-      id: string
-    ) => {
-      const item = await conversationsApi.find(id)
-      commit(SET_SELECTED_MUTATION, item)
+    storeItem: storeConversation,
+    async findeItemAction(id: string) {
+      const item = await conversationsApi.find(id);
       if (item) {
+        this.setSelected(item);
         await conversationsApi.update(item?.id as string, {
           ...item,
-          unreadedMessages: 0
-        })
+          unreadedMessages: 0,
+        });
       }
 
-      return item
-    }
-  }
-}
+      return item;
+    },
+  },
+});  

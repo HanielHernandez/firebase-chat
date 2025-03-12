@@ -37,7 +37,7 @@ const initApp = async (): Promise<void> => {
   }
   app.component('VeeForm', Form)
   app.use(i18n)
-  app.use(store)
+  //app.use(store)
   app.use(router)
   app.mount('#app')
 }

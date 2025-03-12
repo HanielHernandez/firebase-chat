@@ -41,7 +41,9 @@ export class Auth {
       throw USER_ALREADY_EXIS_EXCEPTION
     }
 
-    return createUserWithEmailAndPassword(auth, data.email, data.password).then(
+    return createUserWithEmailAndPassword(auth, data.email, data.password).catch(e=>{
+      console.error(e)  
+    }).then(
       async (crendetials: UserCredential) => {
         const { email, name, phoneNumber } = data
         const userProfile = {
@@ -57,8 +59,15 @@ export class Auth {
           displayName: data.name,
           photoURL: `https://ui-avatars.com/api/?name=${data.name}`
         })
-        await addDoc(this.users(), userProfile)
-        await sendEmailVerification(user, {
+
+        try{
+         await addDoc(this.users(), userProfile);
+        }catch(e){
+          console.log('error add', e)
+          console.error(e)
+        }
+
+       await sendEmailVerification(user, {
           url: 'http://localhost:8080/email-confirmation'
         })
         localStorage.setItem('userToVerifyEmail', data.email)
