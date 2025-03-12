@@ -11,7 +11,7 @@ import { type FirebaseApp, initializeApp } from 'firebase/app'
 import { firebaseConfig } from './config/variables'
 import { Form } from 'vee-validate'
 import dayjs from 'dayjs'
-const app = createApp(App).mount('#app')
+const app = createApp(App)
 
 // Object.keys(Globals).forEach((component:string) => {
 //   app.component(component, Globals[component])
