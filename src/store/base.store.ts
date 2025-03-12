@@ -5,14 +5,14 @@ import {
   QueryDocumentSnapshot,
   QuerySnapshot
 } from '@firebase/firestore'
-import { async, Unsubscribe } from '@firebase/util'
+import { async, type Unsubscribe } from '@firebase/util'
 import {
-  ActionContext,
+  type ActionContext,
   createNamespacedHelpers,
   createStore,
   Store
 } from 'vuex'
-import { CommitFunction, PaginatedStoreState, RootState } from '.'
+import { type CommitFunction, type PaginatedStoreState, type RootState } from '.'
 import {
   FETCH_ITEMS_ACTIONS,
   FIND_ITEM_ACTION,

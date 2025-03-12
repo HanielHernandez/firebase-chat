@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import MessageList from '@/components/messenger/MessageList.vue'
 import { useStoreModule, useUser } from '@/mixins'
-import { Message, MessageType } from '@/models/message'
+import { type Message, type MessageType } from '@/models/message'
 import { limit, orderBy } from '@firebase/firestore'
 import dayjs from 'dayjs'
 import { where } from 'firebase/firestore'

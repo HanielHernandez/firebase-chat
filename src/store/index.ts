@@ -1,6 +1,6 @@
 import { type User } from '@/models/auth'
 import Auth from '@/plugins/firebase/auth'
-import { Unsubscribe } from '@firebase/util'
+import { type Unsubscribe } from '@firebase/util'
 import { createStore } from 'vuex'
 import conversationsStore from './conversations.store'
 import messages from './messages.store'

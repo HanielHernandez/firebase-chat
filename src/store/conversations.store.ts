@@ -7,11 +7,11 @@ import {
   USER_NOT_FOUND
 } from '@/config/variables'
 import { type Conversation } from '@/models/conversation'
-import { Message, MessageType } from '@/models/message'
+import { type Message, type MessageType } from '@/models/message'
 import auth from '@/plugins/firebase/auth'
 import users from '@/plugins/firebase/users'
 import { where } from '@firebase/firestore'
-import { CommitFunction } from '.'
+import { type CommitFunction } from '.'
 import { FIND_ITEM_ACTION, STORE_ITEM_ACTION } from './actions'
 import { createPaginatedStore } from './base.store'
 import { SET_SELECTED_MUTATION } from './mutations'

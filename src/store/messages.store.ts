@@ -1,10 +1,10 @@
 import messagesApi from '@/api/messagesApi'
 import { type Message } from '@/models/message'
 import { endBefore, limitToLast, startAt } from '@firebase/firestore'
-import { Unsubscribe } from '@firebase/util'
+import { type Unsubscribe } from '@firebase/util'
 import { orderBy } from 'firebase/firestore'
-import { ActionContext } from 'vuex'
-import { PaginatedStoreState, RootState } from '.'
+import { type ActionContext } from 'vuex'
+import { type PaginatedStoreState, type RootState } from '.'
 import { FETCH_ITEMS_ACTIONS, LISTEN_CHANGES_ACTION } from './actions'
 import { createPaginatedStore } from './base.store'
 import {
