@@ -47,7 +47,7 @@ export default {
     .fr-list {
       &-item {
         &:hover {
-          background-color: $hoverable-color;
+          //background-color: $hoverable-color;
         }
       }
     }

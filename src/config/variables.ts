@@ -1,11 +1,11 @@
 export const firebaseConfig = {
-  apiKey: 'AIzaSyBvzpRDZNLmKpQR95LPAtwjK00U4LlR3D8',
-  authDomain: 'firechat-c857f.firebaseapp.com',
-  projectId: 'firechat-c857f',
-  storageBucket: 'firechat-c857f.appspot.com',
-  messagingSenderId: '50201580034',
-  appId: '1:50201580034:web:2c6a31034d733630884d1b'
-}
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+};
 
 export const EMAIL_NOT_VERIFIED = 'EMAIL_NOT_VERIFIED'
 export const USER_NOT_FOUND = 'USER_NOT_FOUND'

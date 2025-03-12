@@ -1,5 +1,5 @@
 
-@import 'globals/variables';
-@import 'globals/normalize';
+@use 'globals/variables' as variables;
+@use 'globals/normalize' as normalize;
 
-@import 'components/';
+@use 'components/' as components;

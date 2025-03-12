@@ -11,7 +11,11 @@ import { type FirebaseApp, initializeApp } from 'firebase/app'
 import { firebaseConfig } from './config/variables'
 import { Form } from 'vee-validate'
 import dayjs from 'dayjs'
+import { createPinia } from 'pinia'
 const app = createApp(App)
+
+const pinia = createPinia()
+app.use(pinia)
 
 // Object.keys(Globals).forEach((component:string) => {
 //   app.component(component, Globals[component])
