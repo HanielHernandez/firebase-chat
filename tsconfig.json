@@ -8,6 +8,7 @@
     "baseUrl": "./",
     "isolatedModules": false,
     "target": "es6",
+    "types": ["node"],
     "paths": {
       "@/*": ["./src/*"]
     }

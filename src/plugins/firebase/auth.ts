@@ -3,7 +3,7 @@ import {
   USER_ALREADY_EXIS_EXCEPTION
 } from '@/config/variables'
 import { type LoginRequest, type RegisterRequest, type User } from '@/models/auth'
-import { addDoc, collection, getDoc, query, where } from '@firebase/firestore'
+import { addDoc, collection } from '@firebase/firestore'
 
 import {
   createUserWithEmailAndPassword,
@@ -41,10 +41,8 @@ export class Auth {
       throw USER_ALREADY_EXIS_EXCEPTION
     }
 
-    return createUserWithEmailAndPassword(auth, data.email, data.password).catch(e=>{
-      console.error(e)  
-    }).then(
-      async (crendetials: UserCredential) => {
+    return createUserWithEmailAndPassword(auth, data.email, data.password).then(
+      async (crendetials:UserCredential) => {
         const { email, name, phoneNumber } = data
         const userProfile = {
           name,
@@ -53,6 +51,7 @@ export class Auth {
           profileImageUrl: `https://ui-avatars.com/api/?name=${data.name}`,
           code: generateCode(8)
         } as User
+
         const user = await this.currentUser()
 
         await updateProfile(user, {
@@ -73,8 +72,7 @@ export class Auth {
         localStorage.setItem('userToVerifyEmail', data.email)
         await signOut(auth)
         return crendetials
-      }
-    )
+      }).catch(e => { console.error(e) })
   }
 
   singin(data: LoginRequest): Promise<UserCredential> {

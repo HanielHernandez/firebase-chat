@@ -12,6 +12,7 @@ import { firebaseConfig } from './config/variables'
 import { Form } from 'vee-validate'
 import dayjs from 'dayjs'
 import { createPinia } from 'pinia'
+import date from './plugins/date'
 const app = createApp(App)
 
 const pinia = createPinia()
@@ -30,14 +31,12 @@ const initFirebase = (): Promise<FirebaseApp> => {
 const initApp = async (): Promise<void> => {
   await initFirebase()
   Globals.forEach((component) => {
-    app.component(component.name, component)
+    component.name && app.component(component.name, component)
   })
-  app.config.globalProperties.$date = (timeStamp: number): string => {
-    return dayjs(timeStamp).format('MM/DD/YY hh:mm a')
-  }
+ 
   app.component('VeeForm', Form)
   app.use(i18n)
-  //app.use(store)
+  app.use(date);
   app.use(router)
   app.mount('#app')
 }

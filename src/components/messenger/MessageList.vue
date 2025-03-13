@@ -18,18 +18,9 @@ const props = defineProps({
   }
 })
 
-// const { selected: currentConv } = useStoreModule('conversations')
- const conversationStore = useConversationsStore()
- const currentConv = ref(conversationStore.selected)
+const conversationStore = useConversationsStore()
+const currentConv = ref(conversationStore.selected)
 const messagesStore = useMessagesStore()
-//const scrollPosition = ref(0)
-
-
-// const { endReachded, fetch, reset: resetMessages } = useStoreModule('messages')
-
-
-
-// const lastMessage = ref<Element>()
 const isInitial = ref(true)
 const animatedMessages = ref(0)
 watch(
@@ -118,7 +109,7 @@ const storePosition = () => {
   }
 }
 */
-const beforeEnter = (el: Element ): void => {
+const beforeEnter = (el: HTMLElement ): void => {
   el.style.opacity = '0'
   el.style.transform = 'rotateX(-45deg) scale(0.3)'
 }
@@ -196,7 +187,7 @@ const sameDayAsBefore = (i: number): boolean => {
       :css="false"
       mode="in-out"
       appear
-      @before-Enter="($el)=>beforeEnter($el) "
+      @before-Enter="($el)=>beforeEnter($el as HTMLElement) "
       @enter="enter"
       @leave="leave"
     >

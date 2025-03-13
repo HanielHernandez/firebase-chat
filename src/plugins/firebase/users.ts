@@ -3,9 +3,7 @@ import { type User } from '@/models/auth'
 import {
   collection,
   CollectionReference,
-  doc,
   type DocumentData,
-  getDoc,
   getDocs,
   limit,
   query,
