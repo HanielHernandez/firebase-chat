@@ -37,7 +37,7 @@ export default {
   },
   setup(props, { slots }) {
     const classes = computed(() => {
-      return [props.hoverable ? 'hover:bg-gray-900 hover:bg-opacity-30' : '']
+      return [props.hoverable ? 'hover:bg-gray-900/30' : '']
     })
     const hasAvatar = computed(() => !!slots.avatar)
     return { classes, hasAvatar }

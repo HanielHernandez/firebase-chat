@@ -8,8 +8,9 @@
     "resolveJsonModule": true,
     "strict": true,
     "target": "ES6",
-    "esModuleInterop": true,   // This flag helps with compatibility
-    "skipLibCheck": true,      // This can be helpful to avoid issues with third-party typings
+    "lib": ["esnext", "dom"],
+    "esModuleInterop": true, // This flag helps with compatibility
+    "skipLibCheck": true // This can be helpful to avoid issues with third-party typings
   },
   "compileOnSave": true,
   "include": [

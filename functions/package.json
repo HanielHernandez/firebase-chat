@@ -6,10 +6,11 @@
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "lint": "eslint ."
   },
   "engines": {
-    "node": "12"
+    "node": "20"
   },
   "main": "lib/index.js",
   "dependencies": {
@@ -19,8 +20,9 @@
   },
   "devDependencies": {
     "@types/faker": "^5.5.9",
+    "eslint": "^9.22.0",
     "firebase-functions-test": "^0.2.0",
-    "typescript": "^3.8.0"
+    "typescript": "^5.8.2"
   },
   "private": true
 }

@@ -4,9 +4,7 @@
     <div class="flex justify-items-end items-center">
       <fr-dropdown class="ml-4" options-width="250px" align="right">
         <template #default="{ handleClick }">
-          <div
-            v-if="currentUser"
-            class="
+          <div v-if="currentUser" class="
               flex
               p-2
               rounded-full
@@ -17,21 +15,13 @@
               duration-300
               easin-out
               flex-nowrap
-              hover:bg-gray-900 hover:bg-opacity-20
-            "
-            @click="handleClick"
-          >
-            <img
-              :src="
+              hover:bg-gray-900/20
+            " @click="handleClick">
+            <img :src="
                 currentUser.profile_image_url
                   ? currentUser.profile_image_url
                   : `https://ui-avatars.com/api/?name=${currentUser.name}`
-              "
-              width="40"
-              height="40"
-              alt=""
-              class="rounded-full mr-3"
-            />
+              " width="40" height="40" alt="" class="rounded-full mr-3" />
             <div class="">
               <p class="font-bold leading-none text-gray-900">
                 {{ currentUser.name }}

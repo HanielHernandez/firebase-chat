@@ -92,7 +92,7 @@ export default defineComponent({
 
     const classes = computed(() => {
       const borderClass = `border border-${props.color} text-${props.color}`
-      const flatClass = 'bg-gray-600 bg-opacity-0 hover:bg-opacity-30'
+      const flatClass = 'bg-gray-600 bg-opacity-0 hover:bg-gray-600/30'
       const paddingClass = props.rounded ? 'px-2 py-2' : 'px-4 py-2'
 
       return [

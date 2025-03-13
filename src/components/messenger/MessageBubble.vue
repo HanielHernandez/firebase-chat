@@ -41,7 +41,7 @@
         :class="{ 'mr-2': sender, 'ml-2': !sender }"
         class="
           message-date-tooltip
-          bg-black bg-opacity-30
+          bg-black/30
           text-xs
           px-4
           py-2
