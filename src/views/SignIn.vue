@@ -27,7 +27,7 @@
         <vee-form
           v-slot="{ meta }"
           :initial-values="initialValues"
-          @submit="handleSubmit"
+          @submit="(values)=>handleSubmit(values as LoginRequest)"
         >
           <TextField
             type="email"
@@ -92,7 +92,6 @@ import { type LoginRequest } from '@/models/auth'
 import auth from '@/plugins/firebase/auth'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useStore } from 'vuex'
 import { EMAIL_NOT_VERIFIED } from '@/config/variables'
 import useRootStore from '@/store'
 
@@ -120,11 +119,10 @@ export default defineComponent({
     const handleSubmit = async (values: LoginRequest): Promise<void> => {
       loading.value = true
       try {
-        const response = await auth.singin(values)
-        // // console.log(response)
+        await auth.singin(values)
         setCurrentUser()
-        router.push({ name: 'Messenger' })
         loading.value = false
+        router.push({ name: 'Messenger' })
       } catch (e: any) {
         // // console.log(e.code, e.message)
         message.value.type = 'error'

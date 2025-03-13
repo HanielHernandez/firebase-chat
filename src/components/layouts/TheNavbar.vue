@@ -18,8 +18,8 @@
               hover:bg-gray-900/20
             " @click="handleClick">
             <img :src="
-                currentUser.profile_image_url
-                  ? currentUser.profile_image_url
+                currentUser.profileImageUrl
+                  ? currentUser.profileImageUrl
                   : `https://ui-avatars.com/api/?name=${currentUser.name}`
               " width="40" height="40" alt="" class="rounded-full mr-3" />
             <div class="">
@@ -69,7 +69,7 @@ import auth from '@/plugins/firebase/auth'
 import { useRouter } from 'vue-router'
 import { useUser } from '@/mixins'
 export default {
-  setup(): unknown {
+  setup() {
     const router = useRouter()
     const { currentUser } = useUser()
     const logout = async (): Promise<void> => {

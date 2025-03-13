@@ -1,6 +1,6 @@
 <template>
   <div :id="id" ref="container" class="h-96">
-    <transition name="loading" mode="in-out" tag="div" appear="">
+    <transition name="loading" mode="in-out" tag="div">
       <slot v-if="hasReachLoading" name="loading"></slot>
     </transition>
     <slot name="endReached"></slot>

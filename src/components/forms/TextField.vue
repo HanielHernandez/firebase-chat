@@ -18,7 +18,7 @@
             ? 'border-red-400 focus:border-red-600'
             : 'focus:border-blue-400 border-gray-300',
             type==='password' ? 'pr-12' : ''
-        ]" :placeholder="placeholder" :type="currentType" @input="$emit('update:modelValue', $event.target.value)" />
+        ]" :placeholder="placeholder" :type="currentType" @input="onInputChange" />
         <button v-if="type === 'password'" type="button"  @click="changeType"
         class="cursor-pointer  text-neutral-600 font-medium absolute text-sm head leading-6  p-3 top-0 right-0"> {{ currentType === 'text' ? 'hide': 'show' }} </button>
       </div>
@@ -58,7 +58,7 @@ export default defineComponent({
       default: () => null
     },
     modelValue: {
-      type: String,
+      type: String || null,
       default: () => null
     },
     rules: {
@@ -67,7 +67,7 @@ export default defineComponent({
     }
   },
   emits: ['update:modelValue'],
-  setup(props, { slots }) {
+  setup(props, { slots, emit }) {
     //const value = ref(props.modelValue)
     const hasErrorSlotPopulate = computed(() => {
       return !!slots.error
@@ -79,7 +79,12 @@ export default defineComponent({
     const changeType= ()=> {
       currentType.value = currentType.value === 'password' ? 'text' : 'password'
     }
-    return { hasErrorSlotPopulate, changeType, currentType }
+
+    const onInputChange = (e: InputEvent)=>{
+      emit('update:modelValue', (e.target as HTMLInputElement).value)
+    }
+
+    return { hasErrorSlotPopulate, changeType, currentType, onInputChange }
   }
 })
 </script>

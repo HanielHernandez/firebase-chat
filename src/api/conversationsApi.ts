@@ -1,21 +1,8 @@
-import { type User } from '@/models/auth'
 import { type Conversation } from '@/models/conversation'
-import { auth, db } from '@/plugins/firebase'
-import users from '@/plugins/firebase/users'
-import {
-  addDoc,
-  collection,
-  getDoc,
-  getDocs,
-  onSnapshot,
-  query,
-  QueryConstraint,
-  QuerySnapshot,
-  type Unsubscribe,
-  where
-} from '@firebase/firestore'
-import { doc } from 'firebase/firestore'
+import { db } from '@/plugins/firebase'
+
 import { FirebaseApiService } from './firebaseApi'
+import { collection } from 'firebase/firestore'
 
 export class Conversations extends FirebaseApiService<Conversation> {
   ref: any

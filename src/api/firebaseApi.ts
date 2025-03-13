@@ -79,7 +79,7 @@ export class FirebaseApiService<T> {
 
   async update(id: string, data: T): Promise<T> {
     const docItemRef = doc(db, this.docsRef, id)
-    await updateDoc(docItemRef, data)
+    await updateDoc(docItemRef, data as { [x: string]: any });
     return data
   }
 }

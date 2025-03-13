@@ -9,7 +9,7 @@
         <vee-form
           v-slot="{ meta }"
           :initial-values="initialValues"
-          @submit="register"
+          @submit="(values) => handleSubmit(values)"
         >
           <TextField
             name="email"
@@ -33,12 +33,12 @@
           <div class="border-t my-3"></div>
 
           <p class="text-sm font-medium text-center text-gray-600">
-            {{ $t('signup.already_registered_text') }}
+            {{ t('signup.already_registered_text') }}
             <router-link
               to="sign-in"
               class="text-blue-600 opacity-75 hover:opacity-100"
             >
-              {{ $t('signup.click_here_text') }}
+              {{ t('signup.click_here_text') }}
             </router-link>
           </p>
         </vee-form>
@@ -51,11 +51,11 @@
 import CenteredLayout from '@/components/layouts/CenteredLayout.vue'
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
-import { RegisterRequest } from '@/models/auth'
-import { Form as VeeForm } from 'vee-validate'
+import { type RegisterRequest } from '@/models/auth'
+import { Form as VeeForm, type GenericObject } from 'vee-validate'
 export default {
   components: { CenteredLayout, VeeForm },
-  setup(): unknown {
+  setup() {
     const { t } = useI18n()
     const loading = ref(false)
     const initialValues = ref({
@@ -64,11 +64,12 @@ export default {
 
     // fields instance
 
-    const handleSubmit = async (values: RegisterRequest): Promise<void> => {
+    const handleSubmit = async (values: GenericObject): Promise<void> => {
       loading.value = true
       try {
+      
         ///const response = await Auth.register(values as RegisterRequest)
-        // // console.log(values)
+        console.log(values)
         alert('usuario guardado')
         loading.value = false
       } catch (e) {
@@ -81,7 +82,8 @@ export default {
     return {
       initialValues,
       loading,
-      handleSubmit
+      handleSubmit,
+      t
     }
   }
 }

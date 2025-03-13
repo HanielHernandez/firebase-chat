@@ -8,7 +8,7 @@
         {{ message.message }}
       </fr-alert>
       <div class="w-full md:w-lg flex flex-col rounded border border-neutral-300 p-4">
-        <vee-form v-slot="{ meta }" :initial-values="initialValues" @submit="register">
+        <vee-form v-slot="{ meta }" :initial-values="initialValues" @submit="(values)=>register(values as RegisterRequest)">
           <TextField name="name" rules="required" type="text" :title="$t('auth.name')"
             :placeholder="$t('signup.name_placeholder')" class="mb-4" />
           <TextField name="email" rules="required|email" type="email" :title="$t('auth.email')"
@@ -40,7 +40,7 @@ import CenteredLayout from '@/components/layouts/CenteredLayout.vue'
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import Auth from '@/plugins/firebase/auth'
-import { RegisterRequest } from '@/models/auth'
+import { type RegisterRequest } from '@/models/auth'
 import { Form as VeeForm } from 'vee-validate'
 import { useAlerts } from '@/mixins'
 import { defineComponent } from 'vue'
@@ -61,7 +61,7 @@ export default defineComponent({
 
       loading.value = true
       try {
-        const response = await Auth.register(values as RegisterRequest)
+        await Auth.register(values as RegisterRequest)
         // // console.log(response)
         message.value.type = 'success'
         message.value.message = t('signup.success_message')

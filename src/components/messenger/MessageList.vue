@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, type PropType, ref, defineEmits, watch } from 'vue'
 import { type Message } from '@/models/message'
-import { useStoreModule } from '@/mixins'
 import gsap from 'gsap'
 
 // import { VueEternalLoading } from '@ts-pro/vue-eternal-loading'
@@ -23,14 +22,14 @@ const props = defineProps({
  const conversationStore = useConversationsStore()
  const currentConv = ref(conversationStore.selected)
 const messagesStore = useMessagesStore()
-const scrollPosition = ref(0)
+//const scrollPosition = ref(0)
 
 
 // const { endReachded, fetch, reset: resetMessages } = useStoreModule('messages')
 
 
 
-const lastMessage = ref<Element>()
+// const lastMessage = ref<Element>()
 const isInitial = ref(true)
 const animatedMessages = ref(0)
 watch(
@@ -45,7 +44,7 @@ function reset() {
   isInitial.value = true
 }
 
-const unsubscribe = ref(null)
+//const unsubscribe = ref(null)
 
 onMounted(() => {
   if (messagesList.value) {
@@ -54,7 +53,7 @@ onMounted(() => {
 })
 
 
-const scrollToBotom = () => {
+/*const scrollToBotom = () => {
   if (messagesList.value) {
     console.log(
       'scroll hegiht',
@@ -67,7 +66,7 @@ const scrollToBotom = () => {
       messagesList.value.scrollTo(0, messagesList.value.scrollHeight)
     }
   }
-}
+}*/
 
 const loadMessages = async ()=>{
   try {
@@ -90,7 +89,7 @@ const loadMessages = async ()=>{
 onMounted(() => {
   loadMessages()
 })
-
+/*
 const scrollReached = async ({
   loaded,
   noMore
@@ -118,8 +117,8 @@ const storePosition = () => {
     console.log('Last chidl', lastChild[0])
   }
 }
-
-const beforeEnter = (el: HTMLElement): void => {
+*/
+const beforeEnter = (el: Element ): void => {
   el.style.opacity = '0'
   el.style.transform = 'rotateX(-45deg) scale(0.3)'
 }
@@ -197,7 +196,7 @@ const sameDayAsBefore = (i: number): boolean => {
       :css="false"
       mode="in-out"
       appear
-      @before-enter="beforeEnter"
+      @before-Enter="($el)=>beforeEnter($el) "
       @enter="enter"
       @leave="leave"
     >

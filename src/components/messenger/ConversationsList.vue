@@ -47,13 +47,7 @@
 import { defineComponent, onMounted, onUnmounted } from '@vue/runtime-core'
 import { watch, computed } from 'vue'
 import ConversationItem from '@/components/messenger/ConversationItem.vue'
-import { useUser } from '@/mixins'
-import { useStore } from 'vuex'
 import { type User } from '@/models/auth'
-import {
-  FETCH_CONVERSATION_ITEMS_ACTION,
-  LISTEN_CONVERSATION_ITEMS_ACTION
-} from '@/store/actions'
 import { orderBy, where } from 'firebase/firestore'
 import { useConversationsStore } from '@/store/conversations.store'
 import useRootStore from '@/store'
@@ -85,14 +79,16 @@ export default defineComponent({
       }
 
       try {
-        await store.fetchItems( [
-          where('senderPhoneNumber', '==', currentUser.value.phoneNumber),
-          orderBy('lastMessage.date', 'desc')
-        ])
-        unsubscribe = await store.listenChanges( [
-          where('senderPhoneNumber', '==', currentUser.value.phoneNumber),
-          orderBy('lastMessage.date', 'desc')
-        ])
+        if(!!currentUser.value) {
+          await store.fetchItems( [
+            where('senderPhoneNumber', '==', currentUser.value.phoneNumber),
+            orderBy('lastMessage.date', 'desc')
+          ])
+          unsubscribe = await store.listenChanges( [
+            where('senderPhoneNumber', '==', currentUser.value.phoneNumber),
+            orderBy('lastMessage.date', 'desc')
+          ])
+        }
       } catch (e) {
         alert(e)
         console.error(e)
@@ -100,10 +96,11 @@ export default defineComponent({
     }
 
     watch(
-      currentUser,
+      ()=>currentUser.value as User,
       (old: User, nuevo: User) => {
-        //  console.log('usuario cambio', old, nuevo)
-        fetchConversations()
+        if(old!== nuevo) {
+          fetchConversations()
+        }
       }
     )
 

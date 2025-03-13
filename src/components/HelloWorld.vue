@@ -126,10 +126,6 @@ export default defineComponent({
   props: {
     msg: String
   },
-  setup() {
-    const t = 't'
-    // // console.log(t)
-  }
 })
 </script>
 

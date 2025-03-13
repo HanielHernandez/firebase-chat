@@ -7,7 +7,7 @@ export interface Message extends ItemWithId {
   date: number
   senderImageUrl: string
   type: MessageType
-  senderId?: string
+  senderId: string
   status: string
 }
 

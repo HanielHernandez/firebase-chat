@@ -26,7 +26,7 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import FrLoading from './FrLoading.vue'
-import { RouterLink, useLink } from 'vue-router'
+import { RouterLink } from 'vue-router'
 export default defineComponent({
   name: 'FrButton',
   components: { FrLoading },
@@ -77,7 +77,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const { navigate, href, route, isActive, isExactActive } = useLink(props)
 
     const getColorClass = computed((): string => {
       switch (props.color) {

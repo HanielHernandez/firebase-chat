@@ -1,32 +1,16 @@
 <template>
-  <div
-    :id="`message-${message.id}`"
-    class="message w-full flex py-4"
-    :class="{ 'justify-end': sender }"
-  >
-    <div
-      class="message-inner flex w-4/6 md:w-2/5 items-center"
-      :class="{
-        'flex-row-reverse': sender,
-        'justify-center': message.sender == 'SYSTEM'
-      }"
-    >
-      <img
-        :src="message.senderImageUrl"
-        alt=""
-        width="40"
-        height="40"
-        class="rounded-full"
-        :class="{ 'ml-2': sender, 'mr-2': !sender }"
-      />
+  <div :id="`message-${message.id}`" class="message w-full flex py-4" :class="{ 'justify-end': sender }">
+    <div class="message-inner flex w-4/6 md:w-2/5 items-center" :class="{
+      'flex-row-reverse': sender,
+      'justify-center': message.senderId == 'SYSTEM'
+    }">
+      <img :src="message.senderImageUrl" alt="" width="40" height="40" class="rounded-full"
+        :class="{ 'ml-2': sender, 'mr-2': !sender }" />
 
-      <div
-        class="p-4 rounded-md shadow-sm text-gray-900 max-w-full break-words"
-        :class="{
-          'bg-blue-200': sender,
-          'bg-yellow-100': message.sender != 'SYSTEM' && !sender
-        }"
-      >
+      <div class="p-4 rounded-md shadow-sm text-gray-900 max-w-full break-words" :class="{
+        'bg-blue-200': sender,
+        'bg-yellow-100': message.senderId != 'SYSTEM' && !sender
+      }">
         {{ message.text }}
         <br />
         <p class="text-gray-500 text-xs" :class="{ 'text-right': sender }">
@@ -37,9 +21,7 @@
       <fr-button flat rounded :class="{ 'mr-2': sender, 'ml-2': !sender }">
         <i class="material-icons">more_vert</i>
       </fr-button>
-      <div
-        :class="{ 'mr-2': sender, 'ml-2': !sender }"
-        class="
+      <div :class="{ 'mr-2': sender, 'ml-2': !sender }" class="
           message-date-tooltip
           bg-black/30
           text-xs
@@ -47,9 +29,8 @@
           py-2
           text-white
           rounded-full
-        "
-      >
-        {{ $date(message.date) }}
+        ">
+        {{ formatDate(message.date) }}
       </div>
     </div>
   </div>
@@ -59,7 +40,7 @@
 import { useUser } from '@/mixins'
 import { type Message } from '@/models/message'
 import dayjs from 'dayjs'
-import { computed, defineComponent, PropType } from 'vue'
+import { computed, defineComponent, type PropType } from 'vue'
 export default defineComponent({
   props: {
     message: {
@@ -71,7 +52,7 @@ export default defineComponent({
     const { currentUser } = useUser()
 
     const sender = computed(() => {
-      return currentUser.value.id == props.message.senderId
+      return currentUser.value ? currentUser.value.id == props.message.senderId : false
     })
 
     const formatDate = (date: number): string => {
@@ -90,11 +71,13 @@ export default defineComponent({
 .message {
   &-inner {
     transition: all 0.3s cubic-bezier(0.42, 0, 0.52, 2.04);
+
     .message {
       &-date-tooltip {
         opacity: 0;
       }
     }
+
     &:hover {
       .message {
         &-date-tooltip {

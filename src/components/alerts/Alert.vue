@@ -37,8 +37,7 @@ export default defineComponent({
     }
     watch(
       () => props.modelValue,
-      (from: boolean, to: boolean) => {
-        // // console.log('cambio', from, to)
+      () => {
         open.value = props.modelValue
       }
     )

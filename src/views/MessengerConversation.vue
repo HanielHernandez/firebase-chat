@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import MessageList from '@/components/messenger/MessageList.vue'
-import { useStoreModule, useUser } from '@/mixins'
+import { useUser } from '@/mixins'
 import { type Message, MessageType } from '@/models/message'
 import { useConversationsStore } from '@/store/conversations.store'
 import { useMessagesStore } from '@/store/messages.store'
-import { limit, orderBy } from '@firebase/firestore'
-import dayjs from 'dayjs'
-import { where } from 'firebase/firestore'
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -27,15 +24,6 @@ const conversation = computed(() => {
   return conversationsStore.selected
 })
 
-// const { selected: conversation, find: findConversation } =
-//   useStoreModule('conversations')
-// const { store: storeMessage, listenChanges: listenMessagesChanges } =
-//   useStoreModule('messages')
-// const {
-//   items: messages,
-//   loading,
-//   fetch: fetchMessages
-// } = useStoreModule('messages')
 
 const messages = computed(() => {
   return messageStore.items
@@ -85,7 +73,7 @@ const sendMessage = async (
 
   try {
     sending.value = true
-    const message = await messageStore.addItems([newMessage])
+    await messageStore.addItems([newMessage])
     sending.value = false
     scrollToBottom()
     resetForm()
