@@ -11,13 +11,10 @@ import { type Message,  MessageType } from '@/models/message'
 import auth from '@/plugins/firebase/auth'
 import users from '@/plugins/firebase/users'
 import { where } from '@firebase/firestore'
-import { type CommitFunction } from '.'
-import { FIND_ITEM_ACTION, STORE_ITEM_ACTION } from './actions'
 import { createPaginatedStore } from './base.store'
-import { SET_SELECTED_MUTATION } from './mutations'
 import { defineStore } from 'pinia'
 
-export const startConversation = async (
+export const startNewConversation= async (
   phoneNumber: string
 ): Promise<Conversation> => {
   // // console.log(phoneNumber)
@@ -43,8 +40,6 @@ export const startConversation = async (
     throw CONVRESATION_AREADY_EXIST
   }
 
-  const newConversation = conversations[0];
-
   const lastMessage = {
     date: new Date().getTime(),
     type: MessageType.SYSTEM,
@@ -53,10 +48,7 @@ export const startConversation = async (
     senderId: 'SYSTEM'
   } as Message
 
-
-
   const node = await nodesApi.store({ messages: [lastMessage] })
-  // saveCurrentConversation
   const conversation = await conversationsApi.store({
     recipient,
     title: recipient.name,
@@ -105,19 +97,19 @@ export const startConversation = async (
 //   }
 // }
 
-const store = createPaginatedStore<Conversation>(conversationsApi)
 
-export const useConversationsStore = defineStore("conversations", {
-  ...store,
-  actions: {
-    ...store.actions,
-    startConversation(phoneNumber: string): Promise<Conversation> {
-      return startConversation(phoneNumber);
-    },
-    async findeItem(id: string) {
+export const useConversationsStore = defineStore("conversations", ()=> {
+  const baseStore = createPaginatedStore<Conversation>(conversationsApi)
+
+
+    function startConversation(phoneNumber: string): Promise<Conversation> {
+      return startNewConversation(phoneNumber);
+    }
+
+    async function findItem(id: string) {
       const item = await conversationsApi.find(id);
       if (item) {
-        this.setSelected(item);
+        baseStore.setSelected(item);
         await conversationsApi.update(item?.id as string, {
           ...item,
           unreadedMessages: 0,
@@ -125,6 +117,11 @@ export const useConversationsStore = defineStore("conversations", {
       }
 
       return item;
-    },
-  },
+    }
+
+    return {
+      ...baseStore,
+      startConversation,
+      findItem
+    }
 });  

@@ -31,15 +31,18 @@ const messages = computed(() => {
 
 
 onMounted(async () => {
-  await conversationsStore.findeItem(conversationId.value)
-  // scrollToBottom()
+  try{
+    const conv  = await conversationsStore.findItem(conversationId.value)   
+    console.log('conv', conv)
+  }catch(e){  
+    console.error(e )
+  }
 })
 
 watch(
   () => conversationId.value,
   async () => {
-    console.log('cnversaiton id change')
-    await conversationsStore.findeItem(conversationId.value)
+    await conversationsStore.findItem(conversationId.value)
   }
 )
 
@@ -48,6 +51,7 @@ onUnmounted(() => {
 })
 
 const sending = ref(false)
+
 const scrollToBottom = () => {
   const messageList = document.getElementById('messagesList')
   if (messageList) {
@@ -73,7 +77,7 @@ const sendMessage = async (
 
   try {
     sending.value = true
-    await messageStore.addItems([newMessage])
+    await messageStore.storeItem(newMessage)
     sending.value = false
     scrollToBottom()
     resetForm()

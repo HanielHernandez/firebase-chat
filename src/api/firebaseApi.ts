@@ -12,7 +12,8 @@ import {
   Query,
   getDoc,
   doc,
-  updateDoc
+  updateDoc,
+  deleteDoc
 } from '@firebase/firestore'
 
 export class FirebaseApiService<T> {
@@ -58,7 +59,7 @@ export class FirebaseApiService<T> {
     const q = filters ? this.getFilterQuery(filters) : query(this.getRef())
     return onSnapshot(
       q,
-      (querySnapshot: unknown) => {
+      (querySnapshot) => {
         callback(querySnapshot as QuerySnapshot<T>);
       },
       (error: Error) => {
@@ -81,5 +82,10 @@ export class FirebaseApiService<T> {
     const docItemRef = doc(db, this.docsRef, id)
     await updateDoc(docItemRef, data as { [x: string]: any });
     return data
+  }
+
+  async delete(id:string): Promise<void> {
+    const docItemRef = doc(db, this.docsRef, id)
+    return deleteDoc(docItemRef)
   }
 }

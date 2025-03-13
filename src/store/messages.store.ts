@@ -3,131 +3,129 @@ import { type Message } from '@/models/message'
 import { endBefore, limitToLast, startAt } from '@firebase/firestore'
 import { type Unsubscribe } from '@firebase/util'
 import { orderBy } from 'firebase/firestore'
-import { type ActionContext } from 'vuex'
-import { type PaginatedStoreState, type RootState } from '.'
-import { FETCH_ITEMS_ACTIONS, LISTEN_CHANGES_ACTION } from './actions'
 import { createPaginatedStore } from './base.store'
-import {
-  SET_LOADING_MUTATION,
-  CREATE_ITEM,
-  ADD_ITEMS_MUTATION,
-  SET_END_REACHED,
-  UNSUBSCRIBE_MUTATION,
-  SET_SUBSCRIPTION
-} from './mutations'
 import { defineStore } from 'pinia'
+import { computed } from 'vue'
 
-const messagesStore = createPaginatedStore<Message>(messagesApi)
 
-export const useMessagesStore = defineStore ("messages", {
-  ...messagesStore,
-  getters: {
-    lastMessageDate: (state: PaginatedStoreState<Message>): number => {
-      return state.items[0].date;
-    },
-    firstItem: (state: PaginatedStoreState<Message>): Message => {
-      return state.items[state.items.length - 1];
-    },
-    firstMessageDate: (state: PaginatedStoreState<Message>) => {
-      return state.items ? state.items[state.items.length - 1].date : 0;
-    },
-  },
 
-  actions: {
-    addItems(payload: Message[]) {
-      this.items = [...payload, ...this.items];
-    },
+export const useMessagesStore = defineStore("messages", ()=>{
+    const baseStore = createPaginatedStore<Message>(messagesApi)
 
-    unsubscribe() {
-      if (this.subscription) {
-        this.subscription();
-        this.subscription = null;
+
+   const lastMessageDate = computed<number>( (): number => {
+      return baseStore.items.value[0].date;
+    })
+
+    const firstItem = computed<Message>( () => {
+      const index = baseStore.items.value.length - 1;
+      return baseStore.items.value[index];
+    })
+
+    const firstMessageDate = computed( () => {
+      return firstItem.value.date     || 0;
+    })
+
+
+    function addItems(payload: Message[]) {
+      baseStore.items.value = [...payload, ...baseStore.items.value];
+    }
+
+    function unsubscribe() {
+      if (!!baseStore.subscription.value) {
+        baseStore.subscription.value();
+        baseStore.subscription.value = null;
       }
-    },
+    }
 
-    setSubscription(payload: Unsubscribe) {
-      this.subscription = payload;
-    },
+    function setSubscription(payload: Unsubscribe) {
+      baseStore.subscription.value = payload;
+    }
 
-    createItem(newItem: Message) {
-      this.items = [...this.items, newItem];
-    },
+   function createItem(newItem: Message) {
+      baseStore.items.value = [... baseStore.items.value, newItem];
+    }
 
-    async fetchItems(node: string): Promise<Message[] | null> {
-      if (!this.loading) {
-        this.loading = true;
+    async function fetchItems(node: string): Promise<Message[] | null> {
+      if (!baseStore.loading.value) {
+         baseStore.loading.value = true;
 
         // Unsubscribe if there’s an active subscription
-        if (this.subscription) {
-          this.unsubscribe();
+        if (!!baseStore.subscription.value) {
+          baseStore.subscription.value();
         }
 
         // Set the API node
         messagesApi.setId(node);
 
         // Get last message date
-        const lastMessageDate =
-          this.items.length > 0 ? this.lastMessageDate : new Date().getTime();
-        console.log(lastMessageDate);
+        const lastConvMessageDate =
+          baseStore.items.value.length > 0 ? lastMessageDate.value : new Date().getTime();
+        console.log(lastConvMessageDate);
 
         const queries = [
           orderBy("date", "asc"),
-          endBefore(lastMessageDate),
+          endBefore(lastConvMessageDate),
           limitToLast(10),
         ];
 
         // Fetch messages
-        console.log("messages about to be reach")
+        console.log("messages about to be reach");
         const items = await messagesApi.index(queries);
-        this.addItems(items);
+        addItems(items);
 
-        // Get first message date to start listening for changes
-        const firstMessageDate = this.firstMessageDate;
-        console.log(firstMessageDate);
-
+  
         // Listen for changes
-        const subs = await this.listenForChanges([
+        const subs = await listenForChanges ([
           orderBy("date", "asc"),
-          startAt(firstMessageDate),
+          startAt(firstMessageDate.value),
         ]);
-        this.setSubscription(subs);
+
+        setSubscription(subs);
 
         // Check if there are no new messages
         if (items.length === 0) {
-          this.endReach = true;
+          baseStore.endReach.value = true;
         }
 
-        this.loading = false;
+        baseStore.loading.value = false;
         return items;
       }
       return null;
-    },
+    }
 
-    async listenForChanges(queries: any[]): Promise<Unsubscribe> {
+    async function listenForChanges(queries: any[]): Promise<Unsubscribe> {
+
       return messagesApi.onChanges(queries, (snapshot) => {
-        console.log(snapshot)
-        snapshot.forEach((change) => {
-         
-          //const item = { id: change.id, ...change..data() };
 
-          /*if (
+        snapshot.docChanges().forEach((change) => {
+          const item = { id: change.doc.id , ...change.doc.data() } as Message;
+          console.log(change.type, item);
+          if (
             change.type === "added" &&
-            !this.items.find((x) => x.id === item.id)
+            baseStore.items.value.find((x) => x.id === item.id) === undefined
           ) {
-            this.createItem(item);
-            console.log("ITEM ADDED", item);
+            createItem(item);
           } else if (change.type === "modified") {
-            const index = this.items.findIndex((x) => x.id === item.id);
-            if (index !== -1) this.items[index] = item;
-            console.log("ITEM UPDATED", item);
+            const index = baseStore.items.value.findIndex((x) => x.id === item.id);
+            if (index !== -1) baseStore.items.value[index] = item;
           } else if (change.type === "removed") {
-            this.items = this.items.filter((x) => x.id !== item.id);
-            console.log("ITEM REMOVED", item);
-          }*/
+            baseStore.items.value =baseStore.items.value.filter((x) => x.id !== item.id);
+          }
         });
       });
-    },
-  },
+    }
 
-
-});
+    return {
+      ...baseStore,
+      fetchItems,
+      unsubscribe,
+      listenForChanges,
+      addItems,
+      setSubscription,
+      createItem,
+      lastMessageDate,
+      firstItem,
+      firstMessageDate,
+    }
+  });

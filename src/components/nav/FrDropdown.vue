@@ -10,6 +10,7 @@
         position
         absolute
         border
+        border-neutral-300
         rounded
         z-40
         shadow-md
@@ -17,8 +18,9 @@
         transitions-all
         duration-150
         ease-in-out
+        right-0
       "
-      :class="[align == 'left' ? 'left-0' : 'right-0']"
+      :class="[align == 'left' ? 'md:left-0' : 'md:right-0']"
       :style="{
         top: '100%',
         width: optionsWidth,

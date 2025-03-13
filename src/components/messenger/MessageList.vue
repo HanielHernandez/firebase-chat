@@ -35,8 +35,6 @@ function reset() {
   isInitial.value = true
 }
 
-//const unsubscribe = ref(null)
-
 onMounted(() => {
   if (messagesList.value) {
     messagesList.value.scrollTo(0, 0)
@@ -65,7 +63,7 @@ const loadMessages = async ()=>{
     if (conversationStore.endReach === false && currentConv.value && currentConv.value.node) {
 
       await messagesStore.fetchItems(currentConv.value.node)
-      console.log(messagesStore.items)
+      //console.log(messagesStore.items)
       //loaded()
     } else {
       // noMore()

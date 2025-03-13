@@ -12,6 +12,7 @@
               v-for="conv in conversations"
               :key="`conv-${conv.id}`"
               :conversation="conv"
+              @on-delete-conversation="deleteConversation"
             />
           </transition-group>
         </div>
@@ -44,8 +45,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted } from '@vue/runtime-core'
-import { watch, computed } from 'vue'
+import { defineComponent, onMounted, onUnmounted, reactive } from '@vue/runtime-core'
+import { watch, computed, ref} from 'vue'
 import ConversationItem from '@/components/messenger/ConversationItem.vue'
 import { type User } from '@/models/auth'
 import { orderBy, where } from 'firebase/firestore'
@@ -58,19 +59,12 @@ export default defineComponent({
   setup() {
     const userStore = useRootStore () 
     const store = useConversationsStore()
-
-
-    let unsubscribe = (): void | boolean => {
-      return false
-    }
     const conversations = computed(() => {
       return store.items
     })
     const loading = computed(() => {
       return store.loading
     })
-
-
     const currentUser = computed(() => userStore.currentUser)
 
     const fetchConversations = async () => {
@@ -84,13 +78,23 @@ export default defineComponent({
             where('senderPhoneNumber', '==', currentUser.value.phoneNumber),
             orderBy('lastMessage.date', 'desc')
           ])
-          unsubscribe = await store.listenChanges( [
+          await store.listenChanges( [
             where('senderPhoneNumber', '==', currentUser.value.phoneNumber),
             orderBy('lastMessage.date', 'desc')
           ])
         }
       } catch (e) {
         alert(e)
+        console.error(e)
+      }
+    }
+
+    const deleteConversation =async (id: string) => {
+      try{
+        store.setLoading(true)
+        await store.deleteItem(id)
+        store.setLoading(false)
+      }catch(e){
         console.error(e)
       }
     }
@@ -109,13 +113,16 @@ export default defineComponent({
     })
 
     onUnmounted(() => {
-      unsubscribe()
+      if (store.subscription){
+        store.subscription()
+      }
     })
 
     return {
       loading,
       currentUser,
-      conversations
+      conversations,
+      deleteConversation
     }
   }
 })
