@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import MessageList from '@/components/messenger/MessageList.vue'
 import { useStoreModule, useUser } from '@/mixins'
-import { type Message, type MessageType } from '@/models/message'
+import { type Message, MessageType } from '@/models/message'
+import { useConversationsStore } from '@/store/conversations.store'
+import { useMessagesStore } from '@/store/messages.store'
 import { limit, orderBy } from '@firebase/firestore'
 import dayjs from 'dayjs'
 import { where } from 'firebase/firestore'
@@ -10,6 +12,9 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const { currentUser } = useUser()
+const messageStore = useMessagesStore()
+const conversationsStore = useConversationsStore()
+
 const conversationId = computed(() => {
   return route.params.conversationId as string
 })
@@ -18,31 +23,42 @@ let unsubscribe = () => {
   // // console.log('unsibscribg')
 }
 
-const { selected: conversation, find: findConversation } =
-  useStoreModule('conversations')
-const { store: storeMessage, listenChanges: listenMessagesChanges } =
-  useStoreModule('messages')
-const {
-  items: messages,
-  loading,
-  fetch: fetchMessages
-} = useStoreModule('messages')
+const conversation = computed(() => {
+  return conversationsStore.selected
+})
+
+// const { selected: conversation, find: findConversation } =
+//   useStoreModule('conversations')
+// const { store: storeMessage, listenChanges: listenMessagesChanges } =
+//   useStoreModule('messages')
+// const {
+//   items: messages,
+//   loading,
+//   fetch: fetchMessages
+// } = useStoreModule('messages')
+
+const messages = computed(() => {
+  return messageStore.items
+})
+
 
 onMounted(async () => {
-  await findConversation(conversationId.value)
+  await conversationsStore.findeItem(conversationId.value)
   // scrollToBottom()
 })
+
 watch(
   () => conversationId.value,
   async () => {
     console.log('cnversaiton id change')
-    await findConversation(conversationId.value)
+    await conversationsStore.findeItem(conversationId.value)
   }
 )
 
 onUnmounted(() => {
   unsubscribe()
 })
+
 const sending = ref(false)
 const scrollToBottom = () => {
   const messageList = document.getElementById('messagesList')
@@ -63,12 +79,13 @@ const sendMessage = async (
     type: MessageType.SMS,
     date: new Date().getTime(),
     status: 'sended',
-    senderId: currentUser.value.id,
-    senderImageUrl: currentUser.value.profileImageUrl
+    senderId: currentUser.value && currentUser.value.id || "", 
+    senderImageUrl: currentUser.value && currentUser.value.profileImageUrl || ""
   }
+
   try {
     sending.value = true
-    const message = await storeMessage(newMessage)
+    const message = await messageStore.addItems([newMessage])
     sending.value = false
     scrollToBottom()
     resetForm()
@@ -82,7 +99,7 @@ const sendMessage = async (
 
 <template>
   <div class="h-full container-xl mx-auto container-lg relative">
-    <MessageList ref="messagesList" :messages="messages" />
+    <MessageList ref="messagesList" v-if="conversation" :messages="messages" />
     <div class="w-full p-4 bg-white">
       <vee-form
         class="w-full flex items-center justify-center"

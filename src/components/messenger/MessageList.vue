@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { onMounted, type PropType, ref, defineEmits, watch } from 'vue'
 import { type Message } from '@/models/message'
-import { useStoreModule, useUser } from '@/mixins'
+import { useStoreModule } from '@/mixins'
 import gsap from 'gsap'
 
-import { VueEternalLoading } from '@ts-pro/vue-eternal-loading'
+// import { VueEternalLoading } from '@ts-pro/vue-eternal-loading'
 
 import MessageBubble from './MessageBubble.vue'
 import dayjs from 'dayjs'
+import { useConversationsStore } from '@/store/conversations.store'
+import { useMessagesStore } from '@/store/messages.store'
 const emit = defineEmits(['loadMore'])
 const messagesList = ref<Element | null>(null)
 const props = defineProps({
@@ -17,10 +19,17 @@ const props = defineProps({
   }
 })
 
-const { selected: currentConv } = useStoreModule('conversations')
+// const { selected: currentConv } = useStoreModule('conversations')
+ const conversationStore = useConversationsStore()
+ const currentConv = ref(conversationStore.selected)
+const messagesStore = useMessagesStore()
 const scrollPosition = ref(0)
-const { currentUser } = useUser()
-const { endReachded, fetch, reset: resetMessages } = useStoreModule('messages')
+
+
+// const { endReachded, fetch, reset: resetMessages } = useStoreModule('messages')
+
+
+
 const lastMessage = ref<Element>()
 const isInitial = ref(true)
 const animatedMessages = ref(0)
@@ -32,7 +41,7 @@ watch(
 )
 
 function reset() {
-  resetMessages()
+  conversationStore.resetItems()
   isInitial.value = true
 }
 
@@ -43,6 +52,8 @@ onMounted(() => {
     messagesList.value.scrollTo(0, 0)
   }
 })
+
+
 const scrollToBotom = () => {
   if (messagesList.value) {
     console.log(
@@ -57,6 +68,29 @@ const scrollToBotom = () => {
     }
   }
 }
+
+const loadMessages = async ()=>{
+  try {
+    console.log(conversationStore.endReach === false , currentConv.value)
+    if (conversationStore.endReach === false && currentConv.value && currentConv.value.node) {
+
+      await messagesStore.fetchItems(currentConv.value.node)
+      console.log(messagesStore.items)
+      //loaded()
+    } else {
+      // noMore()
+    }
+  }catch(e){
+    console.error(e)
+   
+  }
+ 
+}
+
+onMounted(() => {
+  loadMessages()
+})
+
 const scrollReached = async ({
   loaded,
   noMore
@@ -64,8 +98,9 @@ const scrollReached = async ({
   loaded: () => void
   noMore: () => void
 }) => {
-  if (endReachded.value === false) {
-    const items = await fetch(currentConv.value.node)
+  if (conversationStore.endReach === false && currentConv.value) {
+  console.log()
+    await conversationStore.fetchItems(currentConv.value.node)
     loaded()
   } else {
     noMore()
@@ -139,7 +174,7 @@ const sameDayAsBefore = (i: number): boolean => {
     class="h-full flex flex-col relative px-4 overflow-y-auto overflow-x-hidden flex-1"
     style="max-height: calc(100vh - 9.625rem)"
   >
-    <VueEternalLoading
+    <!-- <VueEternalLoading
       v-if="currentConv"
       v-model:is-initial="isInitial"
       position="top"
@@ -155,7 +190,7 @@ const sameDayAsBefore = (i: number): boolean => {
       <template #no-more>
         <div class="opacity-0">There is no more content.</div>
       </template>
-    </VueEternalLoading>
+    </VueEternalLoading> -->
 
     <transition-group
       name="messages"

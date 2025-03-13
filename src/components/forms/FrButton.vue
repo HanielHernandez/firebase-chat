@@ -6,6 +6,7 @@
     :disabled="disabled"
     :type="type"
     class="
+    cursor-pointer
       font-bold
       rounded
       transition-colors
@@ -83,7 +84,7 @@ export default defineComponent({
         case 'primary':
           return 'bg-blue-600 text-white'
         case 'danger':
-          return 'bg-reed-600 text-white'
+          return 'bg-red-600 text-white'
         default:
           return 'bg-gray-300 text-black-400'
       }

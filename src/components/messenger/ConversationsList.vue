@@ -99,13 +99,13 @@ export default defineComponent({
       }
     }
 
-    /*watch(
-      () => currentUser.value,
+    watch(
+      currentUser,
       (old: User, nuevo: User) => {
-        // // console.log('usuario cambio', old, nuevo)
+        //  console.log('usuario cambio', old, nuevo)
         fetchConversations()
       }
-    )*/
+    )
 
     onMounted(() => {
       //fetchConversations()

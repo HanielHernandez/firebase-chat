@@ -15,100 +15,119 @@ import {
   UNSUBSCRIBE_MUTATION,
   SET_SUBSCRIPTION
 } from './mutations'
+import { defineStore } from 'pinia'
 
-const messagesStr = createPaginatedStore<Message>(messagesApi)
+const messagesStore = createPaginatedStore<Message>(messagesApi)
 
-export default {
-  ...messagesStr,
-  mutations: {
-    ...messagesStr.mutations,
-    [ADD_ITEMS_MUTATION]: (
-      state: PaginatedStoreState<Message>,
-      paylod: Message[]
-    ): void => {
-      state.items = [...paylod, ...state.items]
-    },
-    [UNSUBSCRIBE_MUTATION]: (state: PaginatedStoreState<Message>): void => {
-      if (state.subscription) {
-        state.subscription()
-      }
-    },
-    [SET_SUBSCRIPTION]: (
-      state: PaginatedStoreState<Message>,
-      payload: Unsubscribe
-    ): void => {
-      state.subscription = payload
-    },
-    [CREATE_ITEM]: (
-      state: PaginatedStoreState<Message>,
-      newItem: Message
-    ): void => {
-      state.items = [...state.items, newItem]
-    }
-  },
+export const useMessagesStore = defineStore ("messages", {
+  ...messagesStore,
   getters: {
     lastMessageDate: (state: PaginatedStoreState<Message>): number => {
-      return state.items[0].date
+      return state.items[0].date;
     },
     firstItem: (state: PaginatedStoreState<Message>): Message => {
-      return state.items[state.items.length - 1]
+      return state.items[state.items.length - 1];
     },
     firstMessageDate: (state: PaginatedStoreState<Message>) => {
-      return state.items ? state.items[state.items.length - 1].date : 0
-    }
+      return state.items ? state.items[state.items.length - 1].date : 0;
+    },
   },
+
   actions: {
-    ...messagesStr.actions,
-    [FETCH_ITEMS_ACTIONS]: async (
-      {
-        dispatch,
-        commit,
-        getters,
-        state
-      }: ActionContext<PaginatedStoreState<Message>, RootState>,
-      node: string
-    ): Promise<Message[] | null> => {
-      if (state.loading == false) {
-        commit(SET_LOADING_MUTATION, true)
-        // if subscriptions on unsubscribe
-        if (state.subscription) {
-          commit(UNSUBSCRIBE_MUTATION)
-        }
-        // set node to to message api
-        messagesApi.setId(node)
-        // get last message from to list message and create query
-        const lastMessageDate =
-          state.items.length > 0
-            ? getters.lastMessageDate
-            : new Date().getTime()
-        console.log(lastMessageDate)
-        const queries = [
-          orderBy('date', 'asc'),
-          endBefore(lastMessageDate),
-          limitToLast(10)
-        ]
-        // get items and set then to store
-        const items = await messagesApi.index(queries)
-        commit(ADD_ITEMS_MUTATION, items)
-        // get first message in order to listen for hacengs
-        const firstMessageDate = getters.firstMessageDate
-        console.log(firstMessageDate)
+    addItems(payload: Message[]) {
+      this.items = [...payload, ...this.items];
+    },
 
-        // listen  for changes and set subscription
-        const subs = await dispatch(LISTEN_CHANGES_ACTION, [
-          orderBy('date', 'asc'),
-          startAt(firstMessageDate)
-        ])
-        commit(SET_SUBSCRIPTION, subs)
-
-        if (items.length == 0) {
-          commit(SET_END_REACHED, true)
-        }
-
-        commit(SET_LOADING_MUTATION, false)
-        return items
+    unsubscribe() {
+      if (this.subscription) {
+        this.subscription();
+        this.subscription = null;
       }
-      return null
-    }
-  }
-}
+    },
+
+    setSubscription(payload: Unsubscribe) {
+      this.subscription = payload;
+    },
+
+    createItem(newItem: Message) {
+      this.items = [...this.items, newItem];
+    },
+
+    async fetchItems(node: string): Promise<Message[] | null> {
+      if (!this.loading) {
+        this.loading = true;
+
+        // Unsubscribe if there’s an active subscription
+        if (this.subscription) {
+          this.unsubscribe();
+        }
+
+        // Set the API node
+        messagesApi.setId(node);
+
+        // Get last message date
+        const lastMessageDate =
+          this.items.length > 0 ? this.lastMessageDate : new Date().getTime();
+        console.log(lastMessageDate);
+
+        const queries = [
+          orderBy("date", "asc"),
+          endBefore(lastMessageDate),
+          limitToLast(10),
+        ];
+
+        // Fetch messages
+        console.log("messages about to be reach")
+        const items = await messagesApi.index(queries);
+        this.addItems(items);
+
+        // Get first message date to start listening for changes
+        const firstMessageDate = this.firstMessageDate;
+        console.log(firstMessageDate);
+
+        // Listen for changes
+        const subs = await this.listenForChanges([
+          orderBy("date", "asc"),
+          startAt(firstMessageDate),
+        ]);
+        this.setSubscription(subs);
+
+        // Check if there are no new messages
+        if (items.length === 0) {
+          this.endReach = true;
+        }
+
+        this.loading = false;
+        return items;
+      }
+      return null;
+    },
+
+    async listenForChanges(queries: any[]): Promise<Unsubscribe> {
+      return messagesApi.onChanges(queries, (snapshot) => {
+        console.log(snapshot)
+        snapshot.forEach((change) => {
+         
+          //const item = { id: change.id, ...change..data() };
+
+          /*if (
+            change.type === "added" &&
+            !this.items.find((x) => x.id === item.id)
+          ) {
+            this.createItem(item);
+            console.log("ITEM ADDED", item);
+          } else if (change.type === "modified") {
+            const index = this.items.findIndex((x) => x.id === item.id);
+            if (index !== -1) this.items[index] = item;
+            console.log("ITEM UPDATED", item);
+          } else if (change.type === "removed") {
+            this.items = this.items.filter((x) => x.id !== item.id);
+            console.log("ITEM REMOVED", item);
+          }*/
+        });
+      });
+    },
+  },
+
+
+});

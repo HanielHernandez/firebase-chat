@@ -1,12 +1,12 @@
 <template>
   <div class="fr-card bg-white" :class="classes">
-    <div v-if="hasSlotPopulated('title')" class="pt-4 px-4 pb-2">
+    <div v-if="hasSlotPopulated('title')" class="p-4">
       <slot name="title"></slot>
     </div>
-    <div class="fr-card-body">
+    <div class="fr-card-body px-4">
       <slot></slot>
     </div>
-    <div v-if="hasSlotPopulated('title')" class="fr-card-actions">
+    <div v-if="hasSlotPopulated('title')" class="fr-card-actions p-4">
       <slot name="actions"></slot>
     </div>
   </div>

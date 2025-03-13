@@ -17,8 +17,7 @@ import { createPaginatedStore } from './base.store'
 import { SET_SELECTED_MUTATION } from './mutations'
 import { defineStore } from 'pinia'
 
-export const storeConversation = async (
-  state: unknown,
+export const startConversation = async (
   phoneNumber: string
 ): Promise<Conversation> => {
   // // console.log(phoneNumber)
@@ -39,10 +38,12 @@ export const storeConversation = async (
     where('senderId', '==', currentUser.code),
     where('recipient.code', '==', recipient.code)
   ])
-  // // console.log(conversations)
+
   if (conversations.length > 0) {
     throw CONVRESATION_AREADY_EXIST
   }
+
+  const newConversation = conversations[0];
 
   const lastMessage = {
     date: new Date().getTime(),
@@ -52,18 +53,20 @@ export const storeConversation = async (
     senderId: 'SYSTEM'
   } as Message
 
-  const node = await nodesApi.store({ messages: [lastMessage] })
+
+
+  //const node = await nodesApi.store({ messages: [lastMessage] })
   // saveCurrentConversation
   const conversation = await conversationsApi.store({
     recipient,
     title: recipient.name,
     conversationImageUrl: recipient.profileImageUrl,
-    node: node.id,
+    node: newConversation.node,
     senderPhoneNumber: currentUser.phoneNumber,
     updatedAt: new Date(),
     unreadedMessages: 0,
-    lastMessage
-  } as Conversation)
+    lastMessage,
+  } as Conversation);
   return conversation
 }
 
@@ -79,7 +82,7 @@ export const storeConversation = async (
 //   ...store,
 //   actions: {
 //     ...store.actions,
-//     [STORE_ITEM_ACTION]: storeConversation,
+//     [STORE_ITEM_ACTION]: startConversation,
 //     [FIND_ITEM_ACTION]: async (
 //       {
 //         commit
@@ -108,8 +111,10 @@ export const useConversationsStore = defineStore("conversations", {
   ...store,
   actions: {
     ...store.actions,
-    storeItem: storeConversation,
-    async findeItemAction(id: string) {
+    startConversation(phoneNumber: string): Promise<Conversation> {
+      return startConversation(phoneNumber);
+    },
+    async findeItem(id: string) {
       const item = await conversationsApi.find(id);
       if (item) {
         this.setSelected(item);

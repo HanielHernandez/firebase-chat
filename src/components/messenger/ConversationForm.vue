@@ -4,7 +4,7 @@
     :initial-values="initialValues"
     @submit="onSubmit"
   >
-    <fr-card>
+    <fr-card class="">
       <template #title>
         <fr-card-title title="Id del Destinatario" class="text-center">
           {{ $t('sidebar.new_conversation_modal.title') }}
@@ -26,9 +26,9 @@
         </text-field>
       </template>
       <template #actions>
-        <div class="text-center flex flex-nowrap px-4">
+        <div class="text-center flex flex-nowrap gap-4 items-center">
           <fr-button
-            class="mr-3"
+            class="w-full "
             block
             :loading="loading"
             :disabled="loading || !meta.valid"
@@ -48,36 +48,43 @@
 
 <script>
 import { STORE_CONVERSATION_ACTION } from '@/store/actions'
+import { useConversationsStore } from '@/store/conversations.store'
 import { defineComponent } from '@vue/runtime-core'
 import { ref } from 'vue'
-import { useStore } from 'vuex'
 export default defineComponent({
   name: 'ConversationForm',
   emits: ['cancel', 'created'],
   setup(props, { emit }) {
+    // store
+    const store = useConversationsStore()
+
+    // state
     const initialValues = ref({
       recipientId: null
     })
     const loading = ref(false)
-    const store = useStore()
-    const storeConversation = (recipientId) =>
-      store.dispatch(STORE_CONVERSATION_ACTION, recipientId)
+console.log(store)
+
+    // methods
+    const startConversation = async (recipientId) =>
+      store.startConversation(recipientId)
+
     const onCancel = () => {
       emit('cancel', true)
     }
+
     const onSubmit = async (values) => {
-      // // console.log('values', values)
       loading.value = true
       try {
-        // create new conversation
-        const conv = await storeConversation(values.recipientId)
+        const conv = await startConversation(values.recipientId)
         loading.value = false
         emit('created', conv)
       } catch (e) {
         loading.value = false
-        alert(e)
+        console.error(e)
       }
     }
+
     return {
       onCancel,
       loading,
