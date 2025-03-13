@@ -55,13 +55,13 @@ export const startConversation = async (
 
 
 
-  //const node = await nodesApi.store({ messages: [lastMessage] })
+  const node = await nodesApi.store({ messages: [lastMessage] })
   // saveCurrentConversation
   const conversation = await conversationsApi.store({
     recipient,
     title: recipient.name,
     conversationImageUrl: recipient.profileImageUrl,
-    node: newConversation.node,
+    node: node.id,
     senderPhoneNumber: currentUser.phoneNumber,
     updatedAt: new Date(),
     unreadedMessages: 0,
