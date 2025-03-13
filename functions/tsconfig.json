@@ -5,8 +5,11 @@
     "noUnusedLocals": true,
     "outDir": "lib",
     "sourceMap": true,
+    "resolveJsonModule": true,
     "strict": true,
-    "target": "es2017"
+    "target": "ES6",
+    "esModuleInterop": true,   // This flag helps with compatibility
+    "skipLibCheck": true,      // This can be helpful to avoid issues with third-party typings
   },
   "compileOnSave": true,
   "include": [
