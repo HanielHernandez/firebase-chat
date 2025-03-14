@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { onMounted, type PropType, ref, watch, onUnmounted, computed } from 'vue'
 import { type Message } from '@/models/message'
-import gsap from 'gsap'
-
-// import { VueEternalLoading } from '@ts-pro/vue-eternal-loading'
-
 import MessageBubble from './MessageBubble.vue'
 import dayjs from 'dayjs'
 import { useConversationsStore } from '@/store/conversations.store'
 import { useMessagesStore } from '@/store/messages.store'
 import type { Unsubscribe } from 'firebase/firestore'
+import gsap from 'gsap'
 
 const props = defineProps({
   messages: {
@@ -102,6 +99,7 @@ const beforeEnter = (el: HTMLElement ): void => {
   el.style.opacity = '0'
   el.style.transform = 'rotateX(-45deg) scale(0.3)'
 }
+
 const enter = (el: any, done: () => void) => {
   const totalElements = getListOfChilds()
   gsap.to(el, {
