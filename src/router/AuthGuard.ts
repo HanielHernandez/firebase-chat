@@ -1,9 +1,9 @@
 import fbAuth from '@/plugins/firebase/auth'
-import type { RoutepositionNormalized, NavigationGuardNext } from 'vue-router'
+import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
 
 export const AuthGuard = async (
-    to: RoutepositionNormalized,
-    _: RoutepositionNormalized,
+    to: RouteLocationNormalized,
+    _: RouteLocationNormalized,
     next: NavigationGuardNext
 ): Promise<void> => {
     const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
@@ -15,8 +15,8 @@ export const AuthGuard = async (
 }
 
 export const NoAuthGuard = async (
-    to: RoutepositionNormalized,
-    _: RoutepositionNormalized,
+    to: RouteLocationNormalized,
+    _: RouteLocationNormalized,
     next: NavigationGuardNext
 ): Promise<void> => {
     const requiresNoAuth = to.matched.some((record) => record.meta.requiresNoAuth)
