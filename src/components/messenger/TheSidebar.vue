@@ -48,6 +48,7 @@ import ConversationForm from '@/components/messenger/ConversationForm.vue'
 
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import type { Conversation } from '@/models/conversation'
 
 const showNewConvModal = ref(false)
 const router = useRouter()
@@ -57,7 +58,7 @@ const createConv = () => {
     showNewConvModal.value = true
     // // console.log('creating new conv')
 }
-const handleCreated = (conv) => {
+const handleCreated = (conv: Conversation) => {
     showNewConvModal.value = false
     router.push({
         name: 'Messenger Conversation',
