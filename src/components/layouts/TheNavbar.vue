@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed top-0 flex left-0 w-screen p-2 justify-between z-10 border-b border-neutral-300">
+    <div class="fixed top-0 flex left-0 w-screen p-2 md:pl-100 justify-between z-10 border-b border-neutral-300">
         <div class="py-2 flex flex-row">
             <router-link
                 to="/messenger"
@@ -7,6 +7,11 @@
             >
                 <span class="material-icons">arrow_back</span>
             </router-link>
+            <div v-if="currentConversationName">
+                <h3 class="text-xl leading-10 pl-4 md:pl-0 text-neutral-900 font-bold">
+                    {{ currentConversationName }}
+                </h3>
+            </div>
         </div>
 
         <div class="flex justify-items-end items-center">
@@ -43,18 +48,11 @@
                             <template #avatar>
                                 <i class="material-icons">person</i>
                             </template>
-                            <a href="#" class="text-gray-600" @click="logout">
+                            <a href="#/messenger" class="text-gray-600" @click="logout">
                                 {{ $t('navbar.my_profile_text') }}
                             </a>
                         </fr-list-item>
-                        <fr-list-item>
-                            <template #avatar>
-                                <i class="material-icons">settings</i>
-                            </template>
-                            <a href="#" class="text-gray-600" @click="logout">
-                                {{ $t('navbar.settings_text') }}
-                            </a>
-                        </fr-list-item>
+
                         <fr-list-item>
                             <template #avatar>
                                 <i class="material-icons">logout</i>
@@ -70,28 +68,30 @@
     </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import auth from '@/plugins/firebase/auth'
 import { useRouter } from 'vue-router'
 import { useUser } from '@/mixins'
-export default {
-    setup() {
-        const router = useRouter()
-        const { currentUser } = useUser()
-        const logout = async (): Promise<void> => {
-            try {
-                await auth.signOut()
-                router.push({ name: 'SignIn' })
-            } catch (error) {
-                console.error(error)
-            }
-        }
-        return {
-            currentUser,
-            logout
-        }
+import { useConversationsStore } from '@/store/conversations.store'
+import { computed } from 'vue'
+import { type User } from '@/models/auth'
+
+const router = useRouter()
+const { currentUser } = useUser()
+const logout = async (): Promise<void> => {
+    try {
+        await auth.signOut()
+        router.push({ name: 'SignIn' })
+    } catch (error) {
+        console.error(error)
     }
 }
+
+const conversationStore = useConversationsStore()
+
+const currentConversationName = computed(() => {
+    return conversationStore.selected && conversationStore.selected.recipient?.name
+})
 </script>
 
 <style lang="scss" scoped></style>

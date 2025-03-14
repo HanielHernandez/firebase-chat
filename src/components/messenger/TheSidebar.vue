@@ -7,11 +7,14 @@
             <h4 class="font-bold text-2xl">
                 {{ $t('sidebar.conversations_title_text') }}
             </h4>
-            <fr-dropdown v-model="openOptions" options-width="260px">
+            <at-tooltip :text="$t('sidebar.new_conversation_text')">
+                <fr-button color="default" rounded flat class="" @click="createConv">
+                    <i class="material-icons">add</i>
+                </fr-button>
+            </at-tooltip>
+            <!-- <fr-dropdown v-model="openOptions" options-width="260px">
                 <template #default="{ createConv }">
-                    <fr-button color="default" rounded flat class="" @click="createConv">
-                        <i class="material-icons">add</i>
-                    </fr-button>
+                 
                 </template>
                 <template #options>
                     <fr-list hoverable>
@@ -33,7 +36,7 @@
                         </fr-list-item>
                     </fr-list>
                 </template>
-            </fr-dropdown>
+            </fr-dropdown> -->
         </div>
         <ConversationsList />
         <fr-modal v-slot="{ closeModal }" v-model="showNewConvModal">

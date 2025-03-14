@@ -9,6 +9,12 @@ const meta = {
     argTypes: {
         text: {
             control: 'text'
+        },
+        position: {
+            control: {
+                type: 'select'
+            },
+            options: ['bottom', 'top', 'right', 'left']
         }
     },
     render: (args) => ({
