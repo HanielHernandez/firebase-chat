@@ -119,6 +119,13 @@ export const useConversationsStore = defineStore("conversations", ()=> {
       return item;
     }
 
+    async function markasRead(conversationId:string) {
+      
+      await conversationsApi.update{
+
+      }
+    }
+
     return {
       ...baseStore,
       startConversation,

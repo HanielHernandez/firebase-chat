@@ -56,11 +56,11 @@ import CenteredLayout from '@/components/layouts/CenteredLayout.vue'
 import { defineComponent } from 'vue'
 import { Form as VeeForm } from 'vee-validate'
 import { ref } from 'vue'
-import { LoginRequest } from '@/models/auth'
 import auth from '@/plugins/firebase/auth'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import type { FirebaseError } from 'firebase/app'
+import type { LoginRequest } from '@/models/auth'
+import { FirebaseError } from 'firebase/app'
 
 export default defineComponent({
     components: { CenteredLayout, VeeForm },
@@ -87,21 +87,17 @@ export default defineComponent({
                 // // console.log(response)
                 router.push({ name: 'Messenger' })
                 loading.value = false
-            } catch (e) {
-                console.error(e.code, e.message)
-
-                if (e.code && e.message) {
+            } catch (e: unknown) {
+                if (e instanceof FirebaseError) {
                     message.value.type = 'error'
                     if (e.code == 'auth/user-not-found') {
                         message.value.text = t('auth.user_not_found_text')
                     } else {
                         message.value.text = `Error ${e.code}: ${e.message}`
                     }
+
+                    loading.value = false
                 }
-
-                console.error(e)
-
-                loading.value = false
             }
         }
 

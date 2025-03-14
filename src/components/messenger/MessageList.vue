@@ -7,6 +7,7 @@ import { useConversationsStore } from '@/store/conversations.store'
 import { useMessagesStore } from '@/store/messages.store'
 import type { Unsubscribe } from 'firebase/firestore'
 import { useInfiniteScroll, useScroll } from '@vueuse/core'
+import { formateDate } from '@/plugins/date'
 
 const props = defineProps({
     messages: {
@@ -22,6 +23,8 @@ const messagesStore = useMessagesStore()
 const currentConv = computed(() => conversationStore.selected)
 const loading = ref(false)
 const { arrivedState } = useScroll(messagesList)
+
+const formatDate = formateDate
 
 const arrivedAtBottom = computed(() => {
     return arrivedState.bottom
@@ -142,14 +145,14 @@ const sameDayAsBefore = (i: number): boolean => {
         <div v-for="(message, index) in messages" :key="message.id" class="message-row" :data-index="index">
             <div v-if="message.senderId == 'SYSTEM'" class="text-center py-2 text-gray-500">
                 <div class="w-full text-xs">
-                    {{ $date(message.date) }}
+                    {{ formatDate(message.date) }}
                 </div>
                 <p class="text-sm">{{ $t(message.text) }}</p>
             </div>
 
             <div v-else-if="index > 0 && sameDayAsBefore(index) == false" class="text-center py-2 text-gray-500">
                 <div class="w-full text-xs">
-                    {{ $date(message.date) }}
+                    {{ formatDate(message.date) }}
                 </div>
             </div>
             <MessageBubble v-if="message.senderId != 'SYSTEM'" :message="message" />
