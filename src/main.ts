@@ -29,7 +29,7 @@ const initFirebase = (): Promise<FirebaseApp> => {
 const initApp = async (): Promise<void> => {
     await initFirebase()
     Globals.forEach((component) => {
-        component.name && app.component(component.name, component)
+        app.component(component.name as string, component)
     })
 
     app.component('VeeForm', Form)
