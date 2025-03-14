@@ -7,11 +7,35 @@
             <h4 class="font-bold text-2xl">
                 {{ $t('sidebar.conversations_title_text') }}
             </h4>
-            <at-tooltip :text="$t('sidebar.new_conversation_text')">
-                <fr-button color="default" rounded flat class="" @click="createConv">
-                    <i class="material-icons">add</i>
-                </fr-button>
-            </at-tooltip>
+            <div class="flex flex-row flex-nowrap">
+                <at-tooltip :text="$t('sidebar.new_conversation_text')">
+                    <fr-button color="default" rounded flat class="" @click="createConv">
+                        <i class="material-icons">add</i>
+                    </fr-button>
+                </at-tooltip>
+                <fr-dropdown>
+                    <template #default="{ handleClick }">
+                        <at-tooltip text="Menu">
+                            <fr-button color="default" rounded flat class="" @click="handleClick">
+                                <i class="material-icons">more_vert</i>
+                            </fr-button>
+                        </at-tooltip>
+                    </template>
+                    <template #options>
+                        <fr-list hoverable bordered>
+                            <fr-list-item @click="logout">
+                                <template #avatar>
+                                    <i class="material-icons">logout</i>
+                                </template>
+                                <span href="#" class="text-gray-600">
+                                    {{ $t('navbar.log_out_text') }}
+                                </span>
+                            </fr-list-item>
+                        </fr-list>
+                    </template>
+                </fr-dropdown>
+            </div>
+
             <!-- <fr-dropdown v-model="openOptions" options-width="260px">
                 <template #default="{ createConv }">
                  
@@ -52,10 +76,13 @@ import ConversationForm from '@/components/messenger/ConversationForm.vue'
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import type { Conversation } from '@/models/conversation'
+import auth from '@/plugins/firebase/auth'
 
 const showNewConvModal = ref(false)
 const router = useRouter()
 const route = useRoute()
+const openOptions = ref(false)
+
 const createConv = () => {
     openOptions.value = false
     showNewConvModal.value = true
@@ -72,7 +99,15 @@ const handleCreated = (conv: Conversation) => {
 const isConversationOpen = computed(() => {
     return route.name === 'Messenger Conversation'
 })
-const openOptions = ref(false)
+
+const logout = async (): Promise<void> => {
+    try {
+        await auth.signOut()
+        router.push({ name: 'SignIn' })
+    } catch (error) {
+        console.error(error)
+    }
+}
 </script>
 
 <style lang="scss" scoped></style>

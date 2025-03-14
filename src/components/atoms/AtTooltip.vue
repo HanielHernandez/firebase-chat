@@ -23,10 +23,10 @@ const positionClass = computed(() => {
         </div>
         <div
             id="tooltip"
-            class="rounded-md absolute text-center transform invisible group-hover:visible transition-all ease-in-out opacity-0 group-hover:opacity-100 height-0 group-hover:h-auto p-2 bg-neutral-900/60 text-white z-60"
+            class="rounded-md absolute text-center transform invisible group-hover:visible transition-all ease-in-out opacity-0 group-hover:opacity-100 height-0 group-hover:h-auto px-2 py-1 bg-neutral-900/60 text-white z-60"
             :class="positionClass"
         >
-            <span class="text-sm font-bold">{{ text }}</span>
+            <span class="text-sm leading-4 font-medium">{{ text }}</span>
         </div>
     </div>
 </template>

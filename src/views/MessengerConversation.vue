@@ -40,6 +40,7 @@ watch(
 
 onBeforeUnmount(() => {
     messageStore.setMessages([])
+    conversationsStore.setSelected(null)
 })
 
 const scrollToBottom = () => {
@@ -77,7 +78,7 @@ const sendMessage = async (values: { text: string }, { resetForm }: { resetForm:
         <MessageList v-if="conversation" ref="messagesList" :messages="messages" />
         <div class="w-full p-4 bg-white bottom-0 left-0 absolute">
             <vee-form class="w-full flex items-center justify-center" @submit="sendMessage">
-                <text-field id="text" class="mr-4" rules="" name="text"> </text-field>
+                <text-field id="text" class="mr-4" rules="" name="text"></text-field>
 
                 <fr-button :loading="sending" flat rounded type="submit">
                     <i class="material-icons">send</i>

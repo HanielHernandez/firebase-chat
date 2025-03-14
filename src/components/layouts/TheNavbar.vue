@@ -7,15 +7,29 @@
             >
                 <span class="material-icons">arrow_back</span>
             </router-link>
-            <div v-if="currentConversationName">
-                <h3 class="text-xl leading-10 pl-4 md:pl-0 text-neutral-900 font-bold">
-                    {{ currentConversationName }}
-                </h3>
+            <div v-if="recipient" class="flex flex-row flex-nowrap items-center">
+                <img
+                    :src="
+                        recipient.profileImageUrl
+                            ? recipient.profileImageUrl
+                            : `https://ui-avatars.com/api/?name=${recipient.name}`
+                    "
+                    alt=""
+                    class="rounded-full w-10 h-10 md:mr-3"
+                />
+                <div class="flex flex-col gap-1">
+                    <h3 class="text-lg leading-5 pl-4 md:pl-0 text-neutral-900 font-bold">
+                        {{ recipient.name }}
+                    </h3>
+                    <h5 v-if="lastMessage" class="text-xs leading-4 text-neutral-500">
+                        {{ formatDate(lastMessage.date) }}
+                    </h5>
+                </div>
             </div>
         </div>
 
         <div class="flex justify-items-end items-center">
-            <fr-dropdown class="ml-4" options-width="250px" align="right">
+            <!-- <fr-dropdown class="ml-4" options-width="250px" align="right">
                 <template #default="{ handleClick }">
                     <div
                         v-if="currentUser"
@@ -63,35 +77,26 @@
                         </fr-list-item>
                     </fr-list>
                 </template>
-            </fr-dropdown>
+            </fr-dropdown> -->
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import auth from '@/plugins/firebase/auth'
-import { useRouter } from 'vue-router'
-import { useUser } from '@/mixins'
+import { formatFromToday } from '@/plugins/date'
 import { useConversationsStore } from '@/store/conversations.store'
 import { computed } from 'vue'
-import { type User } from '@/models/auth'
-
-const router = useRouter()
-const { currentUser } = useUser()
-const logout = async (): Promise<void> => {
-    try {
-        await auth.signOut()
-        router.push({ name: 'SignIn' })
-    } catch (error) {
-        console.error(error)
-    }
-}
 
 const conversationStore = useConversationsStore()
 
-const currentConversationName = computed(() => {
-    return conversationStore.selected && conversationStore.selected.recipient?.name
+const recipient = computed(() => {
+    return conversationStore.selected && conversationStore.selected.recipient
 })
+const lastMessage = computed(() => {
+    return conversationStore.selected?.lastMessage
+})
+
+const formatDate = formatFromToday
 </script>
 
 <style lang="scss" scoped></style>
