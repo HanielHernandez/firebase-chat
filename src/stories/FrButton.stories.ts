@@ -13,8 +13,28 @@ const meta = {
                 type: 'boolean'
             }
         },
+        flat: {
+            control: {
+                type: 'boolean'
+            }
+        },
+        loading: {
+            control: {
+                type: 'boolean'
+            }
+        },
+        block: {
+            control: {
+                type: 'boolean'
+            }
+        },
+        rounded: {
+            control: {
+                type: 'boolean'
+            }
+        },
         color: {
-            options: ['primary', 'danger'],
+            options: ['primary', 'danger', 'default'],
             control: {
                 type: 'select'
             }
@@ -22,17 +42,7 @@ const meta = {
     },
     args: {
         color: 'primary'
-    },
-    render: (args) => ({
-        setup() {
-            return { args }
-        },
-        template: `
-        <FrButton v-bind="args">
-          My Button
-        </FrButton>
-      `
-    })
+    }
 } satisfies Meta<typeof FrButton>
 
 export default meta
@@ -45,8 +55,29 @@ type Story = StoryObj<typeof meta>
 //  */
 export const Primary: Story = {
     args: {
-        disabled: false
-    }
+        color: 'primary'
+    },
+    render: (args) => ({
+        components: { FrButton },
+        setup() {
+            return { args }
+        },
+        template: `
+        <fr-button v-bind="args">
+          My Button
+        </fr-button>
+      `
+    })
+}
+
+export const RoundedWithIcon: Story = {
+    render: () => ({
+        components: { FrButton },
+        template: `
+      <Frbutton flat rounded color="default">
+        <span class="material-icons" >more_vert </span >
+      </Frbutton>`
+    })
 }
 
 // export const Secondary: Story = {

@@ -15,88 +15,70 @@
     </component>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
+<script lang="ts" setup>
+import { clsx } from 'clsx'
+import { computed } from 'vue'
 import FrLoading from './FrLoading.vue'
 import { RouterLink } from 'vue-router'
-export default defineComponent({
-    name: 'FrButton',
-    components: { FrLoading },
-    props: {
-        disabled: {
-            type: Boolean,
-            default: () => false
-        },
-        to: {
-            type: [String, Object],
-            default: () => ''
-        },
-        link: {
-            type: Boolean,
-            default: () => false
-        },
-        loading: {
-            type: Boolean,
-            default: () => false
-        },
-        block: {
-            type: Boolean,
-            default: () => false
-        },
-        color: {
-            type: String,
-            default: () => 'gray-600'
-        },
-        type: {
-            type: String,
-            default: () => 'button'
-        },
-        flat: {
-            type: Boolean,
-            default: () => false
-        },
-        bordered: {
-            type: Boolean,
-            default: () => false
-        },
-        rounded: {
-            type: Boolean,
-            default: () => false
-        },
-        icon: {
-            type: Boolean,
-            default: () => false
-        }
-    },
-    setup(props) {
-        const getColorClass = computed((): string => {
-            switch (props.color) {
-                case 'primary':
-                    return 'bg-blue-600 text-white'
-                case 'danger':
-                    return 'bg-red-600 text-white'
-                default:
-                    return 'bg-gray-300 text-black-400'
-            }
-        })
+import type { Color } from '@/config/consts'
+import type FrButtonProps from './FrButtomProps'
 
-        const classes = computed(() => {
-            const borderClass = `border border-${props.color} text-${props.color}`
-            const flatClass = 'bg-neutral-400 text-neutral-100 bg-opacity-0 hover:bg-gray-600/30'
-            const paddingClass = props.rounded ? 'px-2 py-2' : 'px-4 py-2'
+const {
+    color = 'primary',
+    rounded = false,
+    block = false,
+    flat = false,
+    disabled = false,
+    bordered = false
+} = defineProps<FrButtonProps>()
 
-            return [
-                props.block ? 'block w-full' : 'inline-block',
-                props.flat ? flatClass : '',
-                paddingClass,
-                getColorClass.value,
-                props.disabled ? 'opacity-75' : '',
-                props.rounded ? 'rounded-full px-2 py-2' : '',
-                props.bordered ? borderClass : ''
-            ]
-        })
-        return { classes, RouterLink, getColorClass }
-    }
+const bgColorClasses: Record<Color, string> = {
+    primary: 'bg-blue-600 ',
+    danger: 'bg-red-600',
+    default: 'gg-gray-300'
+}
+
+const flatBgColorClasses: Record<Color, string> = {
+    primary: 'hover:bg-blue-600',
+    danger: 'hover:bg-red-600',
+    default: 'hover:bg-gray-300'
+}
+
+const TextColorClasses: Record<Color, string> = {
+    primary: 'text-white',
+    danger: 'text-white',
+    default: 'text-black-400'
+}
+
+const flatTextColorClasses: Record<Color, string> = {
+    primary: 'text-blue-600 hover:text-white',
+    danger: 'text-red-600 hover:text-white',
+    default: 'text-gray-600 hover:text-black-400'
+}
+
+const classes = computed(() => {
+    const borderClass = `border border-${color} text-${color}`
+    const paddingClass = rounded ? 'px-2 py-2' : 'px-4 py-2'
+
+    return clsx(
+        !flat && !bordered && `${bgColorClasses[color]} ${TextColorClasses[color]}`,
+        flat && `bg-transparent ${flatTextColorClasses[color]} ${flatBgColorClasses[color]} `,
+        bordered && borderClass,
+        disabled ? 'opacity-75 cursor-not-allowed' : 'hover:opacity-90',
+        paddingClass,
+        rounded ? 'rounded-full ' : '',
+        block ? 'block w-full' : 'inline-block'
+    )
+    // return [
+    //     block ? 'block w-full' : 'inline-block',
+    //     flat ? flatClass : '',
+    //     paddingClass,
+    //      getColorClass.value,
+    //     TextColorClasses[color],
+    //     disabled ? 'opacity-75' : '',
+    //     rounded ? 'rounded-full px-2 py-2' : '',
+    //     bordered ? borderClass : ''
+    // ]
 })
 </script>
 
