@@ -58,7 +58,7 @@ const flatTextColorClasses: Record<Color, string> = {
 
 const classes = computed(() => {
     const borderClass = `border border-${color} text-${color}`
-    const paddingClass = rounded ? 'px-2 py-2' : 'px-4 py-2'
+    const paddingClass = rounded ? 'px-2 py-2' : 'px-4 py-3'
 
     return clsx(
         !flat && !bordered && `${bgColorClasses[color]} ${TextColorClasses[color]}`,

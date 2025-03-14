@@ -6,7 +6,7 @@
                 <input
                     :model-value="value"
                     v-bind="field"
-                    class="px-4 py-2 w-full border outline-none text-gray-900 rounded bg-white transition-colors duration-150 ease-in-out"
+                    class="px-4 py-3 w-full border outline-none text-gray-900 bg-neutral-50 rounded transition-colors duration-150 ease-in-out"
                     :class="[
                         !!errorMessage
                             ? 'border-red-400 focus:border-red-600'

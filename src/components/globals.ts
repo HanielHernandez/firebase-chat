@@ -12,6 +12,8 @@ import FrSkeleton from '@/components/skeleton/FrSkeleton.vue'
 import FrMessagePlaceholder from '@/components/messenger/MessagePlaceholder.vue'
 import FrInfiniteScroll from '@/components/InfiniteScroll.vue'
 import AtTooltip from '@/components/atoms/AtTooltip.vue'
+import AtCardContainer from './atoms/AtCardContainer.vue'
+import AtText from './atoms/AtText.vue'
 
 export default [
     TextField,
@@ -27,5 +29,7 @@ export default [
     FrSkeleton,
     FrMessagePlaceholder,
     FrInfiniteScroll,
-    AtTooltip
+    AtTooltip,
+    AtCardContainer,
+    AtText
 ]

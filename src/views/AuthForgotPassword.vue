@@ -1,18 +1,18 @@
 <template>
     <centered-layout>
         <div class="flex flex-col md:mx-0 md:w-1/3 xl:w-1/4 px-4">
-            <h3 class="text-3xl font-bold text-gray-900 text-center mb-6 t">
-                {{ $t('forgot_password.title') }}
-            </h3>
-
             <fr-alert v-if="message.text" show-dismiss type="error" @on-close="message.text = null">
                 {{ message.text }}
             </fr-alert>
 
-            <div class="w-full w-lg flex flex-col rounded border p-4">
-                <p class="text-gray-600 text-sm mb-3">
+            <at-card-container class="w-full md:w-lg flex flex-col">
+                <h3 class="text-3xl font-bold text-gray-900 text-center mb-6">
+                    {{ $t('forgot_password.title') }}
+                </h3>
+
+                <at-text class="mb-6">
                     {{ $t('forgot_password.subtitle') }}
-                </p>
+                </at-text>
                 <vee-form
                     v-slot="{ meta }"
                     :initial-values="initialValues"
@@ -24,29 +24,32 @@
                         rules="required|email"
                         :title="$t('auth.email')"
                         :placeholder="$t('signup.email_placeholder')"
-                        class="mb-3"
+                        class="mb-6"
                     />
 
                     <fr-button
                         :disabled="loading || !meta.valid"
                         type="submit"
                         block
+                        color="primary"
                         :loading="loading"
-                        color="primary w-full"
                         class="text-white"
-                        >{{ $t('forgot_password.button_text') }}</fr-button
                     >
+                        {{ $t('forgot_password.button_text') }}
+                    </fr-button>
 
-                    <div class="border-t my-3"></div>
+                    <div class="border-t border-neutral-300 my-6"></div>
 
-                    <p class="text-sm font-medium text-center text-gray-600">
+                    <at-text class="text-center">
                         {{ $t('signup.already_registered_text') }}
-                        <router-link to="sign-up" class="text-blue-600 opacity-75 hover:opacity-100">
-                            {{ $t('signup.click_here_text') }}
+                        <router-link to="sign-in">
+                            <at-text variant="link">
+                                {{ $t('signup.click_here_text') }}
+                            </at-text>
                         </router-link>
-                    </p>
+                    </at-text>
                 </vee-form>
-            </div>
+            </at-card-container>
         </div>
     </centered-layout>
 </template>
