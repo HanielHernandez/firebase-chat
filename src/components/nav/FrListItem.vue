@@ -10,6 +10,9 @@
       py-3
       px-4
       cursor-pointer
+      hover:bg-neutral-900/10
+      transition-color
+      easae-in-out
     "
   >
     <div
