@@ -4,7 +4,7 @@ import { type ItemWithId, type Message } from './message'
 export interface Conversation extends ItemWithId {
   recipient: User | User[]
   senderPhoneNumber?: string
-  node?: string
+  node: string
   updatedAt: Date
   conversationImageUrl: string
   title: string

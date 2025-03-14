@@ -17,7 +17,7 @@
       </h4>
       <fr-dropdown v-model="openOptions" options-width="260px">
         <template #default="{ handleClick }">
-          <fr-button icon rounded flat class="text-sm" @click="handleClick">
+          <fr-button icon rounded flat class="text-sm bg-neutral-400 text-neutral-100" @click="handleClick">
             <i class="material-icons">more_vert</i>
           </fr-button>
         </template>

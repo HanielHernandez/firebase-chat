@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, type PropType, ref, defineEmits, watch } from 'vue'
+import { onMounted, type PropType, ref, watch, onUnmounted, computed } from 'vue'
 import { type Message } from '@/models/message'
 import gsap from 'gsap'
 
@@ -9,8 +9,8 @@ import MessageBubble from './MessageBubble.vue'
 import dayjs from 'dayjs'
 import { useConversationsStore } from '@/store/conversations.store'
 import { useMessagesStore } from '@/store/messages.store'
-const emit = defineEmits(['loadMore'])
-const messagesList = ref<Element | null>(null)
+import type { Unsubscribe } from 'firebase/firestore'
+
 const props = defineProps({
   messages: {
     type: Array as PropType<Array<Message>>,
@@ -18,11 +18,18 @@ const props = defineProps({
   }
 })
 
-const conversationStore = useConversationsStore()
-const currentConv = ref(conversationStore.selected)
-const messagesStore = useMessagesStore()
+const messagesList = ref<Element | null>(null)
 const isInitial = ref(true)
 const animatedMessages = ref(0)
+const unsubscribe = ref<Unsubscribe| null>(null)
+
+const conversationStore = useConversationsStore()
+const messagesStore = useMessagesStore()
+
+
+const currentConv = computed(()=>(conversationStore.selected))
+
+
 watch(
   () => currentConv.value,
   () => {
@@ -38,45 +45,29 @@ function reset() {
 onMounted(() => {
   if (messagesList.value) {
     messagesList.value.scrollTo(0, 0)
+
+      loadMessages()
   }
 })
 
-
-/*const scrollToBotom = () => {
+const scrollToBotom = () => {
   if (messagesList.value) {
-    console.log(
-      'scroll hegiht',
-      messagesList.value.scrollHeight,
-      scrollPosition.value
-    )
-    if (lastMessage.value) {
-      lastMessage.value.scrollIntoView()
-    } else {
-      messagesList.value.scrollTo(0, messagesList.value.scrollHeight)
-    }
-  }
-}*/
+    messagesList.value.scrollTo(0, messagesList.value.scrollHeight)
 
-const loadMessages = async ()=>{
-  try {
-    console.log(conversationStore.endReach === false , currentConv.value)
-    if (conversationStore.endReach === false && currentConv.value && currentConv.value.node) {
-
-      await messagesStore.fetchItems(currentConv.value.node)
-      //console.log(messagesStore.items)
-      //loaded()
-    } else {
-      // noMore()
-    }
-  }catch(e){
-    console.error(e)
-   
   }
- 
 }
 
-onMounted(() => {
-  loadMessages()
+const loadMessages = async ()=>{
+  if (currentConv.value) {
+    messagesStore.setNodeId(currentConv.value.node)
+    unsubscribe.value = await messagesStore.loadMesages()
+    scrollToBotom()
+  }
+}
+
+
+onUnmounted(() => {
+  unsubscribe.value && unsubscribe.value()
 })
 /*
 const scrollReached = async ({
@@ -150,7 +141,6 @@ const sameDayAsBefore = (i: number): boolean => {
   } else {
     const messagesDateFormate = dayjs(props.messages[i].date).format('MM/DD/YY')
     const prevDateFormate = dayjs(props.messages[i - 1].date).format('MM/DD/YY')
-
     return messagesDateFormate === prevDateFormate
   }
 }
@@ -159,7 +149,7 @@ const sameDayAsBefore = (i: number): boolean => {
   <div
     id="messagesList"
     ref="messagesList"
-    class="h-full flex flex-col relative px-4 overflow-y-auto overflow-x-hidden flex-1"
+    class="h-full flex relative flex-col-reverse  px-4 overflow-y-auto overflow-x-hidden flex-1"
     style="max-height: calc(100vh - 9.625rem)"
   >
     <!-- <VueEternalLoading
@@ -212,8 +202,9 @@ const sameDayAsBefore = (i: number): boolean => {
           <div class="w-full text-xs">
             {{ $date(message.date) }}
           </div>
+
         </div>
-        <MessageBubble :message="message" />
+        <MessageBubble v-if="message.senderId != 'SYSTEM'" :message="message" />
       </div>
     </transition-group>
   </div>

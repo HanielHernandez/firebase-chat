@@ -52,20 +52,15 @@ export class FirebaseApiService<T> {
   getFilterQuery(filters: QueryConstraint[]): Query<T> {
     return query(this.getRef(), ...filters)
   }
+  
   onChanges(
     filters: QueryConstraint[] | null = null,
     callback: (sanpshots: QuerySnapshot<T>) => void
   ): Unsubscribe {
     const q = filters ? this.getFilterQuery(filters) : query(this.getRef())
-    return onSnapshot(
-      q,
-      (querySnapshot) => {
+    return onSnapshot(q, (querySnapshot) => {
         callback(querySnapshot as QuerySnapshot<T>);
-      },
-      (error: Error) => {
-        console.error(error);
-      }
-    );
+      });
   }
 
   async find(id: string): Promise<T | null> {

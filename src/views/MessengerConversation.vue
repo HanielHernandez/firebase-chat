@@ -4,9 +4,10 @@ import { useUser } from '@/mixins'
 import { type Message, MessageType } from '@/models/message'
 import { useConversationsStore } from '@/store/conversations.store'
 import { useMessagesStore } from '@/store/messages.store'
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
+const sending = ref(false)
 const route = useRoute()
 const { currentUser } = useUser()
 const messageStore = useMessagesStore()
@@ -16,56 +17,43 @@ const conversationId = computed(() => {
   return route.params.conversationId as string
 })
 
-let unsubscribe = () => {
-  // // console.log('unsibscribg')
-}
-
 const conversation = computed(() => {
   return conversationsStore.selected
 })
 
-
 const messages = computed(() => {
-  return messageStore.items
+  return messageStore.messages
 })
 
-
 onMounted(async () => {
-  try{
-    const conv  = await conversationsStore.findItem(conversationId.value)   
-    console.log('conv', conv)
-  }catch(e){  
-    console.error(e )
-  }
+  await conversationsStore.findItem(conversationId.value)   
 })
 
 watch(
-  () => conversationId.value,
-  async () => {
-    await conversationsStore.findItem(conversationId.value)
-  }
-)
+  () =>
+  conversationId,
+  async (newval, oldval) => {
+    if(newval!== oldval){
+      await conversationsStore.findItem(conversationId.value)
+    }
+  })
 
-onUnmounted(() => {
-  unsubscribe()
+onBeforeUnmount (() => {
+  messageStore.setMessages([])
 })
 
-const sending = ref(false)
 
 const scrollToBottom = () => {
   const messageList = document.getElementById('messagesList')
   if (messageList) {
-    // // console.log('messagesList', messageList)
     messageList.scrollTo(0, messageList.scrollHeight)
   }
 }
 
-// methods
 const sendMessage = async (
   values: { text: string },
   { resetForm }: { resetForm: () => void }
 ) => {
-  // // console.log('sending', values)
   const newMessage: Message = {
     text: values.text,
     type: MessageType.SMS,
@@ -77,14 +65,12 @@ const sendMessage = async (
 
   try {
     sending.value = true
-    await messageStore.storeItem(newMessage)
-    sending.value = false
+    await messageStore.send(newMessage)
     scrollToBottom()
     resetForm()
+    sending.value = false
   } catch (e) {
     sending.value = false
-
-    console.error(e)
   }
 }
 </script>

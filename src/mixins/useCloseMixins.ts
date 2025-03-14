@@ -1,10 +1,5 @@
 import {
   ref,
-  watch,
-  defineProps,
-  defineEmits,
-  withDefaults,
-  toRefs,
  type Ref
 } from 'vue'
 
@@ -13,7 +8,7 @@ interface UseCloseInteraface {
 }
 export default (
   props: UseCloseInteraface,
-  emit: (id: string, payload: boolean) => void
+
 ): { open: Ref<boolean> } => {
   // define props and emits
 
