@@ -9,7 +9,7 @@
             </h4>
             <fr-dropdown v-model="openOptions" options-width="260px">
                 <template #default="{ createConv }">
-                    <fr-button icon rounded flat class="text-sm bg-neutral-400 text-neutral-100" @click="createConv">
+                    <fr-button color="default" rounded flat class="" @click="createConv">
                         <i class="material-icons">add</i>
                     </fr-button>
                 </template>
@@ -17,7 +17,7 @@
                     <fr-list hoverable>
                         <fr-list-item class="text-gray-600" @click="createConv">
                             <template #avatar>
-                                <i class="material-icons"> add </i>
+                                <i class="material-icons">add</i>
                             </template>
                             <p class="text-gray-600 font-medium">
                                 {{ $t('sidebar.new_conversation_text') }}
@@ -25,7 +25,7 @@
                         </fr-list-item>
                         <fr-list-item class="text-gray-600">
                             <template #avatar>
-                                <i class="material-icons"> add_comment </i>
+                                <i class="material-icons">add_comment</i>
                             </template>
                             <p class="font-medium">
                                 {{ $t('sidebar.join_conversation_text') }}

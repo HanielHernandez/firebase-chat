@@ -11,19 +11,21 @@ import FrAlert from '@/components/alerts/Alert.vue'
 import FrSkeleton from '@/components/skeleton/FrSkeleton.vue'
 import FrMessagePlaceholder from '@/components/messenger/MessagePlaceholder.vue'
 import FrInfiniteScroll from '@/components/InfiniteScroll.vue'
+import AtTooltip from '@/components/atoms/AtTooltip.vue'
 
 export default [
-  TextField,
-  FrButton,
-  FrLoading,
-  FrDropdown,
-  FrList,
-  FrListItem,
-  FrModal,
-  FrAlert,
-  FrCard,
-  FrCardTitle,
-  FrSkeleton,
-  FrMessagePlaceholder,
-  FrInfiniteScroll
+    TextField,
+    FrButton,
+    FrLoading,
+    FrDropdown,
+    FrList,
+    FrListItem,
+    FrModal,
+    FrAlert,
+    FrCard,
+    FrCardTitle,
+    FrSkeleton,
+    FrMessagePlaceholder,
+    FrInfiniteScroll,
+    AtTooltip
 ]

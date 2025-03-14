@@ -22,7 +22,16 @@ export default typescriptEslint.config(
             }
         },
         rules: {
-            // your rules
+            'max-len': [
+                'error',
+                {
+                    code: 120, // Set max line length to 80 characters
+                    ignoreUrls: true, // Optional: Ignore long URLs
+                    ignoreComments: false, // Optional: Don't ignore comments
+                    ignoreStrings: false, // Optional: Don't ignore strings
+                    ignoreTemplateLiterals: false // Optional: Don't ignore template literals
+                }
+            ]
         }
     },
     eslintConfigPrettier
