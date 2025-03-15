@@ -76,7 +76,7 @@ const sendMessage = async (values: { text: string }, { resetForm }: { resetForm:
 <template>
     <div class="h-full container-xl mx-auto container-lg relative pb-20">
         <MessageList v-if="conversation" ref="messagesList" :messages="messages" />
-        <div class="w-full p-4 bg-white bottom-0 left-0 absolute">
+        <div class="w-full p-4 bg-white bottom-0 left-0 absolute border-t-1 border-neutral-100">
             <vee-form class="w-full flex items-center justify-center" @submit="sendMessage">
                 <text-field id="text" class="mr-4" rules="" name="text"></text-field>
 
