@@ -100,19 +100,15 @@ const sameDayAsBefore = (i: number): boolean => {
     <div
         id="messagesList"
         ref="messagesList"
-        class="h-full flex relative flex-col-reverse px-4 overflow-y-auto overflow-x-hidden flex-1"
+        class="h-full flex relative bg-neutral-100 flex-col-reverse px-4 overflow-y-auto overflow-x-hidden flex-1"
         style="max-height: calc(100vh - 9.625rem)"
     >
-        <div v-if="loading" class="text-center w-ull">
-            <fr-loading></fr-loading>
-        </div>
-
         <button
             v-if="arrivedAtBottom === false"
             class="border border-neutral-200 text-neutral-600 bg-white w-10 h-10 rounded-full p-2 shadow-sm fixed bottom right-4 bottom-24"
             @click="scrollToBotom"
         >
-            <span class="material-icons">keyboard_arrow_down </span>
+            <span class="material-icons">keyboard_arrow_down</span>
         </button>
 
         <!-- <VueEternalLoading
@@ -158,6 +154,10 @@ const sameDayAsBefore = (i: number): boolean => {
             <MessageBubble v-if="message.senderId != 'SYSTEM'" :message="message" />
         </div>
         <!-- </transition-group> -->
+
+        <div v-if="loading" class="text-center w-full p-4">
+            <fr-loading></fr-loading>
+        </div>
     </div>
 </template>
 

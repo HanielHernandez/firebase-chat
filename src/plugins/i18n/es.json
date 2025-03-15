@@ -24,13 +24,13 @@
     },
     "forgot_password": {
         "title": "¿Olvidaste tu contraseña?",
-        "subtitle": "Escribe tu correo electrónico para enviar un correo de restablecimiento de contraseña",
+        "subtitle": "Escribe tu e-mail para enviar un correo de restablecimiento de contraseña",
         "button_text": "Enviar correo",
         "click_here_text": "Inicia sesión"
     },
     "auth": {
         "name": "Nombre",
-        "email": "Correo Electrónico",
+        "email": "Email",
         "password": "Contraseña",
         "user_not_found_text": "Usuario no encontrado",
         "confirm_password": "Confirmar Contraseña",

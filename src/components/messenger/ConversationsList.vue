@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="p-4">
-            <text-field placeholder="Buscar" name="search"> </text-field>
+            <text-field placeholder="Buscar" name="search"></text-field>
         </div>
 
         <div>
@@ -33,83 +33,70 @@
     </div>
 </template>
 
-<script lang="ts">
-import { watch, computed, defineComponent, onMounted, onUnmounted } from 'vue'
+<script lang="ts" setup>
+import { watch, computed, onMounted, onUnmounted } from 'vue'
 import ConversationItem from '@/components/messenger/ConversationItem.vue'
 import { type User } from '@/models/auth'
 import { orderBy, where } from 'firebase/firestore'
 import { useConversationsStore } from '@/store/conversations.store'
 import useRootStore from '@/store'
-export default defineComponent({
-    components: {
-        ConversationItem
-    },
-    setup() {
-        const userStore = useRootStore()
-        const store = useConversationsStore()
-        const conversations = computed(() => {
-            return store.items
-        })
-        const loading = computed(() => {
-            return store.loading
-        })
-        const currentUser = computed(() => userStore.currentUser)
 
-        const fetchConversations = async () => {
-            if (currentUser.value == null) {
-                return
-            }
+const userStore = useRootStore()
+const store = useConversationsStore()
+const conversations = computed(() => {
+    return store.items
+})
+const loading = computed(() => {
+    return store.loading
+})
+const currentUser = computed(() => userStore.currentUser)
 
-            try {
-                await store.fetchItems([
-                    where('senderPhoneNumber', '==', currentUser.value.phoneNumber),
-                    orderBy('lastMessage.date', 'desc')
-                ])
-                await store.listenChanges([
-                    where('senderPhoneNumber', '==', currentUser.value.phoneNumber),
-                    orderBy('lastMessage.date', 'desc')
-                ])
-            } catch (e) {
-                alert(e)
-                console.error(e)
-            }
+const fetchConversations = async () => {
+    if (currentUser.value == null) {
+        return
+    }
+
+    try {
+        await store.fetchItems([
+            where('senderPhoneNumber', '==', currentUser.value.phoneNumber),
+            orderBy('lastMessage.date', 'desc')
+        ])
+        await store.listenChanges([
+            where('senderPhoneNumber', '==', currentUser.value.phoneNumber),
+            orderBy('lastMessage.date', 'desc')
+        ])
+    } catch (e) {
+        alert(e)
+        console.error(e)
+    }
+}
+
+const deleteConversation = async (id: string) => {
+    try {
+        store.setLoading(true)
+        await store.deleteItem(id)
+        store.setLoading(false)
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+watch(
+    () => currentUser.value as User,
+    (old: User, nuevo: User) => {
+        if (old !== nuevo) {
+            fetchConversations()
         }
+    }
+)
 
-        const deleteConversation = async (id: string) => {
-            try {
-                store.setLoading(true)
-                await store.deleteItem(id)
-                store.setLoading(false)
-            } catch (e) {
-                console.error(e)
-            }
-        }
+onMounted(() => {
+    //fetchConversations()
+})
 
-        watch(
-            () => currentUser.value as User,
-            (old: User, nuevo: User) => {
-                if (old !== nuevo) {
-                    fetchConversations()
-                }
-            }
-        )
-
-        onMounted(() => {
-            //fetchConversations()
-        })
-
-        onUnmounted(() => {
-            if (store.subscription) {
-                store.subscription()
-            }
-        })
-
-        return {
-            loading,
-            currentUser,
-            conversations,
-            deleteConversation
-        }
+onUnmounted(() => {
+    if (store.subscription) {
+        store.subscription()
     }
 })
 </script>

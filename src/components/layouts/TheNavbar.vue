@@ -1,6 +1,8 @@
 <template>
-    <div class="fixed top-0 flex left-0 w-screen p-2 md:pl-100 justify-between z-10 border-b border-neutral-300">
-        <div class="py-2 flex flex-row">
+    <div
+        class="fixed top-0 flex left-0 min-h-18 w-screen md:pl-100 justify-between z-10 border-b bg-white border-neutral-300"
+    >
+        <div class="py-2 flex flex-row items-center justify-start">
             <router-link
                 to="/messenger"
                 class="text-neutral-600 p-2 rounded-full text-center h-10 w-10 hover:bg-neutral-200 md:hidden"
@@ -15,15 +17,15 @@
                             : `https://ui-avatars.com/api/?name=${recipient.name}`
                     "
                     alt=""
-                    class="rounded-full w-10 h-10 md:mr-3"
+                    class="rounded-full w-10 h-10 ml-2 mr-4"
                 />
                 <div class="flex flex-col gap-1">
-                    <h3 class="text-lg leading-5 pl-4 md:pl-0 text-neutral-900 font-bold">
+                    <at-text variant="h4" class="text-lg leading-6 md:pl-0 text-neutral-900 font-bold">
                         {{ recipient.name }}
-                    </h3>
-                    <h5 v-if="lastMessage" class="text-xs leading-4 text-neutral-500">
+                    </at-text>
+                    <at-text v-if="lastMessage" class="text-sm font-base leading-5 text-neutral-500">
                         {{ formatDate(lastMessage.date) }}
-                    </h5>
+                    </at-text>
                 </div>
             </div>
         </div>

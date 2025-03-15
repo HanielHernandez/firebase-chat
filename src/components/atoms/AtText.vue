@@ -16,7 +16,7 @@ const variantClasses = {
     h1: 'text-4xl font-black text-neutral-800 dark:text-neutral-2000',
     h2: 'text-3xl font-bold text-neutral-800 dark:text-neutral-2000',
     h3: 'text-2xl font-bold text-neutral-800 dark:text-neutral-2000',
-    h4: 'text-xl font-medium ',
+    h4: 'text-xl font-bold ',
     h5: 'text-lg font-medium',
     paragraph: 'text-neutral-600 text-base dark:text-neutral-300',
     label: 'text-sm font-medium uppercase text-gray-500 dark:text-gray-400',

@@ -81,7 +81,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { EMAIL_NOT_VERIFIED } from '@/config/variables'
 import useRootStore from '@/store'
-
+import { FirebaseError } from 'firebase/app'
 export default defineComponent({
     components: { CenteredLayout, VeeForm },
     setup() {
@@ -110,10 +110,10 @@ export default defineComponent({
                 setCurrentUser()
                 loading.value = false
                 router.push({ name: 'Messenger' })
-            } catch (e: any) {
-                // // console.log(e.code, e.message)
-                message.value.type = 'error'
-                if (e.code && e.message) {
+            } catch (e: unknown) {
+                if (e instanceof FirebaseError) {
+                    // // console.log(e.code, e.message)
+                    message.value.type = 'error'
                     if (e.code == 'auth/user-not-found') {
                         message.value.text = t('auth.user_not_found_text')
                     } else {

@@ -9,13 +9,15 @@
         <img :src="conversation.conversationImageUrl" alt="" width="40" class="mr-4 rounded-full" height="40" />
         <div class="flex flex-col flex-1 overflow-hidden">
             <div class="flex flex-nowrap justify-between items-center">
-                <p class="font-bold">
+                <at-text class="font-bold text-neutral-800 leading-6">
                     {{ `${conversation.title}` }}
-                </p>
-                <span class="text-blue-600 text-xs font-medium">{{ formatDate(conversation.lastMessage.date) }} </span>
+                </at-text>
+                <span class="text-blue-600 text-xs font-bold">{{ formatDate(conversation.lastMessage.date) }}</span>
             </div>
             <div class="flex flex-nowrap justify-between items-center">
-                <span class="text-sm text-gray-600 h-5 truncate flex-grow">{{ conversationSubitle }}</span>
+                <at-text class="text-sm text-gray-600 h-5 leading-5 truncate flex-grow">
+                    {{ conversationSubitle }}
+                </at-text>
                 <span
                     v-if="showMessageCounter"
                     class="bg-green-700 rounded-full text-center text-gray-200 text-xs h-4 w-4"
@@ -26,7 +28,7 @@
                 <button
                     class="icon absolute right-4 top-4 w-8 h-8 text-center cursor-pointer bg-neutral-900/50 text-neutral-200 text-xs rounded-full bg-color opacity-0 hover:opacity-100"
                 >
-                    <span class="material-icons" @click="deleteConversation"> delete </span>
+                    <span class="material-icons" @click="deleteConversation">delete</span>
                 </button>
             </div>
         </div>
