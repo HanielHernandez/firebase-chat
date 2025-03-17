@@ -4,10 +4,18 @@
         :class="isConversationOpen ? 'w-0 translate-full md:translate-none ' : 'w-screen'"
     >
         <div class="flex justify-between items-center px-4 pt-4">
-            <h4 class="font-bold text-2xl">
+            <div v-if="showProfile" class="flex flex-row items-center">
+                <button color="default" class="cursor-pointer rounded-full w-6 h-6 mr-2" @click="updateShowProfile">
+                    <span class="material-icons">chevron_left</span>
+                </button>
+                <h4 class="font-bold text-2xl">
+                    {{ $t('sidebar.conversations_title_text') }}
+                </h4>
+            </div>
+            <h4 v-else class="font-bold text-2xl">
                 {{ $t('sidebar.conversations_title_text') }}
             </h4>
-            <div class="flex flex-row flex-nowrap">
+            <div v-if="showProfile == false" class="flex flex-row flex-nowrap">
                 <at-tooltip :text="$t('sidebar.new_conversation_text')">
                     <fr-button color="default" rounded flat class="" @click="createConv">
                         <i class="material-icons">add</i>
@@ -23,11 +31,28 @@
                     </template>
                     <template #options>
                         <fr-list hoverable bordered>
-                            <fr-list-item @click="logout">
+                            <fr-list-item @click="showProfile = true">
+                                <template #avatar>
+                                    <i class="material-icons">person</i>
+                                </template>
+                                <span href="#" class="text-gray-600 leading-6 font-base">
+                                    {{ $t('navbar.my_profile_text') }}
+                                </span>
+                            </fr-list-item>
+                            <fr-list-item v-if="showProfile">
+                                <template #avatar>
+                                    <i class="material-icons">message</i>
+                                </template>
+                                <span href="#" class="text-gray-600 leading-6 font-base">
+                                    {{ $t('navbar.my_profile_text') }}
+                                </span>
+                            </fr-list-item>
+
+                            <fr-list-item alt="show profile" @click="logout">
                                 <template #avatar>
                                     <i class="material-icons">logout</i>
                                 </template>
-                                <span href="#" class="text-gray-600">
+                                <span href="#" class="text-gray-600 leading-6 font-base">
                                     {{ $t('navbar.log_out_text') }}
                                 </span>
                             </fr-list-item>
@@ -62,7 +87,9 @@
                 </template>
             </fr-dropdown> -->
         </div>
-        <ConversationsList />
+        <OrEditProfileForm v-if="showProfile" />
+        <ConversationsList v-else />
+
         <fr-modal v-slot="{ closeModal }" v-model="showNewConvModal">
             <ConversationForm @cancel="closeModal" @created="handleCreated" />
         </fr-modal>
@@ -72,16 +99,17 @@
 <script lang="ts" setup>
 import ConversationsList from '@/components/messenger/ConversationsList.vue'
 import ConversationForm from '@/components/messenger/ConversationForm.vue'
-
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import type { Conversation } from '@/models/conversation'
 import auth from '@/plugins/firebase/auth'
+import OrEditProfileForm from '@/components/organism/OrEditProfileForm.vue'
 
 const showNewConvModal = ref(false)
 const router = useRouter()
 const route = useRoute()
 const openOptions = ref(false)
+const showProfile = ref(false)
 
 const createConv = () => {
     openOptions.value = false
@@ -107,6 +135,10 @@ const logout = async (): Promise<void> => {
     } catch (error) {
         console.error(error)
     }
+}
+
+const updateShowProfile = () => {
+    showProfile.value = !showProfile.value
 }
 </script>
 
