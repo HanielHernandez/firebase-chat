@@ -89,13 +89,13 @@ function onCloseModal() {
             @change="setprofilePicture"
         />
 
-        <fr-modal v-model="showImageModal">
+        <fr-modal v-model="showImageModal" default="{onCloseModal}">
             <at-card-container class="relative w-120">
                 <fr-button
                     flat
                     rounded
                     color="default"
-                    class="absolute top-2 right-2 h-10 w-10 z-80"
+                    class="absolute top-0 right-0 h-8 w-8 !p-0 z-80"
                     @click="onCloseModal()"
                 >
                     <span class="material-icons text-sm">close</span>
@@ -111,8 +111,10 @@ function onCloseModal() {
                     :src="croppingImage.src"
                 />
                 <div class="flex flex-row flex-nowrap gap-4 items-center justify-center">
-                    <fr-button color="primary" :loading="uploading" @click="cropImage">Aceptar</fr-button>
-                    <fr-button color="danger">Cancelar</fr-button>
+                    <fr-button color="primary" :loading="uploading" @click="cropImage">
+                        {{ $t('profle.accept') }}
+                        <span class="material-icons ml-2">check</span>
+                    </fr-button>
                 </div>
             </at-card-container>
         </fr-modal>

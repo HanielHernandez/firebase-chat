@@ -48,6 +48,8 @@
         "conversations_title_text": "Mensajes",
         "new_conversation_text": "Nueva conversación",
         "join_conversation_text": "Unirse a un conversación",
+        "user_profile": "Perfil",
+
         "new_conversation_modal": {
             "title": "Crear nueva conversación",
             "message": "Llena la siguiente información para crear la conversación",
@@ -63,5 +65,12 @@
     "CONVERSATION_CREATED": "Conversación creada",
     "conversation_form": {
         "recipient_phone_number": "Número del destinatario"
+    },
+    "profile": {
+        "name": "Nombre",
+        "email": "Email",
+        "phoneNumber": "Número de teléfono",
+        "editPicture": "Editar Foto de perfil",
+        "accept": "Aceptar"
     }
 }

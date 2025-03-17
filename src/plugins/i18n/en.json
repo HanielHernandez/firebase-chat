@@ -46,6 +46,7 @@
         "conversations_title_text": "Chats",
         "new_conversation_text": "New Conversation",
         "join_conversation_text": "Join Conversation",
+        "user_profile": "Profile",
         "new_conversation_modal": {
             "title": "Create new conversation",
             "message": "Fill the folling form to create a new conversation",
@@ -61,5 +62,12 @@
     "CONVERSATION_CREATED": "Conversación creada",
     "conversation_form": {
         "recipient_phone_number": "Recipient Phone number"
+    },
+    "profile": {
+        "name": "Name",
+        "email": "Email",
+        "phoneNumber": "Phone Number",
+        "editPicture": "Edit Profile Pictre",
+        "accept": "Change"
     }
 }

@@ -31,7 +31,7 @@ const onEditClick = () => {
                     @click="onEditClick"
                 >
                     <i class="material-icons text-white">edit</i>
-                    <span class="mb-4 text-white font-medium blue">Cambiar Foto</span>
+                    <span class="mb-4 text-white font-medium blue">{{ $t('profile.editPicture') }}</span>
                 </div>
                 <img
                     :src="
@@ -66,7 +66,7 @@ const onEditClick = () => {
                 </Form>
 
                 <div v-else>
-                    <AtText variant="h6" class="leading-6">Name</AtText>
+                    <AtText variant="h6" class="leading-6">{{ $t('profile.name') }}</AtText>
                     <AtText class="leading-5">
                         {{ profile.name }}
                     </AtText>
@@ -84,13 +84,13 @@ const onEditClick = () => {
                 </FrButton>
             </div>
             <div class="mb-4">
-                <AtText variant="h6" class="leading-6">Email</AtText>
+                <AtText variant="h6" class="leading-6">{{ $t('profile.email') }}:</AtText>
                 <AtText class="leading-5">
                     {{ profile.email }}
                 </AtText>
             </div>
             <div>
-                <AtText variant="h6" class="leading-6">Phone Number</AtText>
+                <AtText variant="h6" class="leading-6">{{ $t('profile.phoneNumber') }}:</AtText>
                 <AtText class="leading-5">
                     {{ profile.phoneNumber }}
                 </AtText>

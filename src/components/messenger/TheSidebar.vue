@@ -5,11 +5,11 @@
     >
         <div class="flex justify-between items-center px-4 pt-4">
             <div v-if="showProfile" class="flex flex-row items-center">
-                <button color="default" class="cursor-pointer rounded-full w-6 h-6 mr-2" @click="updateShowProfile">
+                <button class="text-neutral-600 cursor-pointer rounded-full w-6 h-6 mr-2" @click="updateShowProfile">
                     <span class="material-icons">chevron_left</span>
                 </button>
                 <h4 class="font-bold text-2xl">
-                    {{ $t('sidebar.conversations_title_text') }}
+                    {{ $t('sidebar.user_profile') }}
                 </h4>
             </div>
             <h4 v-else class="font-bold text-2xl">
