@@ -7,8 +7,7 @@ const meta = {
     component: MlProfile,
     // This component will have an automatically generated docsPage entry: https://storybook.js.org/docs/writing-docs/autodocs
     tags: ['autodocs'],
-    argTypes: {},
-    args: {
+    argTypes: {
         profile: {
             control: {
                 type: 'object'
@@ -30,6 +29,7 @@ export const Default: Story = {
         profile: {
             name: 'Larry Stevenson',
             email: 'larry1989@gmail.com',
+            profileImageUrl: '',
             phoneNumber: '+1 234-567-891'
         }
     }
